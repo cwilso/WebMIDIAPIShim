@@ -9,12 +9,14 @@ This has some significant limitations:
 3. Jazz doesn't have sysex (in or out) support - or, more properly, Jazz doesn't support long MIDI messages (anything > 3 bytes), so this shim doesn't either.
 
 There are also a couple of unimplemented things currently:
+
 1. I don't yet correctly fire onmessage as an event dispatch; it's just a function call.
 2. The long form of sending a MIDIMessage - that is, the one where you create a MIDIMessage object with a timestamp and call sendMIDIMessage - isn't yet supported.  Jazz doesn't support timestamps on output, and doesn't support sysex either, so this will be only partially implemented anyway.
 
 ##Usage
 
 Include WMAS.js in your project, and use the Web MIDI API as captured in the proposal.  EXCEPT:
+
 1. I got rid of the timestamp on sendMessage() - see [bug 18762](https://www.w3.org/Bugs/Public/show_bug.cgi?id=18762).
 2. I removed the "channel" parameter on sendMessage and in MIDIMessage objects.  See [bug 18764](https://www.w3.org/Bugs/Public/show_bug.cgi?id=18764).
 
