@@ -90,32 +90,57 @@ function MIDIPort( type, index, name ) {
   this.name = name;
   this.manufacturer = "";
   this.version = "";
-  this.fingerprint = "" + index + ". " + name;
+  this.fingerprint = "" + index + "." + name;
 }
 
-// TODO: MIDIPorts are supposed to have connect and disconnect events.
+// LIMITATION: MIDIPorts are supposed to have connect and disconnect events.
+// LIMITATION: Jazz can only support one input and one output device at a time.
+// LIMITATION: Jazz doesn't have sysex (in or out) support.
 
 function MIDIInput( target ) {
   // target can be a MIDIPort or DOMString 
+  if ( target instanceof MIDIPort )
+    this._deviceName = target.name;
+  else
+    this._deviceName = target.slice( target.indexOf(".")+1);
+
   this.onmessage = null;
-  // TODO: look up input, create Jazz input, hook up to a message handler.
+  Jazz.MidiInOpen( this._deviceName, _midiProc.bind(this) );
 }
 
-MIDIInput.prototype._midiProc = function(t,a,b,c) {
+function _midiProc(t,a,b,c) {
+    var message = new MIDIMessage();
+    message.timestamp = t;  // TODO: actually, not the appropriate timestamp.  Need to call Jazz.Time() on input init, and then subtract that and add to DOMHRTS.
+    message.data = new Uint8Array([a,b,c]);
+/*    message.data = new Uint8Array(3);
+    message.data[0] = a;
+    message.data[1] = a;
+    message.data[2] = a;
+*/
+  if (this.onmessage)
+    this.onmessage( new Array(message) );
+  // TODO: need to correctly fire onmessage as an event dispatch
+
 }
 
 function MIDIOutput( target ) {
-  // target can be a MIDIPort or DOMString 
-  // TODO: look up output, create Jazz output, hook up to a message handler.
+  // target can be a MIDIPort or DOMString
+  if (target.prototype.isPrototypeOf(MIDIPort) )
+    this._deviceName = target.name;
+  else
+    this._deviceName = target.slice( target.indexOf(".")+1);
+  // Note that due to Jazz' limitations, we don't actually open the output here.
 }
 
 MIDIOutput.prototype.sendMIDIMessage = function( message ) {
-  // TODO: send a MIDIMessage.
-  return true;
+  // TODO: send a MIDIMessage.  Can't do this with Jazz if it's sysex.
+  return false;
 }
 
-MIDIOutput.prototype.sendMessage = function( status, channel, data0, data1, timestamp ) {
-  // TODO: send message.
+MIDIOutput.prototype.sendMessage = function( status, data0, data1 ) {
+  Jazz.MidiOutOpen(this._deviceName);
+  Jazz.MidiOut( status, data0, data1);
+  // TODO: explicitly check # of bytes to send, via arguments.length.
   return true;
 }
 
@@ -131,7 +156,9 @@ function MIDIMessage() {
 
 
 // ISSUE: MIDIOutput - "returns a boolean signifying whether the operation was successful" is untenable
-// ISSUE: MIDIOutput - need a send with no timestamp.  Suggest interpreting MIDI statuses.
-// ISSUE: MIDIMessage - do all long messages have status or channel?? - would change createMIDIMessage too
+// ISSUE: MIDIOutput - need a send with no timestamp.  Suggest getting rid of timestamp on simple send.
+// ISSUE: not even all short messages have channel (e.g. realtime messages).  Should recombine to status(+channel),data,data
+// ISSUE: Long messages may not have channel either - MIDIMessage create should not have status byte separate, either.
+
 
 
