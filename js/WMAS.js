@@ -29,14 +29,22 @@ window.addEventListener('load', function() {
   document.body.insertBefore(Jazz,document.body.firstChild);
 
   if (!window.navigator.getMIDIAccess)
-    window.navigator.getMIDIAccess = MIDIAccess;
+    window.navigator.getMIDIAccess = _getMIDIAccess;
 });
 
+function _getMIDIAccess( successCallback, errorCallback ) {
+  return new MIDIAccess( successCallback, errorCallback );
+}
+
 function MIDIAccess( successCallback, errorCallback ) {
-  if (Jazz.isJazz)
-    successCallback();
-  else
-    errorCallback();
+  if (Jazz.isJazz) {
+    if (successCallback)
+      successCallback();
+  } else {
+    if (errorCallback)
+      errorCallback();
+  }
+  return this;
 }
 
 MIDIAccess.prototype.enumerateInputs = function(  ) {
