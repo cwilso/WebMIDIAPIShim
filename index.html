@@ -2,9 +2,51 @@
 <html>
 <head>
 <title>Testpad for Web MIDI API Shim</title>
+<script src="lib/MIDIBridge.js"></script>
+<script src="lib/WMAS.js"></script>
+<script>
+var midi=null;
+var inputs=null;
+var outputs=null;
+var input=null;
+var output=null;
+
+function runTest() {
+	navigator.getMIDIAccess( success, failure );
+}
+
+function handleMIDIMessage( m ) {
+	// testing - just reflect.
+	output.sendMessage( m[0].data[0], m[0].data[1], m[0].data[2] );
+}
+
+function success( m ) {
+	console.log("MIDI ready!");
+	midi = m;
+
+	inputs = midi.enumerateInputs();
+	console.log("First input:\n" + inputs[0]);
+
+	input = midi.getInput( inputs[0] );
+
+	input.onmessage = handleMIDIMessage;
+
+	outputs = midi.enumerateOutputs();
+	console.log("First output:\n" + outputs[0]);
+
+	output = midi.getOutput( outputs[0] );
+
+	output.sendMessage( 0xb0, 0x00, 0x7f );	// Launchpad - light it up!
+}
+
+function failure(msg) {
+	alert("failure - "+msg);
+}
+</script>
 </head>
+
 <body>
-<script src="js/WMAS.js"></script>
-Testing...
+	<button onclick="runTest();">Test MIDI!</button>
+
 </body>
 </html>
