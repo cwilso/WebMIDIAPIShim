@@ -3,7 +3,7 @@
 <head>
 <title>Testpad for Web MIDI API Shim</title>
 <script src="lib/MIDIBridge.js"></script>
-<script src="lib/WMAS.js"></script>
+<script src="lib/WebMIDIAPI.js"></script>
 <script>
 var midi=null;
 var inputs=null;
@@ -17,7 +17,8 @@ function runTest() {
 
 function handleMIDIMessage( m ) {
 	// testing - just reflect.
-	output.sendMessage( m[0].data[0], m[0].data[1], m[0].data[2] );
+	if (output)
+		output.sendMessage( m[0].data[0], m[0].data[1], m[0].data[2] );
 }
 
 function success( m ) {
@@ -25,18 +26,25 @@ function success( m ) {
 	midi = m;
 
 	inputs = midi.enumerateInputs();
-	console.log("First input:\n" + inputs[0]);
+	console.log(""+inputs.length+" inputs:");
+	for (var i=0;i<inputs.length;i++)
+		console.log(""+ i + ": " + inputs[i] );
 
-	input = midi.getInput( inputs[0] );
-
-	input.onmessage = handleMIDIMessage;
+	if (inputs.length>0) {
+		input = midi.getInput( inputs[0] );
+		input.onmessage = handleMIDIMessage;
+		console.log("Hooked up first input.");
+	}
 
 	outputs = midi.enumerateOutputs();
-	console.log("First output:\n" + outputs[0]);
+	console.log(""+outputs.length+" outputs:");
+	for (var i=0;i<outputs.length;i++)
+		console.log(""+ i + ": " + outputs[i] );
 
-	output = midi.getOutput( outputs[0] );
-
-	output.sendMessage( 0xb0, 0x00, 0x7f );	// Launchpad - light it up!
+	if (outputs.length) {
+		output = midi.getOutput( outputs[0] );
+		output.sendMessage( 0xb0, 0x00, 0x7f );	// If the first device is a Novation Launchpad, this will light it up!
+	}
 }
 
 function failure(msg) {
