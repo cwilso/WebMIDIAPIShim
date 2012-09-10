@@ -1,10 +1,65 @@
 <!doctype html>
 <html>
 <head>
-<title>Testpad for Web MIDI API Shim</title>
+<title>Web MIDI API Polyfill</title>
+<script src="lib/WebMIDIAPI.js"></script>
+<script>
+var midi=null;
+var inputs=null;
+var outputs=null;
+var input=null;
+var output=null;
+var log=null;
+
+function runTest() {
+	if (!log)
+		log = document.getElementById("log");
+	log.innerText = "Starting up MIDI...\n";
+	navigator.getMIDIAccess( success, failure );
+}
+
+function handleMIDIMessage( m ) {
+	// testing - just reflect.
+	log.innerText += "Message: 0x" + m[0].data[0].toString(16) + " 0x" + m[0].data[1].toString(16) + " 0x" + m[0].data[2].toString(16) + "\n";
+	if (output)
+		output.sendMessage( m[0].data[0], m[0].data[1], m[0].data[2] );
+}
+
+function success( m ) {
+	log.innerText += "MIDI ready!\n";
+	midi = m;
+
+	inputs = midi.enumerateInputs();
+	log.innerText += inputs.length+" inputs:\n";
+	for (var i=0;i<inputs.length;i++)
+		log.innerText += i + ": " + inputs[i] + "\n";
+
+	if (inputs.length>0) {
+		input = midi.getInput( inputs[0] );
+		input.onmessage = handleMIDIMessage;
+		log.innerText += "Hooked up first input.\n";
+	}
+
+	outputs = midi.enumerateOutputs();
+	log.innerText += outputs.length+" outputs:\n";
+	for (var i=0;i<outputs.length;i++)
+		log.innerText += i + ": " + outputs[i] + "\n";
+
+	if (outputs.length) {
+		output = midi.getOutput( outputs[0] );
+		output.sendMessage( 0xb0, 0x00, 0x7f );	// If the first device is a Novation Launchpad, this will light it up!
+	}
+}
+
+function failure(msg) {
+	alert("failure - "+msg);
+}
+</script>
 </head>
+
 <body>
-<script src="js/WMAS.js"></script>
-Testing...
+	<button onclick="runTest();">Test MIDI!</button>
+<pre id="log">
+</pre>
 </body>
 </html>
