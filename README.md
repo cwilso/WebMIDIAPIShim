@@ -32,6 +32,7 @@ Now you can use the Web MIDI API as captured in the proposal (except for the exc
 
 1. I got rid of the timestamp on sendMessage() - see [bug 18762](https://www.w3.org/Bugs/Public/show_bug.cgi?id=18762).
 2. I removed the "channel" parameter on sendMessage and in MIDIMessage objects.  See [bug 18764](https://www.w3.org/Bugs/Public/show_bug.cgi?id=18764).
+3. I don't implement the sendMIDIMessage method - that is, with timestamps and arbitrary-length messages.
 
 So, some sample usage: 
 
