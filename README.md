@@ -24,7 +24,7 @@ There are also a couple of unimplemented things currently:
 ##Usage
 
 1. Copy the contents of /lib/ into your project - and be sure to include it in a /lib/ directory, because the Java instantiation needs to have it there (or edit the javadir in the code).  
-2. Add "<script src='lib/WebMIDIAPI.js'></script>" to your code.
+2. Add "&ltscript src='lib/WebMIDIAPI.js'>&lt;/script>" to your code.
 
 Now you can use the Web MIDI API as captured in the proposal (except for the exceptions noted below) - it will automatically check to see if the MIDI API is already implemented, and if not it will insert itself.
 
