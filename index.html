@@ -18,16 +18,19 @@ function runTest() {
 	navigator.getMIDIAccess( success, failure );
 }
 
-function handleMIDIMessage( m ) {
+function handleMIDIMessage( ev ) {
 	// testing - just reflect.
-	log.innerText += "Message: 0x" + m[0].data[0].toString(16) + " 0x" + m[0].data[1].toString(16) + " 0x" + m[0].data[2].toString(16) + "\n";
+	log.innerText += "Message: " + ev.data.length + " bytes, timestamp: " + ev.timestamp;
+	if (ev.data.length == 3) 
+		log.innerText += " 0x" + ev.data[0].toString(16) + " 0x" + ev.data[1].toString(16) + " 0x" + ev.data[2].toString(16) + "\n";
+	log.innerText += "\n";
 	if (output)
-		output.sendMessage( m[0].data[0], m[0].data[1], m[0].data[2] );
+		output.send( ev.data );
 }
 
-function success( m ) {
+function success( midiAccess ) {
 	log.innerText += "MIDI ready!\n";
-	midi = m;
+	midi = midiAccess;
 
 	inputs = midi.enumerateInputs();
 	log.innerText += inputs.length+" inputs:\n";
@@ -47,12 +50,12 @@ function success( m ) {
 
 	if (outputs.length) {
 		output = midi.getOutput( outputs[0] );
-		output.sendMessage( 0xb0, 0x00, 0x7f );	// If the first device is a Novation Launchpad, this will light it up!
+		output.send( [0xb0, 0x00, 0x7f] );	// If the first device is a Novation Launchpad, this will light it up!
 	}
 }
 
-function failure(msg) {
-	alert("failure - "+msg);
+function failure( errorCode ) {
+	alert( "Failed to initialize MIDI - " + ((errorCode==1) ? "permission denied" : ("error code " + errorCode)) );
 }
 </script>
 </head>
