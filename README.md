@@ -4,12 +4,9 @@ This JS library is a prototype polyfill and shim for the [Web MIDI API](https://
 
 I'm currently using this polyfill to test usability of the API itself, but it's also useful to enable MIDI scenarios.
 
-This polyfill now supports multiple simultaneous inputs and outputs, and sending and receiving long messages (sysem exclusive).  It also properly dispatches events.
+This polyfill now supports multiple simultaneous inputs and outputs, and sending and receiving long messages (sysem exclusive).  It also properly dispatches events.  Timestamps on send and receive should be properly implemented now, although of course timing will not be very precise on send.
 
-###There are a couple of unimplemented things currently:
-
-1. Timestamps on send are currently ignored, although it is next on my list to fix (although the timing will not be very precise).
-2. Jazz doesn't expose the version number or manufacturer, so these are always "<not supported>".
+Jazz doesn't expose the version number or manufacturer, so these are always "&lt;not supported&gt;".
 
 ##Usage
 
