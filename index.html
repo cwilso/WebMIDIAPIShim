@@ -39,7 +39,8 @@ function success( midiAccess ) {
 
 	if (inputs.length>0) {
 		input = midi.getInput( inputs[0] );
-		input.onmessage = handleMIDIMessage;
+//		input.onmessage = handleMIDIMessage;
+		input.addEventListener("message", handleMIDIMessage);
 		log.innerText += "Hooked up first input.\n";
 	}
 

@@ -1,16 +1,15 @@
 # Web MIDI API Polyfill
 
-This JS library is a prototype polyfill and shim for the [Web MIDI API](https://dvcs.w3.org/hg/audio/raw-file/tip/midi/specification.html) (of which I am a co-author), using [Jazz-Soft.net's Jazz-Plugin](http://jazz-soft.net/) to enable MIDI support on Windows and OSX.  This polyfill and the plugin should work on Chrome, Firefox, Safari, Opera and IE.
+This JS library is a prototype polyfill and shim for the [Web MIDI API](https://dvcs.w3.org/hg/audio/raw-file/tip/midi/specification.html) (of which I am a co-author), using [Jazz-Soft.net's Jazz-Plugin](http://jazz-soft.net/) to enable MIDI support on Windows and OSX.  You need to have at least [version 1.2](http://jazz-soft.net/download/Jazz-Plugin/1.2) of the Jazz-Plugin in order for this polyfill to work properly.  This polyfill and the plugin should work on Chrome, Firefox, Safari, Opera and IE.
 
 I'm currently using this polyfill to test usability of the API itself, but it's also useful to enable MIDI scenarios.
 
-This polyfill now supports multiple simultaneous inputs and outputs, and sending and receiving long messages (sysem exclusive).
+This polyfill now supports multiple simultaneous inputs and outputs, and sending and receiving long messages (sysem exclusive).  It also properly dispatches events.
 
-##There are a couple of unimplemented things currently:
+###There are a couple of unimplemented things currently:
 
-1. I don't yet correctly fire onmessage as an event dispatch; it's just a function call.
-2. Timestamps on send are currently ignored, although it is next on my list to fix (although the timing will not be very precise).
-3. Jazz doesn't expose the version number or manufacturer, so these are always "<not supported>".
+1. Timestamps on send are currently ignored, although it is next on my list to fix (although the timing will not be very precise).
+2. Jazz doesn't expose the version number or manufacturer, so these are always "<not supported>".
 
 ##Usage
 
@@ -30,7 +29,7 @@ So, some sample usage:
 	    var inputs = m.enumerateInputs();   // inputs = array of MIDIPorts
 	    var outputs = m.enumerateOutputs(); // outputs = array of MIDIPorts
 	    var i = m.getInput( inputs[0] );    // grab first input device.  You can also getInput( index );
-	    i.onmessage = myMIDIMessagehandler;	// onmessage( event ), event.MIDIMessages = []MIDIMessage.
+	    i.onmessage = myMIDIMessagehandler;	// onmessage( event ), event.data & event.timestamp are populated
 	    var o = m.getOutput( outputs[0] );  // grab first output device
 	    o.sendMessage( [ 0x90, 0x45, 0xff ] );  // full velocity note on A4 on channel zero
 	    o.sendMessage( [ 0x80, 0x45, 0x00 ] );  // A4 note off
