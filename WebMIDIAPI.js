@@ -5,6 +5,8 @@ window.addEventListener('load', function() {
 
     // Make sure we support the performance timing api.
     window.performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {};
+    if (!window.performance.now)
+      window.performance.now = window.performance.webkitNow;
     
     window.navigator.getMIDIAccess = _getMIDIAccess;
 });
