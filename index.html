@@ -1,51 +1,108 @@
 <!DOCTYPE html>
 <html>
+	<head>
+	<meta charset='utf-8' />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+	<meta name="description" content="Webmidiapishim : Polyfill using the Jazz NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows." />
+	<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+	<title>Web MIDI API Polyfill</title>
+	<style>
+#log {
+	height: 15em;
+}
+</style>
+	</head>
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Webmidiapishim : Polyfill using the Jazz NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows." />
+	<body>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Web MIDI API Polyfill</title>
-  </head>
-
-  <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/cwilso/WebMIDIAPIShim">View on GitHub</a>
-
-          <h1 id="project_title">Web MIDI API Polyfill</h1>
-          <h2 id="project_tagline">This is a polyfill using the <a href="http://jazz-soft.net/">Jazz</a> NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows.</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+      <header class="inner"> <a id="forkme_banner" href="https://github.com/cwilso/WebMIDIAPIShim">View on GitHub</a>
+    <h1 id="project_title">Web MIDI API Polyfill</h1>
+    <h2 id="project_tagline">This is a polyfill using the <a href="http://jazz-soft.net/">Jazz</a> NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows.</h2>
+    <section id="downloads"> <a class="zip_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/zipball/master">Download this project as a .zip file</a> <a class="tar_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/tarball/master">Download this project as a tar.gz file</a> </section>
+  </header>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>To use the Web MIDI API Polyfill</h3>
-          <p>Just include</p>
-          	<pre>&lt;script src='http://cwilso.github.com/WebMIDIAPIShim/WebMIDIAPI.js'&gt;&lt;/script&gt;</pre>
-          <p>in your HTML source.</p>
-      </section>
+    <h3>To use the Web MIDI API Polyfill</h3>
+    <p>Just include</p>
+    <pre>&lt;script src='http://cwilso.github.com/WebMIDIAPIShim/WebMIDIAPI.js'&gt;&lt;/script&gt;</pre>
+    <p>in your HTML source.</p>
+    <h3>Test it out!</h3>
+    <p><strong>Before you press the button:</strong> install the <a href="http://jazz-soft.net/">Jazz-Soft.net's Jazz-Plugin</a> to enable MIDI support on Windows and OSX.</p>
+    <p>On MacOS, you will also need a real synthesizer or something like <a href="http://www.manyetas.com/creed/midikeys.html">MidiKeys</a>. </p>
+    <button onclick="runTest();">Test MIDI!</button>
+    <pre id="log">
+	</pre>
+    <div id="MIDIPlugin" style="position:absolute; visibility:hidden"></div>
+  </section>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Web MIDI API Polyfill maintained by <a href="https://github.com/cwilso">cwilso</a></p>
-      </footer>
+    <p class="copyright">Web MIDI API Polyfill maintained by <a href="https://github.com/cwilso">cwilso</a></p>
+  </footer>
     </div>
+<script src="WebMIDIAPI.js"></script> 
+<script>
+var midi=null;
+var inputs=null;
+var outputs=null;
+var input=null;
+var output=null;
+var log=null;
 
-    
+function runTest() {
+	if (!log)
+		log = document.getElementById("log");
+	log.innerText = "Starting up MIDI...\n";
+	navigator.getMIDIAccess( success, failure );
+}
 
-  </body>
+function handleMIDIMessage( ev ) {
+	// testing - just reflect.
+	log.innerText += "Message: " + ev.data.length + " bytes, timestamp: " + ev.timestamp;
+	if (ev.data.length == 3) 
+		log.innerText += " 0x" + ev.data[0].toString(16) + " 0x" + ev.data[1].toString(16) + " 0x" + ev.data[2].toString(16);
+	log.innerText += "\n";
+	if (output)
+		output.send( ev.data );
+}
+
+function success( midiAccess ) {
+	log.innerText += "MIDI ready!\n";
+	midi = midiAccess;
+
+	inputs = midi.enumerateInputs();
+	log.innerText += inputs.length+" inputs:\n";
+	for (var i=0;i<inputs.length;i++)
+		log.innerText += i + ": " + inputs[i] + "\n";
+
+	if (inputs.length>0) {
+		input = midi.getInput( inputs[0] );
+//		input.onmessage = handleMIDIMessage;
+		input.addEventListener("message", handleMIDIMessage);
+		log.innerText += "Hooked up first input.\n";
+	}
+
+	outputs = midi.enumerateOutputs();
+	log.innerText += outputs.length+" outputs:\n";
+	for (var i=0;i<outputs.length;i++)
+		log.innerText += i + ": " + outputs[i] + "\n";
+
+	if (outputs.length) {
+		output = midi.getOutput( outputs[0] );
+		output.send( [0xb0, 0x00, 0x7f] );	// If the first device is a Novation Launchpad, this will light it up!
+	}
+}
+
+function failure( error ) {
+	alert( "Oh oh! Did you forget to install the Jazz plugin?");
+}
+</script>
+</body>
 </html>
