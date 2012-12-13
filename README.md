@@ -18,7 +18,7 @@ Now you can use the Web MIDI API as captured in the specification (except for th
 So, some sample usage: 
 
 	var m = null;   // m = MIDIAccess object for you to make calls on
-    navigator.getMIDIAccess( onsuccesscallback, onerrorcallback );
+    navigator.requestMIDIAccess( onsuccesscallback, onerrorcallback );
     function onsuccesscallback( access ) { 
     	m = access;
 

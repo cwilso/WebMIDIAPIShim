@@ -16,7 +16,7 @@ function runTest() {
 	if (!log)
 		log = document.getElementById("log");
 	log.innerText = "Starting up MIDI...\n";
-	navigator.getMIDIAccess( success, failure );
+	navigator.requestMIDIAccess( success, failure );
 }
 
 function handleMIDIMessage1( ev ) {
