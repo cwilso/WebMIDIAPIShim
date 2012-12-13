@@ -32,4 +32,4 @@ So, some sample usage:
 	    o.sendMessage( [ 0x80, 0x45, 0x00 ] );  // A4 note off
 	};
 
-You can also take a look at [index.html](index.html) for a basic test, or [multi.html](multi.html) for a multiple-simultaneous-input test.  Better documentation later.  :)
+You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim/tests/index.html) for a basic test, or [multi.html](http://cwilso.github.com/WebMIDIAPIShim/tests/multi.html) for a multiple-simultaneous-input test.  Better documentation later.  :)
