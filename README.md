@@ -28,8 +28,8 @@ So, some sample usage:
 	    var i = m.getInput( inputs[0] );    // grab first input device.  You can also getInput( index );
 	    i.onmessage = myMIDIMessagehandler;	// onmessage( event ), event.data & event.timestamp are populated
 	    var o = m.getOutput( outputs[0] );  // grab first output device
-	    o.sendMessage( [ 0x90, 0x45, 0xff ] );  // full velocity note on A4 on channel zero
-	    o.sendMessage( [ 0x80, 0x45, 0x00 ] );  // A4 note off
+	    o.send( [ 0x90, 0x45, 0x7f ] );  // full velocity note on A4 on channel zero
+	    o.send( [ 0x80, 0x45, 0x00 ] );  // A4 note off
 	};
 
 You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim/tests/index.html) for a basic test, or [multi.html](http://cwilso.github.com/WebMIDIAPIShim/tests/multi.html) for a multiple-simultaneous-input test.  Better documentation later.  :)
