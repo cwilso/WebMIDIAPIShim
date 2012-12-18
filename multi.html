@@ -40,11 +40,11 @@ function success( m ) {
 	for (var i=0;i<inputs.length;i++)
 		log.innerText += i + ": " + inputs[i] + "\n";
 
-	if (inputs.length>2) {
+	if (inputs.length>=2) {
 		input1 = midi.getInput( inputs[0] );
 		input1.onmessage = handleMIDIMessage1;
 		log.innerText += "Hooked up first input.\n";
-		input2 = midi.getInput( inputs[2] );
+		input2 = midi.getInput( inputs[1] );
 		input2.onmessage = handleMIDIMessage2;
 		log.innerText += "Hooked up second input.\n";
 	}
