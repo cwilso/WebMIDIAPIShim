@@ -11,7 +11,15 @@
     if (!window.navigator.requestMIDIAccess) {
       window.navigator.requestMIDIAccess = _requestMIDIAccess;
       if (!window.navigator.getMIDIAccess)
+<<<<<<< HEAD
         window.navigator.getMIDIAccess = _requestMIDIAccess;
+=======
+<<<<<<< HEAD
+        window.navigator.getMIDIAccess = _requestMIDIAccess;
+=======
+        window.navigator.getMIDIAccess = _getMIDIAccess;
+>>>>>>> enumerate => get
+>>>>>>> enumerate => get
     }
 
   function _JazzInstance() {
@@ -62,9 +70,29 @@
 
   function _requestMIDIAccess( successCallback, errorCallback ) {
       new MIDIAccess( successCallback, errorCallback );
+<<<<<<< HEAD
       return;
   }
 
+=======
+<<<<<<< HEAD
+      return;
+  }
+
+=======
+  }
+
+  function _getMIDIAccess( successCallback, errorCallback ) {
+      var message = "getMIDIAccess has been renamed to requestMIDIAccess.  Please update your code.";
+      
+      if (console.warn)
+        console.warn( message );
+      else
+        console.log( message );
+      new MIDIAccess( successCallback, errorCallback );
+  }
+>>>>>>> enumerate => get
+>>>>>>> enumerate => get
 
   // API Methods
 
@@ -87,11 +115,23 @@
           this._successCallback( this );
   }
 
+<<<<<<< HEAD
   MIDIAccess.prototype.enumerateInputs = function(  ) {
+=======
+<<<<<<< HEAD
+  MIDIAccess.prototype.enumerateInputs = function(  ) {
+=======
+  MIDIAccess.prototype.getInputs = function(  ) {
+>>>>>>> enumerate => get
+>>>>>>> enumerate => get
       if (!this._Jazz)
           return null;
       var list=this._Jazz.MidiInList();
       var inputs = new Array( list.length );
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> enumerate => get
     
       for ( var i=0; i<list.length; i++ ) {
           inputs[i] = new MIDIPort( this, list[i], i, "input" );
@@ -135,6 +175,75 @@
       this.fingerprint = "" + index + "." + this.name;
   }
 
+<<<<<<< HEAD
+=======
+=======
+    
+      for ( var i=0; i<list.length; i++ ) {
+          inputs[i] = new MIDIPort( this, list[i], i, "input" );
+      }
+      return inputs;
+  }
+
+  MIDIAccess.prototype.getOutputs = function(  ) {
+      if (!this._Jazz)
+          return null;
+      var list=this._Jazz.MidiOutList();
+      var outputs = new Array( list.length );
+    
+      for ( var i=0; i<list.length; i++ ) {
+          outputs[i] = new MIDIPort( this, list[i], i, "output" );
+      }
+      return outputs;
+  }
+
+  // TODO: remove these versions
+  MIDIAccess.prototype.enumerateInputs = function(  ) {
+    var message = "MIDIAccess.enumerateInputs has been renamed to MIDIAccess.getInputs.  Please update your code.";
+    
+    if (console.warn)
+      console.warn( message );
+    else
+      console.log( message );
+    return this.getInputs();
+  }
+
+  MIDIAccess.prototype.enumerateOutputs = function(  ) {
+    var message = "MIDIAccess.enumerateOutputs has been renamed to MIDIAccess.getOutputs.  Please update your code.";
+    
+    if (console.warn)
+      console.warn( message );
+    else
+      console.log( message );
+    return this.getOutputs();
+  }
+
+  MIDIAccess.prototype.getInput = function( target ) {
+      if (target==null)
+          return null;
+      return new MIDIInput( this, target );
+  }
+
+  MIDIAccess.prototype.getOutput = function( target ) {
+      if (target==null)
+          return null;
+      return new MIDIOutput( this, target );
+  }
+
+  function MIDIPort( midi, port, index, type ) {
+      this._index = index;
+      this._midi = midi;
+      this.type = type;
+
+      // Can't get manu/version from Jazz
+      this.name = port;
+      this.manufacturer = "<manufacturer unknown>";
+      this.version = "<version not supported>";
+      this.fingerprint = "" + index + "." + this.name;
+  }
+
+>>>>>>> enumerate => get
+>>>>>>> enumerate => get
   MIDIPort.prototype.toString = function() {
       return ("type: "+ this.type + "name: '" + this.name + "' manufacturer: '" + 
       this.manufacturer + "' version: " + this.version + " fingerprint: '" + this.fingerprint + "'" );
@@ -200,6 +309,7 @@
 
   MIDIInput.prototype.dispatchEvent = function (evt) {
     this._pvtDef = false;
+<<<<<<< HEAD
 
     // dispatch to listeners
     for (var i=0; i<this._listeners.length; i++)
@@ -219,6 +329,52 @@
     evt.timestamp = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
     evt.data = new Uint8Array(data);
     this.dispatchEvent( evt );
+=======
+
+    // dispatch to listeners
+    for (var i=0; i<this._listeners.length; i++)
+      if (this._listeners[i].handleEvent)
+<<<<<<< HEAD
+        this._listeners[i].handleEvent( evt );
+      else
+        this._listeners[i]( evt );
+=======
+        this._listeners[i].handleEvent.bind(this)( evt );
+      else
+        this._listeners[i].bind(this)( evt );
+>>>>>>> enumerate => get
+
+    if (this.onmessage)
+      this.onmessage( evt );
+
+    return this._pvtDef;
+  }
+
+  function _midiProc( timestamp, data ) {
+    var evt = new CustomEvent( "message" );
+    evt.timestamp = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
+    evt.data = new Uint8Array(data);
+    this.dispatchEvent( evt );
+
+  }
+
+  function MIDIOutput( midiAccess, target ) {
+    // target can be a MIDIPort or DOMString 
+    if ( target instanceof MIDIPort ) {
+      this._deviceName = target.name;
+      this._index = target._index;
+    } else if ( target.isString() ) { // fingerprint 
+      var dot = target.indexOf(".");
+      this._index = parseInt( target.slice( 0, dot ) );
+      this._deviceName = target.slice( dot + 1 );
+    } else { // target is numerical index
+      this._index = target;
+      var list=this.Jazz.MidiOutList();
+      this._deviceName = list[target];
+    }
+
+    this._midiAccess = midiAccess;
+>>>>>>> enumerate => get
 
   }
 
@@ -251,6 +407,20 @@
     }
     outputInstance.outputInUse = true;
 
+<<<<<<< HEAD
+=======
+    var outputInstance = null;
+    for (var i=0; (i<midiAccess._jazzInstances.length)&&(!outputInstance); i++) {
+      if (!midiAccess._jazzInstances[i].outputInUse)
+        outputInstance=midiAccess._jazzInstances[i];
+    }
+    if (!outputInstance) {
+      outputInstance = new _JazzInstance();
+      midiAccess._jazzInstances.push( outputInstance );
+    }
+    outputInstance.outputInUse = true;
+
+>>>>>>> enumerate => get
     this._jazzInstance = outputInstance._Jazz;
     this._jazzInstance.MidiOutOpen(this._deviceName);
   }
@@ -263,6 +433,7 @@
     var delayBeforeSend = 0;
     if (data.length==0)
       return false;
+<<<<<<< HEAD
 
     if (timestamp)
       delayBeforeSend = Math.floor( timestamp - window.performance.now() );
@@ -337,5 +508,142 @@
     Object.defineProperty(exports.performance, "now", props);
 }(window));
 
+=======
+<<<<<<< HEAD
+
+    if (timestamp)
+      delayBeforeSend = Math.floor( timestamp - window.performance.now() );
+
+    if (timestamp && (delayBeforeSend>1)) {
+      var sendObj = new Object;
+      sendObj.jazz = this._jazzInstance;
+      sendObj.data = data;
+
+      window.setTimeout( _sendLater.bind(sendObj), delayBeforeSend );
+    } else {
+      this._jazzInstance.MidiOutLong( data );
+    }
+    return true;
+  }
+
+}(window));
+
+// Polyfill window.performance.now() if necessary.
+(function (exports) {
+    var perf = {},
+        props;
+
+    function findAlt() {
+        var prefix = "moz,webkit,opera,ms".split(","),
+            i = prefix.length,
+            //worst case, we use Date.now()
+            props = { 
+                value: function (start) {
+                    return function () {
+                        return Date.now() - start;
+                    }
+                }(Date.now())
+            };
+
+        //seach for vendor prefixed version  
+        for (; i >= 0; i--) {
+            if ((prefix[i] + "Now") in exports.performance) {
+                props.value = function (method) {
+                    return function () {
+                        exports.performance[method]();
+                    }
+                }(prefix[i] + "Now");
+                return props;
+            }
+        }
+
+        //otherwise, try to use connectionStart 
+        if ("timing" in exports.performance &&
+            "connectStart" in exports.performance.timing) {
+            //this pretty much approximates performance.now() to the millisecond
+            props.value = function (start) {
+                return function(){Date.now() - start;}
+            }(exports.performance.timing.connectStart);
+        }
+        return props;
+    }
+
+=======
+
+    if (timestamp)
+      delayBeforeSend = Math.floor( timestamp - window.performance.now() );
+
+    if (timestamp && (delayBeforeSend>1)) {
+      var sendObj = new Object;
+      sendObj.jazz = this._jazzInstance;
+      sendObj.data = data;
+
+      window.setTimeout( _sendLater.bind(sendObj), delayBeforeSend );
+    } else {
+      this._jazzInstance.MidiOutLong( data );
+    }
+    return true;
+  }
+
+}(window));
+
+// Polyfill window.performance.now() if necessary.
+(function (exports) {
+    var perf = {},
+        props;
+
+    function findAlt() {
+        var prefix = "moz,webkit,opera,ms".split(","),
+            i = prefix.length,
+            //worst case, we use Date.now()
+            props = { 
+                value: function (start) {
+                    return function () {
+                        return Date.now() - start;
+                    }
+                }(Date.now())
+            };
+
+        //seach for vendor prefixed version  
+        for (; i >= 0; i--) {
+            if ((prefix[i] + "Now") in exports.performance) {
+                props.value = function (method) {
+                    return function () {
+                        exports.performance[method]();
+                    }
+                }(prefix[i] + "Now");
+                return props;
+            }
+        }
+
+        //otherwise, try to use connectionStart 
+        if ("timing" in exports.performance &&
+            "connectStart" in exports.performance.timing) {
+            //this pretty much approximates performance.now() to the millisecond
+            props.value = function (start) {
+                return function(){Date.now() - start;}
+            }(exports.performance.timing.connectStart);
+        }
+        return props;
+    }
+
+>>>>>>> enumerate => get
+    //if already defined, bail    
+    if (("performance" in exports) && ("now" in exports.performance)) {
+        return;
+    }
+    if (!("performance" in exports)) {
+        Object.defineProperty(exports, "performance", {
+            get: function () {
+                return perf;
+            }
+        });
+        //otherwise, perforance is there, but not "now()"    
+    } 
+    props = findAlt(); 
+    Object.defineProperty(exports.performance, "now", props);
+}(window));
+
+>>>>>>> enumerate => get
 
 
