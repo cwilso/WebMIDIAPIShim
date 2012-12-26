@@ -33,7 +33,7 @@ function success( midiAccess ) {
 	log.innerHTML += "MIDI ready!\n";
 	midi = midiAccess;
 
-	inputs = midi.enumerateInputs();
+	inputs = midi.getInputs();
 	log.innerHTML += inputs.length+" inputs:\n";
 	for (var i=0;i<inputs.length;i++)
 		log.innerHTML += i + ": " + inputs[i] + "\n";
@@ -45,7 +45,7 @@ function success( midiAccess ) {
 		log.innerHTML += "Hooked up first input.\n";
 	}
 
-	outputs = midi.enumerateOutputs();
+	outputs = midi.getOutputs();
 	log.innerHTML += outputs.length+" outputs:\n";
 	for (var i=0;i<outputs.length;i++)
 		log.innerHTML += i + ": " + outputs[i] + "\n";

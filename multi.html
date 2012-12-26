@@ -35,7 +35,7 @@ function success( m ) {
 	log.innerText += "MIDI ready!\n";
 	midi = m;
 
-	inputs = midi.enumerateInputs();
+	inputs = midi.getInputs();
 	log.innerText += inputs.length+" inputs:\n";
 	for (var i=0;i<inputs.length;i++)
 		log.innerText += i + ": " + inputs[i] + "\n";
@@ -45,11 +45,11 @@ function success( m ) {
 		input1.onmessage = handleMIDIMessage1;
 		log.innerText += "Hooked up first input.\n";
 		input2 = midi.getInput( inputs[1] );
-		input2.onmessage = handleMIDIMessage2;
+		input2.addEventListener( "message", handleMIDIMessage2 );
 		log.innerText += "Hooked up second input.\n";
 	}
 
-	outputs = midi.enumerateOutputs();
+	outputs = midi.getOutputs();
 	log.innerText += outputs.length+" outputs:\n";
 	for (var i=0;i<outputs.length;i++)
 		log.innerText += i + ": " + outputs[i] + "\n";
