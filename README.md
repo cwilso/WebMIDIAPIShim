@@ -19,17 +19,22 @@ So, some sample usage:
 
 	var m = null;   // m = MIDIAccess object for you to make calls on
     navigator.requestMIDIAccess( onsuccesscallback, onerrorcallback );
+    
     function onsuccesscallback( access ) { 
     	m = access;
 
     	// Things you can do with the MIDIAccess object:
 	    var inputs = m.enumerateInputs();   // inputs = array of MIDIPorts
 	    var outputs = m.enumerateOutputs(); // outputs = array of MIDIPorts
-	    var i = m.getInput( inputs[0] );    // grab first input device.  You can also getInput( index );
+	    var i = m.getInput( inputs[0] );    // grab first input device.  You can also just call getInput( index );
 	    i.onmessage = myMIDIMessagehandler;	// onmessage( event ), event.data & event.timestamp are populated
-	    var o = m.getOutput( outputs[0] );  // grab first output device
-	    o.send( [ 0x90, 0x45, 0x7f ] );  // full velocity note on A4 on channel zero
-	    o.send( [ 0x80, 0x45, 0x00 ] );  // A4 note off
+	    var o = m.getOutput( 0 );           // grab first output device
+	    o.send( [ 0x90, 0x45, 0x7f ] );     // full velocity note on A4 on channel zero
+	    o.send( [ 0x80, 0x45, 0x7f ], window.performance.now() + 1000 );  // full velocity A4 note off in one second.
 	};
+
+	function onerrorcallback( err ) {
+		console.log("uh-oh! Something went wrong!  Error code: " + err.code );
+	}
 
 You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim/tests/index.html) for a basic test, or [multi.html](http://cwilso.github.com/WebMIDIAPIShim/tests/multi.html) for a multiple-simultaneous-input test.  Better documentation later.  :)
