@@ -170,20 +170,6 @@
   }
 
   function MIDIInput( midiAccess, target ) {
-    // target can be a MIDIPort or DOMString 
-    if ( target instanceof MIDIPort ) {
-      this._deviceName = target.name;
-      this._index = target._index;
-    } else if ( target.isString() ) { // fingerprint 
-      var dot = target.indexOf(".");
-      this._index = parseInt( target.slice( 0, dot ) );
-      this._deviceName = target.slice( dot + 1 );
-    } else { // target is numerical index
-      this._index = target;
-      var list=this.Jazz.MidiInList();
-      this._deviceName = list[target];
-    }
-
     this.onmessage = null;
     this._listeners = [];
     this._midiAccess = midiAccess;
@@ -200,6 +186,21 @@
     inputInstance.inputInUse = true;
 
     this._jazzInstance = inputInstance._Jazz;
+
+    // target can be a MIDIPort or DOMString 
+    if ( target instanceof MIDIPort ) {
+      this._deviceName = target.name;
+      this._index = target._index;
+    } else if (typeof target === "number") { // target is numerical index
+      this._index = target;
+      var list=this._jazzInstance.MidiInList();
+      this._deviceName = list[target];
+    } else if ( target.isString() ) { // fingerprint 
+      var dot = target.indexOf(".");
+      this._index = parseInt( target.slice( 0, dot ) );
+      this._deviceName = target.slice( dot + 1 );
+    }
+
     this._input = this._jazzInstance.MidiInOpen( this._index, _midiProc.bind(this) );
   }
 
@@ -246,28 +247,58 @@
   function _midiProc( timestamp, data ) {
     var evt = new CustomEvent( "message" );
     evt.timestamp = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
-    evt.data = new Uint8Array(data);
-    this.dispatchEvent( evt );
+    var length = 0;
+    var i,j;
 
+    // Jazz sometimes passes us multiple messages at once, so we need to parse them out
+    // and pass them one at a time.
+    for (i=0; i<data.length; i+=length) {
+      switch (data[i] & 0xF0) {
+        case 0x80:  // note off
+        case 0x90:  // note on
+        case 0xA0:  // polyphonic aftertouch 
+        case 0xB0:  // control change
+        case 0xE0:  // channel mode
+          length = 3;
+          break;
+
+        case 0xC0:  // program change
+        case 0xD0:  // channel aftertouch
+          length = 2;
+          break;
+
+        case 0xF0:
+          switch (data[i]) {
+            case 0xf0:  // variable-length sysex.
+              // count the length;
+              length = -1;
+              for (j=i+1; (j<data.length) && (data[j] != 0xF7); j++)
+                ;
+              length = j-i+1;
+              break;
+
+            case 0xF1:  // MTC quarter frame
+            case 0xF3:  // song select
+              length = 2;
+              break;
+
+            case 0xF2:  // song position pointer
+              length = 3;
+              break;
+
+            default:
+              length = 1;
+              break;
+          }
+          break;
+      }
+      evt.data = new Uint8Array(data.slice(i, length+i));
+      this.dispatchEvent( evt );
+    }
   }
 
   function MIDIOutput( midiAccess, target ) {
-    // target can be a MIDIPort or DOMString 
-    if ( target instanceof MIDIPort ) {
-      this._deviceName = target.name;
-      this._index = target._index;
-    } else if ( target.isString() ) { // fingerprint 
-      var dot = target.indexOf(".");
-      this._index = parseInt( target.slice( 0, dot ) );
-      this._deviceName = target.slice( dot + 1 );
-    } else { // target is numerical index
-      this._index = target;
-      var list=this.Jazz.MidiOutList();
-      this._deviceName = list[target];
-    }
-
     this._midiAccess = midiAccess;
-
 
     var outputInstance = null;
     for (var i=0; (i<midiAccess._jazzInstances.length)&&(!outputInstance); i++) {
@@ -281,6 +312,21 @@
     outputInstance.outputInUse = true;
 
     this._jazzInstance = outputInstance._Jazz;
+
+    // target can be a MIDIPort or DOMString 
+    if ( target instanceof MIDIPort ) {
+      this._deviceName = target.name;
+      this._index = target._index;
+    } else if (typeof target === "number") { // target is numerical index
+      this._index = target;
+      var list=this._jazzInstance.MidiOutList();
+      this._deviceName = list[target];
+    } else if ( target.isString() ) { // fingerprint 
+      var dot = target.indexOf(".");
+      this._index = parseInt( target.slice( 0, dot ) );
+      this._deviceName = target.slice( dot + 1 );
+    }
+
     this._jazzInstance.MidiOutOpen(this._deviceName);
   }
 
