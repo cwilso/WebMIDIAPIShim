@@ -56,7 +56,7 @@ function success( m ) {
 		input1 = midi.getInput( inputs[0] );
 		input1.onmessage = handleMIDIMessage1;
 		log.innerText += "Hooked up first input.\n";
-		input2 = midi.getInput( inputs[1] );
+		input2 = midi.getInput( 1 );
 		input2.addEventListener( "message", handleMIDIMessage2 );
 		log.innerText += "Hooked up second input.\n";
 	}
