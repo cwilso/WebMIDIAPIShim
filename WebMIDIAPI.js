@@ -204,8 +204,6 @@
     this._input = this._jazzInstance.MidiInOpen( this._index, _midiProc.bind(this) );
   }
 
-  MIDIInput.inherits( MIDIPort );
-
   // Introduced in DOM Level 2:
   MIDIInput.prototype.addEventListener = function (type, listener, useCapture ) {
     if (type != "message")
@@ -331,8 +329,6 @@
 
     this._jazzInstance.MidiOutOpen(this._deviceName);
   }
-
-  MIDIOutput.inherits( MIDIPort );
 
   function _sendLater() {
       this.jazz.MidiOutLong( this.data );    // handle send as sysex
