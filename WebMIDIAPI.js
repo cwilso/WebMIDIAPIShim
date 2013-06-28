@@ -25,6 +25,25 @@
             window.navigator.getMIDIAccess = _getMIDIAccess;
     }
 
+    function Promise() {
+
+    }
+
+    Promise.prototype.then = function(accept, reject) {
+        this.accept = accept; 
+        this.reject = reject;
+    }
+
+    Promise.prototype.succeed = function(access) {
+        if (this.accept)
+            this.accept(access);
+    }
+
+    Promise.prototype.fail = function(error) {
+        if (this.reject)
+            this.reject(error);
+    }
+
     function _JazzInstance() {
         this.inputInUse = false;
         this.outputInUse = false;
@@ -79,119 +98,70 @@
         }
     }
 
-    function _requestMIDIAccess( successCallback, errorCallback ) {
-        new MIDIAccess( successCallback, errorCallback );
-    }
-
-    function _getMIDIAccess( successCallback, errorCallback ) {
-        var message = "getMIDIAccess has been renamed to requestMIDIAccess.  Please update your code.";
-
-        if (console.warn)
-            console.warn( message );
-        else
-            console.log( message );
-        new MIDIAccess( successCallback, errorCallback );
+    function _requestMIDIAccess() {
+        var access = new MIDIAccess();
+        return access._promise;
     }
 
     // API Methods
 
-    function MIDIAccess( successCallback, errorCallback ) {
+    function MIDIAccess() {
         this._jazzInstances = new Array();
         this._jazzInstances.push( new _JazzInstance() );
+        this._promise = new Promise;
 
         if (this._jazzInstances[0]._Jazz) {
             this._Jazz = this._jazzInstances[0]._Jazz;
-            this._successCallback = successCallback;
             window.setTimeout( _onReady.bind(this), 3 );
         } else {
-            if (errorCallback)
-                errorCallback( { code: 1 } );
+            window.setTimeout( _onNotReady.bind(this), 3 );
         }
     }
 
     function _onReady() {
-        if (this._successCallback)
-            this._successCallback( this );
+        if (this._promise)
+            this._promise.succeed(this);
     }
 
-    MIDIAccess.prototype.getInputs = function(  ) {
+    function _onNotReady() {
+        if (this._promise)
+            this._promise.fail( { code: 1 } );
+    }
+
+    MIDIAccess.prototype.inputs = function(  ) {
         if (!this._Jazz)
               return null;
         var list=this._Jazz.MidiInList();
         var inputs = new Array( list.length );
 
         for ( var i=0; i<list.length; i++ ) {
-            inputs[i] = new MIDIPort( this, list[i], i, "input" );
+            inputs[i] = new MIDIInput( this, list[i], i );
         }
         return inputs;
     }
 
-    MIDIAccess.prototype.getOutputs = function(  ) {
+    MIDIAccess.prototype.outputs = function(  ) {
         if (!this._Jazz)
             return null;
         var list=this._Jazz.MidiOutList();
         var outputs = new Array( list.length );
 
         for ( var i=0; i<list.length; i++ ) {
-            outputs[i] = new MIDIPort( this, list[i], i, "output" );
+            outputs[i] = new MIDIOutput( this, list[i], i );
         }
         return outputs;
     }
 
-    // TODO: remove these versions
-    MIDIAccess.prototype.enumerateInputs = function(  ) {
-        var message = "MIDIAccess.enumerateInputs has been renamed to MIDIAccess.getInputs.  Please update your code.";
-
-        if (console.warn)
-            console.warn( message );
-        else
-            console.log( message );
-        return this.getInputs();
-    }
-
-    MIDIAccess.prototype.enumerateOutputs = function(  ) {
-        var message = "MIDIAccess.enumerateOutputs has been renamed to MIDIAccess.getOutputs.  Please update your code.";
-
-        if (console.warn)
-            console.warn( message );
-        else
-            console.log( message );
-        return this.getOutputs();
-    }
-
-    MIDIAccess.prototype.getInput = function( target ) {
-        if (target==null)
-            return null;
-        return new MIDIInput( this, target );
-    }
-
-    MIDIAccess.prototype.getOutput = function( target ) {
-        if (target==null)
-            return null;
-        return new MIDIOutput( this, target );
-    }
-
-    function MIDIPort( midi, port, index, type ) {
-        this._index = index;
-        this._midi = midi;
-        this.type = type;
-
-        // Can't get manu/version from Jazz
-        this.name = port;
-        this.manufacturer = null;
-        this.version = null;
-        this.fingerprint = "" + index + "." + this.name;
-    }
-
-    MIDIPort.prototype.toString = function() {
-        return ("type: "+ this.type + "name: '" + this.name + "' manufacturer: '" +
-              this.manufacturer + "' version: " + this.version + " fingerprint: '" + this.fingerprint + "'" );
-    }
-
-    function MIDIInput( midiAccess, target ) {
-        this.onmessage = null;
+    function MIDIInput( midiAccess, name, index ) {
         this._listeners = [];
         this._midiAccess = midiAccess;
+        this._index = index;
+        this.id = "" + index + "." + name;
+        this.manufacturer = "";
+        this.name = name;
+        this.type = "input";
+        this.version = "";
+        this.onmidimessage = null;
 
         var inputInstance = null;
         for (var i=0; (i<midiAccess._jazzInstances.length)&&(!inputInstance); i++) {
@@ -205,21 +175,6 @@
         inputInstance.inputInUse = true;
 
         this._jazzInstance = inputInstance._Jazz;
-
-        // target can be a MIDIPort or DOMString
-        if ( target instanceof MIDIPort ) {
-            this._deviceName = target.name;
-            this._index = target._index;
-        } else if (typeof target === "number") { // target is numerical index
-            this._index = target;
-            var list=this._jazzInstance.MidiInList();
-            this._deviceName = list[target];
-        } else if ( typeof target === 'string' ) { // fingerprint
-            var dot = target.indexOf(".");
-            this._index = parseInt( target.slice( 0, dot ) );
-            this._deviceName = target.slice( dot + 1 );
-        }
-
         this._input = this._jazzInstance.MidiInOpen( this._index, _midiProc.bind(this) );
     }
 
@@ -257,8 +212,8 @@
             else
                 this._listeners[i].bind(this)( evt );
 
-        if (this.onmessage)
-            this.onmessage( evt );
+        if (this.onmidimessage)
+            this.onmidimessage( evt );
 
         return this._pvtDef;
     }
@@ -319,8 +274,15 @@
         }
     }
 
-    function MIDIOutput( midiAccess, target ) {
+    function MIDIOutput( midiAccess, name, index ) {
+        this._listeners = [];
         this._midiAccess = midiAccess;
+        this._index = index;
+        this.id = "" + index + "." + name;
+        this.manufacturer = "";
+        this.name = name;
+        this.type = "output";
+        this.version = "";
 
         var outputInstance = null;
         for (var i=0; (i<midiAccess._jazzInstances.length)&&(!outputInstance); i++) {
@@ -334,22 +296,7 @@
         outputInstance.outputInUse = true;
 
         this._jazzInstance = outputInstance._Jazz;
-
-        // target can be a MIDIPort or DOMString
-        if ( target instanceof MIDIPort ) {
-            this._deviceName = target.name;
-            this._index = target._index;
-        } else if (typeof target === "number") { // target is numerical index
-            this._index = target;
-            var list=this._jazzInstance.MidiOutList();
-            this._deviceName = list[target];
-        } else if ( typeof target === 'string' ) { // fingerprint
-            var dot = target.indexOf(".");
-            this._index = parseInt( target.slice( 0, dot ) );
-            this._deviceName = target.slice( dot + 1 );
-        }
-
-        this._jazzInstance.MidiOutOpen(this._deviceName);
+        this._jazzInstance.MidiOutOpen(this.name);
     }
 
     function _sendLater() {

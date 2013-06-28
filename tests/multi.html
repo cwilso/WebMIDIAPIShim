@@ -16,7 +16,7 @@ function runTest() {
 	if (!log)
 		log = document.getElementById("log");
 	log.innerText = "Starting up MIDI...\n";
-	navigator.requestMIDIAccess( success, failure );
+	navigator.requestMIDIAccess().then( success, failure );
 }
 
 function handleMIDIMessage1( ev ) {
@@ -35,27 +35,27 @@ function success( m ) {
 	log.innerText += "MIDI ready!\n";
 	midi = m;
 
-	inputs = midi.getInputs();
+	inputs = midi.inputs();
 	log.innerText += inputs.length+" inputs:\n";
 	for (var i=0;i<inputs.length;i++)
-		log.innerText += i + ": " + inputs[i] + "\n";
+		log.innerText += i + ": " + inputs[i].name + "\n";
 
 	if (inputs.length>=2) {
-		input1 = midi.getInput( inputs[0] );
-		input1.onmessage = handleMIDIMessage1;
+		input1 = inputs[0];
+		input1.onmidimessage = handleMIDIMessage1;
 		log.innerText += "Hooked up first input.\n";
-		input2 = midi.getInput( inputs[1] );
-		input2.addEventListener( "message", handleMIDIMessage2 );
+		input2 = inputs[1];
+		input2.addEventListener( "midimessage", handleMIDIMessage2 );
 		log.innerText += "Hooked up second input.\n";
 	}
 
-	outputs = midi.getOutputs();
+	outputs = midi.outputs();
 	log.innerText += outputs.length+" outputs:\n";
 	for (var i=0;i<outputs.length;i++)
-		log.innerText += i + ": " + outputs[i] + "\n";
+		log.innerText += i + ": " + outputs[i].name + "\n";
 
 	if (outputs.length) {
-		output = midi.getOutput( outputs[0] );
+		output = outputs[0];
 		output.send( [0xb0, 0x00, 0x7f] );	// If the first device is a Novation Launchpad, this will light it up!
 	}
 }
