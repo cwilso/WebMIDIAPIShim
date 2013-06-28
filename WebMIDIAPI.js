@@ -14,7 +14,7 @@
 */
 
 // Initialize the MIDI library.
-(function (global, exports, perf) {
+(function (global) {
     'use strict';
     var midiIO, _requestMIDIAccess, _getMIDIAccess, MIDIAccess, _onReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
 
@@ -225,7 +225,7 @@
 
     // Introduced in DOM Level 2:
     MIDIInput.prototype.addEventListener = function (type, listener, useCapture ) {
-        if (type != "message")
+        if (type !== "midimessage")
             return;
         for (var i=0; i<this._listeners.length; i++)
             if (this._listeners[i] == listener)
@@ -234,7 +234,7 @@
     }
 
     MIDIInput.prototype.removeEventListener = function (type, listener, useCapture ) {
-        if (type != "message")
+        if (type !== "midimessage")
             return;
         for (var i=0; i<this._listeners.length; i++)
             if (this._listeners[i] == listener) {
