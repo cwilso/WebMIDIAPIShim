@@ -156,6 +156,8 @@
         this._listeners = [];
         this._midiAccess = midiAccess;
         this._index = index;
+        this._inLongSysexMessage = false;
+        this._sysexBuffer = new Uint8Array();
         this.id = "" + index + "." + name;
         this.manufacturer = "";
         this.name = name;
@@ -218,58 +220,96 @@
         return this._pvtDef;
     }
 
+    MIDIInput.prototype.appendToSysexBuffer = function ( data ) {
+        var oldLength = this._sysexBuffer.length;
+        var tmpBuffer = new Uint8Array( oldLength + data.length );
+        tmpBuffer.set( this._sysexBuffer );
+        tmpBuffer.set( data, oldLength );
+        this._sysexBuffer = tmpBuffer;
+    }
+
+    MIDIInput.prototype.bufferLongSysex = function ( data, initialOffset ) {
+        var j=initialOffset;
+        while (j<data.length) {
+            if (data[j] == 0xF7) {
+                // end of sysex!
+                j++;
+                this.appendToSysexBuffer( data.slice(initialOffset, j) );
+                return j;
+            }
+            j++;
+        }
+        // didn't reach the end; just tack it on.
+        this.appendToSysexBuffer( data.slice(initialOffset, j) );
+        this._inLongSysexMessage = true;
+        return j;
+    }
+
     function _midiProc( timestamp, data ) {
         // Have to use createEvent/initEvent because IE10 fails on new CustomEvent.  Thanks, IE!
-        var evt = document.createEvent( "Event" );
-        evt.initEvent( "midimessage", false, false );
-        evt.timestamp = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
         var length = 0;
         var i,j;
+        var isSysexMessage = false;
 
         // Jazz sometimes passes us multiple messages at once, so we need to parse them out
         // and pass them one at a time.
+
         for (i=0; i<data.length; i+=length) {
-            switch (data[i] & 0xF0) {
-                case 0x80:  // note off
-                case 0x90:  // note on
-                case 0xA0:  // polyphonic aftertouch
-                case 0xB0:  // control change
-                case 0xE0:  // channel mode
-                    length = 3;
-                    break;
 
-                case 0xC0:  // program change
-                case 0xD0:  // channel aftertouch
-                    length = 2;
-                    break;
+            if (this._inLongSysexMessage)
+                i = this.bufferLongSysex(data,i);
+            else {
+                isSysexMessage = false;
+                switch (data[i] & 0xF0) {
+                    case 0x80:  // note off
+                    case 0x90:  // note on
+                    case 0xA0:  // polyphonic aftertouch
+                    case 0xB0:  // control change
+                    case 0xE0:  // channel mode
+                        length = 3;
+                        break;
 
-                case 0xF0:
-                    switch (data[i]) {
-                        case 0xf0:  // variable-length sysex.
-                            // count the length;
-                            length = -1;
-                            j=i+1;
-                            while ((j<data.length) && (data[j] != 0xF7))
-                                j++;
-                            length = j-i+1;
-                            break;
+                    case 0xC0:  // program change
+                    case 0xD0:  // channel aftertouch
+                        length = 2;
+                        break;
 
-                        case 0xF1:  // MTC quarter frame
-                        case 0xF3:  // song select
-                            length = 2;
-                            break;
+                    case 0xF0:
+                        switch (data[i]) {
+                            case 0xf0:  // variable-length sysex.
+                                i = this.bufferLongSysex(data,i);
+                                if ( data[i-1] != 0xf7 ) {
+                                    // ran off the end without hitting the end of the sysex message
+                                    return;
+                                }
+                                isSysexMessage = true;
+                                break;
 
-                        case 0xF2:  // song position pointer
-                            length = 3;
-                            break;
+                            case 0xF1:  // MTC quarter frame
+                            case 0xF3:  // song select
+                                length = 2;
+                                break;
 
-                        default:
-                            length = 1;
-                            break;
-                    }
-                    break;
+                            case 0xF2:  // song position pointer
+                                length = 3;
+                                break;
+
+                            default:
+                                length = 1;
+                                break;
+                        }
+                        break;
+                }
             }
-            evt.data = new Uint8Array(data.slice(i, length+i));
+            var evt = document.createEvent( "Event" );
+            evt.initEvent( "midimessage", false, false );
+            evt.timestamp = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
+            if (isSysexMessage || this._inLongSysexMessage) {
+                evt.data = new Uint8Array( this._sysexBuffer );
+                this._sysexBuffer.length = 0;
+                this._inLongSysexMessage = false;
+            } else
+                evt.data = new Uint8Array(data.slice(i, length+i));
             this.dispatchEvent( evt );
         }
     }
