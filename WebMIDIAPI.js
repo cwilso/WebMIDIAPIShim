@@ -255,10 +255,14 @@
         // and pass them one at a time.
 
         for (i=0; i<data.length; i+=length) {
-
-            if (this._inLongSysexMessage)
+            if (this._inLongSysexMessage) {
                 i = this.bufferLongSysex(data,i);
-            else {
+                if ( data[i-1] != 0xf7 ) {
+                    // ran off the end without hitting the end of the sysex message
+                    return;
+                }
+                isSysexMessage = true;
+            } else {
                 isSysexMessage = false;
                 switch (data[i] & 0xF0) {
                     case 0x80:  // note off
