@@ -27,7 +27,6 @@
 <!-- MAIN CONTENT -->
 <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-      <h2>Forewarning: the spec has recently changed to use Futures.  I have not updated the polyfill yet.</h2>
     <h3>To use the Web MIDI API Polyfill</h3>
     <p>Just include</p>
     <pre>&lt;script src='http://cwilso.github.com/WebMIDIAPIShim/WebMIDIAPI.js'&gt;&lt;/script&gt;</pre>
@@ -103,7 +102,7 @@ function success( midiAccess ) {
 }
 
 function failure( error ) {
-	alert( "Oh oh! Did you forget to install the Jazz plugin?");
+	alert( "MIDI failed to start. Did you forget to install the Jazz plugin?");
 }
 </script>
 </body>

@@ -307,7 +307,7 @@
             }
             var evt = document.createEvent( "Event" );
             evt.initEvent( "midimessage", false, false );
-            evt.timestamp = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
+            evt.receivedTime = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
             if (isSysexMessage || this._inLongSysexMessage) {
                 evt.data = new Uint8Array( this._sysexBuffer );
                 this._sysexBuffer.length = 0;
