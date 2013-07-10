@@ -98,14 +98,14 @@
         }
     }
 
-    function _requestMIDIAccess() {
+    _requestMIDIAccess = function _requestMIDIAccess() {
         var access = new MIDIAccess();
         return access._promise;
-    }
+    };
 
     // API Methods
 
-    function MIDIAccess() {
+    MIDIAccess = function MIDIAccess() {
         this._jazzInstances = new Array();
         this._jazzInstances.push( new _JazzInstance() );
         this._promise = new Promise;
@@ -116,17 +116,17 @@
         } else {
             window.setTimeout( _onNotReady.bind(this), 3 );
         }
-    }
+    };
 
-    function _onReady() {
+    _onReady = function _onReady() {
         if (this._promise)
             this._promise.succeed(this);
-    }
+    };
 
     function _onNotReady() {
         if (this._promise)
             this._promise.fail( { code: 1 } );
-    }
+    };
 
     MIDIAccess.prototype.inputs = function(  ) {
         if (!this._Jazz)
@@ -150,9 +150,9 @@
             outputs[i] = new MIDIOutput( this, list[i], i );
         }
         return outputs;
-    }
+    };
 
-    function MIDIInput( midiAccess, name, index ) {
+    MIDIInput = function MIDIInput( midiAccess, name, index ) {
         this._listeners = [];
         this._midiAccess = midiAccess;
         this._index = index;
@@ -178,7 +178,7 @@
 
         this._jazzInstance = inputInstance._Jazz;
         this._input = this._jazzInstance.MidiInOpen( this._index, _midiProc.bind(this) );
-    }
+    };
 
     // Introduced in DOM Level 2:
     MIDIInput.prototype.addEventListener = function (type, listener, useCapture ) {
@@ -188,7 +188,7 @@
             if (this._listeners[i] == listener)
                 return;
         this._listeners.push( listener );
-    }
+    };
 
     MIDIInput.prototype.removeEventListener = function (type, listener, useCapture ) {
         if (type !== "midimessage")
@@ -198,11 +198,11 @@
                 this._listeners.splice( i, 1 );  //remove it
                 return;
             }
-    }
+    };
 
     MIDIInput.prototype.preventDefault = function() {
         this._pvtDef = true;
-    }
+    };
 
     MIDIInput.prototype.dispatchEvent = function (evt) {
         this._pvtDef = false;
@@ -218,7 +218,7 @@
             this.onmidimessage( evt );
 
         return this._pvtDef;
-    }
+    };
 
     MIDIInput.prototype.appendToSysexBuffer = function ( data ) {
         var oldLength = this._sysexBuffer.length;
@@ -226,10 +226,10 @@
         tmpBuffer.set( this._sysexBuffer );
         tmpBuffer.set( data, oldLength );
         this._sysexBuffer = tmpBuffer;
-    }
+    };
 
     MIDIInput.prototype.bufferLongSysex = function ( data, initialOffset ) {
-        var j=initialOffset;
+        var j = initialOffset;
         while (j<data.length) {
             if (data[j] == 0xF7) {
                 // end of sysex!
@@ -243,9 +243,9 @@
         this.appendToSysexBuffer( data.slice(initialOffset, j) );
         this._inLongSysexMessage = true;
         return j;
-    }
+    };
 
-    function _midiProc( timestamp, data ) {
+    _midiProc = function _midiProc( timestamp, data ) {
         // Have to use createEvent/initEvent because IE10 fails on new CustomEvent.  Thanks, IE!
         var length = 0;
         var i,j;
@@ -316,9 +316,9 @@
                 evt.data = new Uint8Array(data.slice(i, length+i));
             this.dispatchEvent( evt );
         }
-    }
+    };
 
-    function MIDIOutput( midiAccess, name, index ) {
+    MIDIOutput = function MIDIOutput( midiAccess, name, index ) {
         this._listeners = [];
         this._midiAccess = midiAccess;
         this._index = index;
@@ -341,7 +341,7 @@
 
         this._jazzInstance = outputInstance._Jazz;
         this._jazzInstance.MidiOutOpen(this.name);
-    }
+    };
 
     function _sendLater() {
         this.jazz.MidiOutLong( this.data );    // handle send as sysex
@@ -349,14 +349,14 @@
 
     MIDIOutput.prototype.send = function( data, timestamp ) {
         var delayBeforeSend = 0;
-        if (data.length==0)
+        if (data.length === 0)
             return false;
 
         if (timestamp)
             delayBeforeSend = Math.floor( timestamp - window.performance.now() );
 
         if (timestamp && (delayBeforeSend>1)) {
-            var sendObj = new Object;
+            var sendObj = new Object();
             sendObj.jazz = this._jazzInstance;
             sendObj.data = data;
 
@@ -365,25 +365,24 @@
             this._jazzInstance.MidiOutLong( data );
         }
         return true;
-    }
+    };
 
-    }(window));
+}(window));
 
-    // Polyfill window.performance.now() if necessary.
+// Polyfill window.performance.now() if necessary.
 (function (exports) {
-    var perf = {},
-    props;
+    var perf = {}, props;
 
     function findAlt() {
-        var prefix = "moz,webkit,opera,ms".split(","),
+        var prefix = ['moz', 'webkit', 'o', 'ms'],
         i = prefix.length,
             //worst case, we use Date.now()
             props = {
-                value: function (start) {
+                value: (function (start) {
                     return function () {
                         return Date.now() - start;
-                    }
-                }(Date.now())
+                    };
+                }(Date.now()))
             };
 
         //seach for vendor prefixed version
@@ -401,11 +400,11 @@
         //otherwise, try to use connectionStart
         if ("timing" in exports.performance && "connectStart" in exports.performance.timing) {
             //this pretty much approximates performance.now() to the millisecond
-            props.value = function (start) {
+            props.value = (function (start) {
                 return function() {
                     Date.now() - start;
-                }
-            }(exports.performance.timing.connectStart);
+                };
+            }(exports.performance.timing.connectStart));
         }
         return props;
     }
@@ -423,6 +422,3 @@
     props = findAlt();
     Object.defineProperty(exports.performance, "now", props);
 }(window));
-
-
-
