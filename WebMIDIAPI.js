@@ -361,11 +361,8 @@
     };
 
     //init: create plugin
-    if (!window.navigator.requestMIDIAccess) {
+    if (!window.navigator.requestMIDIAccess)
         window.navigator.requestMIDIAccess = _requestMIDIAccess;
-        if (!window.navigator.getMIDIAccess)
-            window.navigator.getMIDIAccess = _getMIDIAccess;
-    }
 
 }(window));
 
