@@ -16,7 +16,7 @@
 // Initialize the MIDI library.
 (function (global) {
     'use strict';
-    var midiIO, _requestMIDIAccess, _getMIDIAccess, MIDIAccess, _onReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
+    var midiIO, _requestMIDIAccess, MIDIAccess, _onReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
 
     function Promise() {
 
