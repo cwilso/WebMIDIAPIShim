@@ -18,13 +18,6 @@
     'use strict';
     var midiIO, _requestMIDIAccess, _getMIDIAccess, MIDIAccess, _onReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
 
-    //init: create plugin
-    if (!window.navigator.requestMIDIAccess) {
-        window.navigator.requestMIDIAccess = _requestMIDIAccess;
-        if (!window.navigator.getMIDIAccess)
-            window.navigator.getMIDIAccess = _getMIDIAccess;
-    }
-
     function Promise() {
 
     }
@@ -105,7 +98,7 @@
 
     // API Methods
 
-    MIDIAccess = function MIDIAccess() {
+    function MIDIAccess() {
         this._jazzInstances = new Array();
         this._jazzInstances.push( new _JazzInstance() );
         this._promise = new Promise;
@@ -366,6 +359,13 @@
         }
         return true;
     };
+
+    //init: create plugin
+    if (!window.navigator.requestMIDIAccess) {
+        window.navigator.requestMIDIAccess = _requestMIDIAccess;
+        if (!window.navigator.getMIDIAccess)
+            window.navigator.getMIDIAccess = _getMIDIAccess;
+    }
 
 }(window));
 
