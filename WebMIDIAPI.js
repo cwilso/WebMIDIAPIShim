@@ -303,7 +303,7 @@
             evt.receivedTime = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
             if (isSysexMessage || this._inLongSysexMessage) {
                 evt.data = new Uint8Array( this._sysexBuffer );
-                this._sysexBuffer.length = 0;
+                this._sysexBuffer = Uint8Array(0);
                 this._inLongSysexMessage = false;
             } else
                 evt.data = new Uint8Array(data.slice(i, length+i));
