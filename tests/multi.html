@@ -61,6 +61,7 @@ function success( m ) {
 	if (outputs.length) {
 		output = outputs[0];
 		output.send( [0xb0, 0x00, 0x7f] );	// If the first device is a Novation Launchpad, this will light it up!
+		output = outputs[length-1];
 	}
 }
 
