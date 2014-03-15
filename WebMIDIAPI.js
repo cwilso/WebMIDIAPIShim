@@ -98,7 +98,7 @@
 
     // API Methods
 
-    function MIDIAccess() {
+    MIDIAccess = function() {
         this._jazzInstances = new Array();
         this._jazzInstances.push( new _JazzInstance() );
         this._promise = new Promise;
