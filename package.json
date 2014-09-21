@@ -1,0 +1,31 @@
+{
+  "name": "web-midi-api",
+  "version": "0.0.0",
+  "description": "Node.js version of Chirs Wilson's WebMIDIAPIShim",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jazz-soft/WebMIDIAPIShim.git"
+  },
+  "keywords": [
+    "midi",
+    "web midi",
+    "web midi api"
+  ],
+  "author": {
+    "name": "jazz-soft",
+    "url": "http://jazz-soft.net/"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jazz-soft/WebMIDIAPIShim/issues"
+  },
+  "homepage": "https://github.com/jazz-soft/WebMIDIAPIShim",
+  "dependencies": {
+    "jazz-midi": "^1.3.0"
+  },
+  "readmeFilename": "README.md",
+}
