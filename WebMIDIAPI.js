@@ -17,6 +17,8 @@
 (function (global) {
     'use strict';
     var midiIO, _requestMIDIAccess, _delayedInit, MIDIAccess, _onReady, _onNotReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
+    var inNodeJs = ( typeof __dirname !== 'undefined' && window.jazzMidi );
+    var allMidiIns = [];
 
     function Promise() {
 
@@ -40,6 +42,12 @@
     function _JazzInstance() {
         this.inputInUse = false;
         this.outputInUse = false;
+
+        // if running in Node.js
+        if (inNodeJs) {
+            this.objRef = new window.jazzMidi.MIDI();
+            return;
+        }
 
         // load the Jazz plugin
         var o1 = document.createElement("object");
@@ -175,6 +183,7 @@
         var then = function() {
             this._jazzInstance = inputInstance._Jazz;
             this._input = this._jazzInstance.MidiInOpen( this._index, _midiProc.bind(this) );
+            if (inNodeJs) allMidiIns.push(this._jazzInstance);
         };
         for (var i=0; (i<midiAccess._jazzInstances.length)&&(!inputInstance); i++) {
             if (!midiAccess._jazzInstances[i].inputInUse)
@@ -316,8 +325,11 @@
                         break;
                 }
             }
-            var evt = document.createEvent( "Event" );
-            evt.initEvent( "midimessage", false, false );
+            var evt = {}
+            if (!inNodeJs) {
+                evt = document.createEvent( "Event" );
+                evt.initEvent( "midimessage", false, false );
+            }
             evt.receivedTime = parseFloat( timestamp.toString()) + this._jazzInstance._perfTimeZero;
             if (isSysexMessage || this._inLongSysexMessage) {
                 evt.data = new Uint8Array( this._sysexBuffer );
@@ -325,7 +337,9 @@
                 this._inLongSysexMessage = false;
             } else
                 evt.data = new Uint8Array(data.slice(i, length+i));
-            this.dispatchEvent( evt );
+
+            if (inNodeJs) this.onmidimessage( evt );
+            else this.dispatchEvent( evt );
         }
     };
 
@@ -384,8 +398,15 @@
     };
 
     //init: create plugin
-    if (!window.navigator.requestMIDIAccess)
+    if (!window.navigator.requestMIDIAccess) {
         window.navigator.requestMIDIAccess = _requestMIDIAccess;
+        if (typeof __dirname !== 'undefined' && window.jazzMidi) {
+            window.navigator.close = function() {
+                for(var i in allMidiIns) allMidiIns[i].MidiInClose();
+                // Need to close MIDI input ports, otherwise Node.js will wait for MIDI input forever.
+            };
+        }
+    }
 
 }(window));
 
