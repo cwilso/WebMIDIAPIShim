@@ -160,7 +160,8 @@
                 _createJazzInstance.bind(this)(i, max);
             } else {
                 /*
-                    All necessary _JazzInstances are created, now call _onReady
+                    All necessary _JazzInstances have been created and
+                    initialized, now call _onReady
                 */
                 window.setTimeout(_onReady.bind(this), 3);
             }
