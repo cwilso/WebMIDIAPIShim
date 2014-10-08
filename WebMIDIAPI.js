@@ -143,6 +143,9 @@
                 numInstances = Math.max(numInputs, numOutputs) - 1;
                 if(numInstances > 0){
                     _createJazzInstance.bind(this)(0, numInstances);
+                }else{
+                    // no need to create additional instances
+                    window.setTimeout(_onReady.bind(this), 3);
                 }
             } else {
                 window.setTimeout(_onNotReady.bind(this), 3);
