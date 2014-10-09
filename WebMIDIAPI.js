@@ -235,7 +235,7 @@
             inputInstance._delayedInit(then.bind(this));
         } else {
             inputInstance.inputInUse = true;
-            then.bind(this).apply();
+            inputInstance._delayedInit(then.bind(this));
         }
     };
 
@@ -408,7 +408,7 @@
             outputInstance._delayedInit(then.bind(this));
         } else {
             outputInstance.outputInUse = true;
-            then.bind(this).apply();
+            outputInstance._delayedInit(then.bind(this));
         }
     };
 
