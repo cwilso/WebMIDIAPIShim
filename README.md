@@ -38,6 +38,10 @@ So, some sample usage:
 
 You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim/tests/index.html) for a basic test, or [multi.html](http://cwilso.github.com/WebMIDIAPIShim/tests/multi.html) for a multiple-simultaneous-input test.  Better documentation later.  :)
 
+##Node.js install
+
+    npm install web-midi-api
+
 ##Node.js example
 
     var navigator = require('web-midi-api');
@@ -53,7 +57,7 @@ You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim
       midi = midiAccess;
       ins = midi.inputs();
       outs = midi.outputs();
-      setTimeout(testOutputs, 500);
+      setTimeout(testOutputs, 200);
     }
     
     function testOutputs(){
