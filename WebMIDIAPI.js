@@ -129,7 +129,7 @@
         this._promise = new Promise;
 
         instance._delayedInit(function() {
-            if(instance._Jazz){
+            if (instance._Jazz) {
                 this._Jazz = instance._Jazz;
                 numInputs = this._Jazz.MidiInList().length;
                 numOutputs = this._Jazz.MidiOutList().length;
@@ -141,9 +141,9 @@
                     already created a _JazzInstance.
                 */
                 numInstances = Math.max(numInputs, numOutputs) - 1;
-                if(numInstances > 0){
+                if (numInstances > 0) {
                     _createJazzInstance.bind(this)(0, numInstances);
-                }else{
+                } else {
                     // no need to create additional instances
                     window.setTimeout(_onReady.bind(this), 3);
                 }
@@ -159,7 +159,7 @@
 
         instance._delayedInit(function() {
             i++;
-            if(i < max) {
+            if (i < max) {
                 _createJazzInstance.bind(this)(i, max);
             } else {
                 /*
