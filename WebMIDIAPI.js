@@ -377,7 +377,9 @@
             } else
                 evt.data = new Uint8Array(data.slice(i, length+i));
 
-            if (inNodeJs && this.onmidimessage) this.onmidimessage( evt );
+            if (inNodeJs) {
+                if (this.onmidimessage) this.onmidimessage( evt );
+            }
             else this.dispatchEvent( evt );
         }
     };
