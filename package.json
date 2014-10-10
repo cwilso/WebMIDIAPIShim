@@ -1,6 +1,6 @@
 {
   "name": "web-midi-api",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Node.js version of Chirs Wilson's WebMIDIAPIShim",
   "main": "index.js",
   "scripts": {
