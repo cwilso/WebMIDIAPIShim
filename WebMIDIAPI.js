@@ -314,6 +314,7 @@
         // and pass them one at a time.
 
         for (i=0; i<data.length; i+=length) {
+            var isValidMessage = true;
             if (this._inLongSysexMessage) {
                 i = this.bufferLongSysex(data,i);
                 if ( data[i-1] != 0xf7 ) {
@@ -324,6 +325,11 @@
             } else {
                 isSysexMessage = false;
                 switch (data[i] & 0xF0) {
+                    case 0x00:  // Chew up spurious 0x00 bytes.  Fixes a Windows problem.
+                        length=1;
+                        isValidMessage = false;
+                        break;
+
                     case 0x80:  // note off
                     case 0x90:  // note on
                     case 0xA0:  // polyphonic aftertouch
@@ -364,7 +370,9 @@
                         break;
                 }
             }
-            var evt = {}
+            if (!isValidMessage) 
+                continue;
+            var evt = {};
             if (!inNodeJs) {
                 evt = document.createEvent( "Event" );
                 evt.initEvent( "midimessage", false, false );
