@@ -217,7 +217,11 @@
         this.type = "input";
         this.version = "";
         this.onmidimessage = null;
-
+        if (midiAccess._Jazz.Support("MidiInInfo")) {
+            var info = midiAccess._Jazz.MidiInInfo(name);
+            this.manufacturer = info[1];
+            this.version = info[2];
+        }
         var inputInstance = null;
         var then = function() {
             this._jazzInstance = inputInstance._Jazz;
@@ -401,7 +405,11 @@
         this.name = name;
         this.type = "output";
         this.version = "";
-
+        if (midiAccess._Jazz.Support("MidiOutInfo")) {
+            var info = midiAccess._Jazz.MidiOutInfo(name);
+            this.manufacturer = info[1];
+            this.version = info[2];
+        }
         var outputInstance = null;
         var then = function() {
             this._jazzInstance = outputInstance._Jazz;
