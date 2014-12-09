@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 	<meta charset='utf-8' />
@@ -32,7 +32,7 @@
     <pre>&lt;script src='http://cwilso.github.com/WebMIDIAPIShim/WebMIDIAPI.js'&gt;&lt;/script&gt;</pre>
     <p>in your HTML source.</p>
     <h3>Test it out!</h3>
-    <p><strong>Before you press the button:</strong> install the <a href="http://jazz-soft.net/">Jazz-Soft.net's Jazz-Plugin</a>, version 1.2 or higher to enable MIDI support on Windows and OSX.</p>
+    <p><strong>Before you press the button:</strong> install the <a href="http://jazz-soft.net/">Jazz-Soft.net's Jazz-Plugin</a>, version 1.4 or higher to enable MIDI support on Windows, OSX and Linux.</p>
     <p>You will also want some MIDI input/output devices - MacOS and Windows typically have output software synthesizers installed by default.
     On MacOS, if you want a software input device you may want to install <a href="http://www.manyetas.com/creed/midikeys.html">MidiKeys</a>. </p>
     <button onclick="runTest();">Test MIDI!</button>
@@ -81,7 +81,7 @@ function success( midiAccess ) {
 	inputs = midi.inputs();
 	log.innerHTML += inputs.length+" inputs:\n";
 	for (var i=0;i<inputs.length;i++)
-		log.innerHTML += i + ": " + inputs[i].name + "\n";
+		log.innerHTML += i + ": " + inputs[i].name + "; manufacturer: " + inputs[i].manufacturer + "; version: " + inputs[i].version + "\n";
 
 	if (inputs.length>0) {
 		input = inputs[0];
@@ -93,7 +93,7 @@ function success( midiAccess ) {
 	outputs = midi.outputs();
 	log.innerHTML += outputs.length+" outputs:\n";
 	for (var i=0;i<outputs.length;i++)
-		log.innerHTML += i + ": " + outputs[i].name + "\n";
+		log.innerHTML += i + ": " + outputs[i].name + "; manufacturer: " + outputs[i].manufacturer + "; version: " + outputs[i].version + "\n";
 
 	if (outputs.length) {
 		output = outputs[0];
