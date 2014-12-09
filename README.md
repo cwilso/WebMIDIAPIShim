@@ -3,7 +3,7 @@
 This JS library is a prototype polyfill and shim for the [Web MIDI API](https://dvcs.w3.org/hg/audio/raw-file/tip/midi/specification.html) (of which Chris is a co-author), using [Jazz-Soft.net's Jazz-Plugin](http://jazz-soft.net/) to enable MIDI support on Windows, OSX and Linux.
 You need to have [version 1.2 or hgher](http://jazz-soft.net/download/Jazz-Plugin) of the Jazz-Plugin in order for this polyfill to work properly.  This polyfill and the plugin should work on Chrome, Firefox, Safari, Opera and IE.
 
-Chris is currently using this polyfill to test usability of the API itself, but it's also useful to enable MIDI scenarios.
+This polyfill was originally designed to test usability of the API itself, but it's also useful to enable MIDI scenarios in browsers that don't yet support Web MIDI.
 
 This polyfill now supports multiple simultaneous inputs and outputs, and sending and receiving long messages (sysem exclusive).  It also properly dispatches events.  Timestamps on send and receive should be properly implemented now, although of course timing will not be very precise on either.
 
