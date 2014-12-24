@@ -75,29 +75,58 @@ function handleMIDIMessage( ev ) {
 }
 
 function success( midiAccess ) {
-	log.innerHTML += "MIDI ready!\n";
-	midi = midiAccess;
+    var i, iterator, data, port;
 
-	inputs = midi.inputs();
-	log.innerHTML += inputs.length+" inputs:\n";
-	for (var i=0;i<inputs.length;i++)
-		log.innerHTML += i + ": " + inputs[i].name + "; manufacturer: " + inputs[i].manufacturer + "; version: " + inputs[i].version + "\n";
+    log.innerHTML += "MIDI ready!\n";
+    midi = midiAccess;
 
-	if (inputs.length>0) {
-		input = inputs[0];
-//		input.onmidimessage = handleMIDIMessage;
-		input.addEventListener("midimessage", handleMIDIMessage);
-		log.innerHTML += "Hooked up first input.\n";
-	}
+    inputs = midi.inputs;
+    log.innerHTML += inputs.size+" inputs:\n";
 
-	outputs = midi.outputs();
-	log.innerHTML += outputs.length+" outputs:\n";
-	for (var i=0;i<outputs.length;i++)
-		log.innerHTML += i + ": " + outputs[i].name + "; manufacturer: " + outputs[i].manufacturer + "; version: " + outputs[i].version + "\n";
+/*
+    // forEach doesn't yet work in WebMIDI/Chrome...
+    i = 0;
+    inputs.forEach(function(key, value){
+        log.innerHTML += i++ + ": " + value.name + "; manufacturer: " + value.manufacturer + "; version: " + value.version + "\n";
+    });
+*/
 
-	if (outputs.length) {
-		output = outputs[0];
-		output.send( [0xb0, 0x00, 0x7f] );	// If the first device is a Novation Launchpad, this will light it up!
+    // ...but the iterator does, so we use the iterator:
+    i = 0;
+    iterator = inputs.values();
+    while((data = iterator.next()).done === false){
+        port = data.value;
+        log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
+    }
+
+    if(inputs.size > 0) {
+        iterator = inputs.values();
+        input = iterator.next().value;
+        // input.onmidimessage = handleMIDIMessage;
+        input.addEventListener("midimessage", handleMIDIMessage);
+        log.innerHTML += "Hooked up first input.\n";
+    }
+
+    outputs = midi.outputs;
+    log.innerHTML += outputs.size+" outputs:\n";
+
+/*
+    i = 0;
+    outputs.forEach(function(key, value){
+        log.innerHTML += i++ + ": " + value.name + "; manufacturer: " + value.manufacturer + "; version: " + value.version + "\n";
+    });
+*/
+    i = 0;
+    iterator = outputs.values();
+    while((data = iterator.next()).done === false){
+        port = data.value;
+        log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
+    }
+
+    if(outputs.size > 0) {
+        iterator = outputs.values();
+		output = iterator.next().value;
+        output.send( [0xb0, 0x00, 0x7f] );  // If the first device is a Novation Launchpad, this will light it up!
 	}
 }
 

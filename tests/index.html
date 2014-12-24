@@ -15,44 +15,58 @@ var log=null;
 function runTest() {
 	if (!log)
 		log = document.getElementById("log");
-	log.innerText = "Starting up MIDI...\n";
+	log.textContent = "Starting up MIDI...\n";
 	navigator.requestMIDIAccess().then( success, failure );
 }
 
 function handleMIDIMessage( ev ) {
 	// testing - just reflect.
-	log.innerText += "Message: " + ev.data.length + " bytes, timestamp: " + ev.timestamp;
-	if (ev.data.length == 3) 
-		log.innerText += " 0x" + ev.data[0].toString(16) + " 0x" + ev.data[1].toString(16) + " 0x" + ev.data[2].toString(16);
-	log.innerText += "\n";
+	log.textContent += "Message: " + ev.data.length + " bytes, timestamp: " + ev.timestamp;
+	if (ev.data.length == 3)
+		log.textContent += " 0x" + ev.data[0].toString(16) + " 0x" + ev.data[1].toString(16) + " 0x" + ev.data[2].toString(16);
+	log.textContent += "\n";
 	if (output)
 		output.send( ev.data );
 }
 
 function success( midiAccess ) {
-	log.innerText += "MIDI ready!\n";
+	var i, iterator, data, port;
+	log.textContent += "MIDI ready!\n";
 	midi = midiAccess;
 
-	inputs = midi.inputs();
-	log.innerText += inputs.length+" inputs:\n";
-	for (var i=0;i<inputs.length;i++)
-		log.innerText += i + ": " + inputs[i].name + "\n";
+	inputs = midi.inputs;
+	log.textContent += inputs.size+" inputs:\n";
 
-	if (inputs.length>0) {
-		input = inputs[0];
+	i = 0;
+    iterator = inputs.values();
+    while((data = iterator.next()).done === false){
+        port = data.value;
+        log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
+    }
+
+	if (inputs.size>0) {
+		iterator = inputs.values();
+		input = iterator.next().value;
 //		input.onmessage = handleMIDIMessage;
 		input.addEventListener("midimessage", handleMIDIMessage);
-		log.innerText += "Hooked up first input.\n";
+		log.textContent += "Hooked up first input.\n";
 	}
 
-	outputs = midi.outputs();
-	log.innerText += outputs.length+" outputs:\n";
-	for (var i=0;i<outputs.length;i++)
-		log.innerText += i + ": " + outputs[i].name + "\n";
+	outputs = midi.outputs;
+	log.textContent += outputs.size+" outputs:\n";
 
-	if (outputs.length) {
-		output = outputs[0];
-		output.send( [0xb0, 0x00, 0x7f] );	// If the first device is a Novation Launchpad, this will light it up!
+	i = 0;
+    iterator = outputs.values();
+    while((data = iterator.next()).done === false){
+        port = data.value;
+        log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
+    }
+
+	if (outputs.size > 0) {
+		iterator = outputs.values();
+		output = iterator.next().value;
+		//output.send( [0xb0, 0x00, 0x7f] );	// If the first device is a Novation Launchpad, this will light it up!
+		output.send( [0x90, 60, 100] );	// If the first device is a synth, you will hear a note
 	}
 }
 

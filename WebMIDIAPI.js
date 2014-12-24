@@ -20,6 +20,24 @@
     var inNodeJs = ( typeof __dirname !== 'undefined' && window.jazzMidi );
     var allMidiIns = [];
 
+    function Iterator(items) {
+        this._items = items;
+        this._index = 0;
+        this._maxIndex = items.length;
+    }
+
+    Iterator.prototype.next = function(){
+        if(this._index === this._maxIndex){
+            return {value: undefined, done: true};
+        }
+        return {value: this._items[this._index++], done: false};
+    };
+
+    Iterator.prototype.reset = function(){
+        this._index = 0;
+    };
+
+
     function Promise() {
 
     }
@@ -27,7 +45,7 @@
     Promise.prototype.then = function(accept, reject) {
         this.accept = accept;
         this.reject = reject;
-    }
+    };
 
     Promise.prototype.succeed = function(access) {
         if (this.accept)
@@ -37,7 +55,7 @@
     Promise.prototype.fail = function(error) {
         if (this.reject)
             this.reject(error);
-    }
+    };
 
     function _JazzInstance() {
         this.inputInUse = false;
@@ -172,8 +190,11 @@
     };
 
     _onReady = function() {
-        if (this._promise)
+        if (this._promise){
+            this._createMIDIInputMap();
+            this._createMIDIOutputMap();
             this._promise.succeed(this);
+        }
     };
 
     _onNotReady = function() {
@@ -181,29 +202,103 @@
             this._promise.fail( { code: 1 } );
     };
 
-    MIDIAccess.prototype.inputs = function(  ) {
-        if (!this._Jazz)
-              return null;
-        var list=this._Jazz.MidiInList();
-        var inputs = new Array( list.length );
 
-        for ( var i=0; i<list.length; i++ ) {
-            inputs[i] = new MIDIInput( this, list[i], i );
-        }
-        return inputs;
-    }
-
-    MIDIAccess.prototype.outputs = function(  ) {
-        if (!this._Jazz)
+    MIDIAccess.prototype._createMIDIInputMap = function() {
+        if(!this._Jazz){
             return null;
-        var list=this._Jazz.MidiOutList();
-        var outputs = new Array( list.length );
-
-        for ( var i=0; i<list.length; i++ ) {
-            outputs[i] = new MIDIOutput( this, list[i], i );
         }
-        return outputs;
+
+        var list = this._Jazz.MidiInList(),
+            size = list.length,
+            values = [],
+            keys = [],
+            entries = [],
+            portsById = {},
+            input, i;
+
+        for(i = 0; i < size; i++) {
+            input = new MIDIInput(this, list[i], i);
+            entries.push([input.id, input]);
+            values.push(input);
+            keys.push(input.id);
+            portsById[input.id] = input;
+        }
+
+        this.inputs = {
+            size: size,
+            forEach: function(cb){
+                var i, entry, maxi = entries.length;
+                for(i = 0; i < maxi; i++){
+                    entry = entries[i];
+                    cb(entry[0], entry[1]);
+                }
+            },
+            keys: function(){
+                return new Iterator(keys);
+            },
+            values: function(){
+                return new Iterator(values);
+            },
+            entries: function(){
+                return new Iterator(entries);
+            },
+            get: function(id){
+                return portsById[id];
+            },
+            has: function(id){
+                return portsById[id] !== undefined;
+            }
+        };
     };
+
+    MIDIAccess.prototype._createMIDIOutputMap = function() {
+        if(!this._Jazz){
+            return null;
+        }
+
+        var list = this._Jazz.MidiOutList(),
+            size = list.length,
+            values = [],
+            keys = [],
+            entries = [],
+            portsById = {},
+            output, i;
+
+        for(i = 0; i < size; i++) {
+            output = new MIDIOutput(this, list[i], i);
+            entries.push([output.id, output]);
+            values.push(output);
+            keys.push(output.id);
+            portsById[output.id] = output;
+        }
+
+        this.outputs = {
+            size: size,
+            forEach: function(cb){
+                var i, entry, maxi = entries.length;
+                for(i = 0; i < maxi; i++){
+                    entry = entries[i];
+                    cb(entry[0], entry[1]);
+                }
+            },
+            keys: function(){
+                return new Iterator(keys);
+            },
+            values: function(){
+                return new Iterator(values);
+            },
+            entries: function(){
+                return new Iterator(entries);
+            },
+            get: function(id){
+                return portsById[id];
+            },
+            has: function(id){
+                return portsById[id] !== undefined;
+            }
+        };
+    };
+
 
     MIDIInput = function MIDIInput( midiAccess, name, index ) {
         this._listeners = [];
@@ -239,7 +334,9 @@
             inputInstance._delayedInit(then.bind(this));
         } else {
             inputInstance.inputInUse = true;
-            inputInstance._delayedInit(then.bind(this));
+            //inputInstance._delayedInit(then.bind(this));
+            // no need to delay, the instance has already been initialized
+            then.call(this);
         }
     };
 
@@ -374,7 +471,7 @@
                         break;
                 }
             }
-            if (!isValidMessage) 
+            if (!isValidMessage)
                 continue;
             var evt = {};
             if (!inNodeJs) {
@@ -426,7 +523,9 @@
             outputInstance._delayedInit(then.bind(this));
         } else {
             outputInstance.outputInUse = true;
-            outputInstance._delayedInit(then.bind(this));
+            //outputInstance._delayedInit(then.bind(this));
+            // no need to delay, the instance has already been initialized
+            then.call(this);
         }
     };
 
