@@ -45,7 +45,7 @@ window.onload = function(){
 
 
     function runTest() {
-        preLog.textContent = 'Starting up MIDI...\n';
+        preLog.innerHTML = 'Starting up MIDI...\n';
         navigator.requestMIDIAccess().then(success, failure);
     }
 
@@ -59,7 +59,7 @@ window.onload = function(){
         if(ev.data.length === 3){
             output = output + ' 0x' + ev.data[0].toString(16) + ' 0x' + ev.data[1].toString(16) + ' 0x' + ev.data[2].toString(16);
         }
-        preLog.textContent = output + '\n' + preLog.textContent;
+        preLog.innerHTML = output + '\n' + preLog.innerHTML;
 
         for(var id in activeOutputs){
             activeOutputs[id].send(ev.data);
@@ -69,7 +69,7 @@ window.onload = function(){
 
     function success(midiAccess) {
         var i, maxi, iterator, data, port, portId, checkboxes, checkbox;
-        preLog.textContent += 'MIDI ready!\n';
+        preLog.innerHTML += 'MIDI ready!\n';
         midi = midiAccess;
 
         inputs = midi.inputs;

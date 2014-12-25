@@ -41,7 +41,7 @@ function success( midiAccess ) {
     iterator = inputs.values();
     while((data = iterator.next()).done === false){
         port = data.value;
-        log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
+        log.textContent += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
     }
 
 	if (inputs.size>0) {
@@ -59,7 +59,7 @@ function success( midiAccess ) {
     iterator = outputs.values();
     while((data = iterator.next()).done === false){
         port = data.value;
-        log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
+        log.textContent += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
     }
 
 	if (outputs.size > 0) {

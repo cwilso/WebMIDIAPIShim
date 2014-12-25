@@ -331,7 +331,7 @@
         } else {
             inputInstance.inputInUse = true;
             //inputInstance._delayedInit(then.bind(this));
-            // no need to delay, the instance has already been initialized
+            // no need for delay, the instance has already been initialized
             then.call(this);
         }
     };
@@ -520,7 +520,7 @@
         } else {
             outputInstance.outputInUse = true;
             //outputInstance._delayedInit(then.bind(this));
-            // no need to delay, the instance has already been initialized
+            // no need for delay, the instance has already been initialized
             then.call(this);
         }
     };

@@ -84,33 +84,14 @@ function success( midiAccess ) {
     log.innerHTML += inputs.size+" inputs:\n";
 
 /*
-    // forEach doesn't yet work in WebMIDI/Chrome...
+    // forEach doesn't yet work in WebMIDI/Chrome
     i = 0;
     inputs.forEach(function(key, value){
         log.innerHTML += i++ + ": " + value.name + "; manufacturer: " + value.manufacturer + "; version: " + value.version + "\n";
     });
 */
 
-    // ...but the iterator does, so we use the iterator:
-
-iterator = inputs.keys();
-while((data = iterator.next()).done !== true){
-    console.log('input id:', data.value, inputs.has(data.value), inputs.get(data.value).name);
-}
-
-iterator = inputs.values();
-while((data = iterator.next()).done !== true){
-    port = data.value;
-    console.log('input id:', port.id, ' input name:', port.name);
-}
-
-iterator = inputs.entries();
-while((data = iterator.next()).done !== true){
-    port = data.value[1];
-    console.log('input id:', port.id, data.value[0], ' input name:', port.name);
-}
-
-
+    // but the iterator does, so we use the iterator:
     i = 0;
     iterator = inputs.values();
     while((data = iterator.next()).done === false){
