@@ -16,15 +16,15 @@ You can use the Web MIDI API as captured in the specification - the polyfill wil
 
 So, some sample usage:
 
-	var m = null; // m = MIDIAccess object for you to make calls on
+    var m = null; // m = MIDIAccess object for you to make calls on
     navigator.requestMIDIAccess().then( onsuccesscallback, onerrorcallback );
 
     function onsuccesscallback( access ) {
-    	m = access;
+      m = access;
 
-    	// Things you can do with the MIDIAccess object:
-	    var inputs = m.inputs; // inputs = MIDIInputMaps, you can retrieve the inputs with iterators
-	    var outputs = m.outputs; // outputs = MIDIOutputMaps, you can retrieve the outputs with iterators
+      // Things you can do with the MIDIAccess object:
+      var inputs = m.inputs; // inputs = MIDIInputMaps, you can retrieve the inputs with iterators
+      var outputs = m.outputs; // outputs = MIDIOutputMaps, you can retrieve the outputs with iterators
 
       var iteratorInputs = inputs.values() // returns an iterator that loops over all inputs
       var input = iteratorInputs.next().value // get the first input
@@ -35,12 +35,12 @@ So, some sample usage:
       var output = iteratorOutputs.next().value; // grab first output device
 
       output.send( [ 0x90, 0x45, 0x7f ] ); // full velocity note on A4 on channel zero
-	    output.send( [ 0x80, 0x45, 0x7f ], window.performance.now() + 1000 );  // full velocity A4 note off in one second.
-	};
+      output.send( [ 0x80, 0x45, 0x7f ], window.performance.now() + 1000 ); // full velocity A4 note off in one second.
+    };
 
-	function onerrorcallback( err ) {
-		console.log( "uh-oh! Something went wrong!  Error code: " + err.code );
-	}
+    function onerrorcallback( err ) {
+      console.log( "uh-oh! Something went wrong! Error code: " + err.code );
+    }
 
 You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim/tests/index.html) for a basic test, or [multi.html](http://cwilso.github.com/WebMIDIAPIShim/tests/multi.html) or [routing.html](http://cwilso.github.com/WebMIDIAPIShim/tests/routing.html) for a multiple-simultaneous-input test.  Better documentation later.  :)
 
