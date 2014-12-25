@@ -35,10 +35,10 @@ function handleMIDIMessage2( ev ) {
 		output.send( ev.data );
 }
 
-function success( m ) {
+function success( midiAccess ) {
 	var i, iterator, data, port;
 	log.textContent += "MIDI ready!\n";
-	midi = m;
+	midi = window.updateMIDIAccess(midiAccess);
 
 	inputs = midi.inputs;
 	log.textContent += inputs.size+" inputs:\n";

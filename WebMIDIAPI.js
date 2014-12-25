@@ -50,7 +50,7 @@
     Promise.prototype.succeed = function(access) {
         if (this.accept)
             this.accept(access);
-    }
+    };
 
     Promise.prototype.fail = function(error) {
         if (this.reject)
@@ -95,7 +95,7 @@
         var insertionPoint = document.getElementById("MIDIPlugin");
         if (!insertionPoint) {
             // Create hidden element
-            var insertionPoint = document.createElement("div");
+            insertionPoint = document.createElement("div");
             insertionPoint.id = "MIDIPlugin";
             insertionPoint.style.position = "absolute";
             insertionPoint.style.visibility = "hidden";
@@ -127,6 +127,7 @@
             then();
         }, 100);
     };
+
 
     _requestMIDIAccess = function _requestMIDIAccess() {
         var access = new MIDIAccess();
@@ -553,6 +554,103 @@
         return true;
     };
 
+
+    // wrapper for older WebMIDI implementation, i.e. Chromium's WebMIDI implementation
+
+    function MIDIAccessWrapper(access){
+        this._createMIDIInputMap(access);
+        this._createMIDIOutputMap(access);
+    };
+
+    MIDIAccessWrapper.prototype._createMIDIInputMap = function(access) {
+        var list = access.inputs(),
+            size = list.length,
+            values = [],
+            keys = [],
+            entries = [],
+            portsById = {},
+            input, i;
+
+        for(i = 0; i < size; i++) {
+            input = list[i];
+            entries.push([input.id, input]);
+            values.push(input);
+            keys.push(input.id);
+            portsById[input.id] = input;
+        }
+
+        this.inputs = {
+            size: size,
+            forEach: function(cb){
+                var i, entry, maxi = entries.length;
+                for(i = 0; i < maxi; i++){
+                    entry = entries[i];
+                    cb(entry[0], entry[1]);
+                }
+            },
+            keys: function(){
+                return new Iterator(keys);
+            },
+            values: function(){
+                return new Iterator(values);
+            },
+            entries: function(){
+                return new Iterator(entries);
+            },
+            get: function(id){
+                return portsById[id];
+            },
+            has: function(id){
+                return portsById[id] !== undefined;
+            }
+        };
+    };
+
+    MIDIAccessWrapper.prototype._createMIDIOutputMap = function(access) {
+        var list = access.outputs(),
+            size = list.length,
+            values = [],
+            keys = [],
+            entries = [],
+            portsById = {},
+            output, i;
+
+        for(i = 0; i < size; i++) {
+            output = list[i];
+            entries.push([output.id, output]);
+            values.push(output);
+            keys.push(output.id);
+            portsById[output.id] = output;
+        }
+
+        this.outputs = {
+            size: size,
+            forEach: function(cb){
+                var i, entry, maxi = entries.length;
+                for(i = 0; i < maxi; i++){
+                    entry = entries[i];
+                    cb(entry[0], entry[1]);
+                }
+            },
+            keys: function(){
+                return new Iterator(keys);
+            },
+            values: function(){
+                return new Iterator(values);
+            },
+            entries: function(){
+                return new Iterator(entries);
+            },
+            get: function(id){
+                return portsById[id];
+            },
+            has: function(id){
+                return portsById[id] !== undefined;
+            }
+        };
+    };
+
+
     //init: create plugin
     if (!window.navigator.requestMIDIAccess) {
         window.navigator.requestMIDIAccess = _requestMIDIAccess;
@@ -562,6 +660,14 @@
                 // Need to close MIDI input ports, otherwise Node.js will wait for MIDI input forever.
             };
         }
+    }
+
+    // Not too elegant, but it's the best solution I could think up. Anyway, it is only necessary until Chromium updates its WebMIDI implementation.
+    window.updateMIDIAccess = function(access){
+        if(typeof access.inputs === 'function'){
+            return new MIDIAccessWrapper(access);
+        }
+        return access;
     }
 
 }(window));
