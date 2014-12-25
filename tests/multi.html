@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Test of multiple inputs</title>
 	<script src="../WebMIDIAPI.js"></script>
 	<script>
@@ -38,7 +39,7 @@ function handleMIDIMessage2( ev ) {
 function success( midiAccess ) {
 	var i, iterator, data, port;
 	log.textContent += "MIDI ready!\n";
-	midi = window.updateMIDIAccess(midiAccess);
+	midi = midiAccess;
 
 	inputs = midi.inputs;
 	log.textContent += inputs.size+" inputs:\n";

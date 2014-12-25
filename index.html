@@ -78,7 +78,7 @@ function success( midiAccess ) {
     var i, iterator, data, port;
 
     log.innerHTML += "MIDI ready!\n";
-    midi = window.updateMIDIAccess(midiAccess);
+    midi = midiAccess;
 
     inputs = midi.inputs;
     log.innerHTML += inputs.size+" inputs:\n";

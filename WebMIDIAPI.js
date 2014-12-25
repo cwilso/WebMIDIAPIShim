@@ -16,7 +16,7 @@
 // Initialize the MIDI library.
 (function (global) {
     'use strict';
-    var midiIO, _requestMIDIAccess, _delayedInit, MIDIAccess, _createJazzInstance, _onReady, _onNotReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
+    var midiIO, _delayedInit, MIDIAccess, _createJazzInstance, _onReady, _onNotReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
     var inNodeJs = ( typeof __dirname !== 'undefined' && window.jazzMidi );
     var allMidiIns = [];
 
@@ -128,11 +128,6 @@
         }, 100);
     };
 
-
-    _requestMIDIAccess = function _requestMIDIAccess() {
-        var access = new MIDIAccess();
-        return access._promise;
-    };
 
     // API Methods
 
@@ -557,9 +552,33 @@
 
     // wrapper for older WebMIDI implementation, i.e. Chromium's WebMIDI implementation
 
-    function MIDIAccessWrapper(access){
-        this._createMIDIInputMap(access);
-        this._createMIDIOutputMap(access);
+    function MIDIAccessWrapper(request){
+        this._promise = new Promise();
+        this._request = request;
+    };
+
+    MIDIAccessWrapper.prototype.init = function() {
+        var scope = this;
+
+        this._request.bind(window.navigator)().then(
+
+            function onSuccess(access){
+                if(typeof access.inputs === 'function'){
+                    // add MIDIInputMap and MIDIOutputMap to MIDIAccess object
+                    scope._createMIDIInputMap(access);
+                    scope._createMIDIOutputMap(access);
+                }
+                if(scope._promise){
+                    scope._promise.succeed(access);
+                }
+            },
+
+            function onError(e){
+                if(scope._promise){
+                    scope._promise.fail({code:1});
+                }
+            }
+        );
     };
 
     MIDIAccessWrapper.prototype._createMIDIInputMap = function(access) {
@@ -579,7 +598,7 @@
             portsById[input.id] = input;
         }
 
-        this.inputs = {
+        access.inputs = {
             size: size,
             forEach: function(cb){
                 var i, entry, maxi = entries.length;
@@ -623,7 +642,7 @@
             portsById[output.id] = output;
         }
 
-        this.outputs = {
+        access.outputs = {
             size: size,
             forEach: function(cb){
                 var i, entry, maxi = entries.length;
@@ -651,24 +670,28 @@
     };
 
 
-    //init: create plugin
-    if (!window.navigator.requestMIDIAccess) {
-        window.navigator.requestMIDIAccess = _requestMIDIAccess;
-        if (typeof __dirname !== 'undefined' && window.jazzMidi) {
-            window.navigator.close = function() {
-                for(var i in allMidiIns) allMidiIns[i].MidiInClose();
-                // Need to close MIDI input ports, otherwise Node.js will wait for MIDI input forever.
+    //init: create plugin or wrap native MIDIAccess object
+    (function init(){
+        var access;
+        if(!window.navigator.requestMIDIAccess){
+            window.navigator.requestMIDIAccess = function(){
+                access = new MIDIAccess();
+                return access._promise;
             };
+            if(typeof __dirname !== 'undefined' && window.jazzMidi) {
+                window.navigator.close = function() {
+                    for(var i in allMidiIns) allMidiIns[i].MidiInClose();
+                    // Need to close MIDI input ports, otherwise Node.js will wait for MIDI input forever.
+                };
+            }
+        }else{
+            access = new MIDIAccessWrapper(window.navigator.requestMIDIAccess);
+            window.navigator.requestMIDIAccess = function(){
+                access.init();
+                return access._promise;
+            }
         }
-    }
-
-    // Not too elegant, but it's the best solution I could think up. Anyway, it is only necessary until Chromium updates its WebMIDI implementation.
-    window.updateMIDIAccess = function(access){
-        if(typeof access.inputs === 'function'){
-            return new MIDIAccessWrapper(access);
-        }
-        return access;
-    }
+    }());
 
 }(window));
 
