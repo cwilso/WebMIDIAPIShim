@@ -42,7 +42,7 @@ So, some sample usage:
       console.log( "uh-oh! Something went wrong! Error code: " + err.code );
     }
 
-You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim/tests/index.html) for a basic test, or [multi.html](http://cwilso.github.com/WebMIDIAPIShim/tests/multi.html) or [routing.html](http://cwilso.github.com/WebMIDIAPIShim/tests/routing.html) for a multiple-simultaneous-input test.  Better documentation later.  :)
+You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim/tests/index.html) for a basic test, or [multi.html](http://cwilso.github.com/WebMIDIAPIShim/tests/multi.html) for a multiple-simultaneous-input test. The [routing.html](http://cwilso.github.com/WebMIDIAPIShim/tests/routing.html) example mimics a MIDI patchbay and allows you to route one or more inputs to one or more outputs. Better documentation later.  :)
 
 ##Node.js install and test
 
