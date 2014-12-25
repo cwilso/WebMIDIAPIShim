@@ -1,6 +1,6 @@
 # Web MIDI API Polyfill
 
-This JS library is a prototype polyfill and shim for the [Web MIDI API](http://webaudio.github.io/web-midi-api/#midiinputmap-interface) (of which Chris is a co-author), using [Jazz-Soft.net's Jazz-Plugin](http://jazz-soft.net/) to enable MIDI support on Windows, OSX and Linux.
+This JS library is a prototype polyfill and shim for the [Web MIDI API](http://webaudio.github.io/web-midi-api/) (of which Chris is a co-author), using [Jazz-Soft.net's Jazz-Plugin](http://jazz-soft.net/) to enable MIDI support on Windows, OSX and Linux.
 You need to have [version 1.2 or hgher](http://jazz-soft.net/download/Jazz-Plugin) of the Jazz-Plugin in order for this polyfill to work properly.  This polyfill and the plugin should work on Chrome, Firefox, Safari, Opera and IE.
 
 This polyfill was originally designed to test usability of the API itself, but it's also useful to enable MIDI scenarios in browsers that don't yet support Web MIDI.

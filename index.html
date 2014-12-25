@@ -92,6 +92,25 @@ function success( midiAccess ) {
 */
 
     // ...but the iterator does, so we use the iterator:
+
+iterator = inputs.keys();
+while((data = iterator.next()).done !== true){
+    console.log('input id:', data.value, inputs.has(data.value), inputs.get(data.value).name);
+}
+
+iterator = inputs.values();
+while((data = iterator.next()).done !== true){
+    port = data.value;
+    console.log('input id:', port.id, ' input name:', port.name);
+}
+
+iterator = inputs.entries();
+while((data = iterator.next()).done !== true){
+    port = data.value[1];
+    console.log('input id:', port.id, data.value[0], ' input name:', port.name);
+}
+
+
     i = 0;
     iterator = inputs.values();
     while((data = iterator.next()).done === false){
