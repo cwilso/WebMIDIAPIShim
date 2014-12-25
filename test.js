@@ -1,7 +1,7 @@
 // This script is for Node.js only. Don't use it in HTML!
 'use strict';
 
-var navigator = require('web-midi-api');
+var navigator = require('../web-midi-api');
 
 var midi;
 var inputs;

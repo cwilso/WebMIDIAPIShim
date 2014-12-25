@@ -44,13 +44,23 @@ So, some sample usage:
 
 You can also take a look at [index.html](http://cwilso.github.com/WebMIDIAPIShim/tests/index.html) for a basic test, or [multi.html](http://cwilso.github.com/WebMIDIAPIShim/tests/multi.html) or [routing.html](http://cwilso.github.com/WebMIDIAPIShim/tests/routing.html) for a multiple-simultaneous-input test.  Better documentation later.  :)
 
-##Node.js install
+##Node.js install and test
+
+  Make a new directory, copy the file test.js to this directory. Then move into the newly created directory via the command line and enter this command:
 
     npm install web-midi-api
 
-##Node.js example
+  Now you should have a folder node_modules/web-midi-api. Type this command to run the test:
 
-    var navigator = require('web-midi-api');
+    node test.js
+
+  Or if you are on Linux:
+
+    nodejs test.js
+
+##Node.js example (test.js)
+
+    var navigator = require('../web-midi-api');
 
     var midi;
     var inputs;
