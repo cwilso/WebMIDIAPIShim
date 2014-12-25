@@ -1,34 +1,37 @@
 // This script is for Node.js only. Don't use it in HTML!
-var navigator = require('../web-midi-api');
+'use strict';
 
-var ins;
-var outs;
+var navigator = require('web-midi-api');
+
+var midi;
+var inputs;
+var outputs;
 
 function onMIDIFailure(msg){
-  console.log("Failed to get MIDI access - " + msg);
+  console.log('Failed to get MIDI access - ' + msg);
 }
 
 function onMIDISuccess(midiAccess){
   midi = midiAccess;
-  ins = midi.inputs();
-  outs = midi.outputs();
+  inputs = midi.inputs;
+  outputs = midi.outputs;
   setTimeout(testOutputs, 500);
 }
 
 function testOutputs(){
   console.log('Testing MIDI-Out ports...');
-  for(var i in outs){
-    var x = outs[i];
-    console.log('id:', x.id, "manufacturer:", x.manufacturer, "name:", x.name, "version:", x.version);
+  outputs.forEach(function(key, value){
+    var x = value;
+    console.log('id:', x.id, 'manufacturer:', x.manufacturer, 'name:', x.name, 'version:', x.version);
     x.send([0x90, 60, 0x7f]);
-  }
+  });
   setTimeout(stopOutputs, 1000);
 }
 
 function stopOutputs(){
-  for(var i in outs){
-    outs[i].send([0x80, 60, 0]);
-  }
+  outputs.forEach(function(key, value){
+    value.send([0x80, 60, 0]);
+  });
   testInputs();
 }
 
@@ -40,11 +43,11 @@ function onMidiIn(ev){
 
 function testInputs(){
   console.log('Testing MIDI-In ports...');
-  for(var i in ins){
-    var x = ins[i];
-    console.log('id:', x.id, "manufacturer:", x.manufacturer, "name:", x.name, "version:", x.version);
+  inputs.forEach(function(key, value){
+    var x = value;
+    console.log('id:', x.id, 'manufacturer:', x.manufacturer, 'name:', x.name, 'version:', x.version);
     x.onmidimessage = onMidiIn;
-  }
+  });
   setTimeout(stopInputs, 5000);
 }
 
