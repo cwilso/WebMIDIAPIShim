@@ -7,6 +7,7 @@
     #container{
         width: 100%;
         font-family: monospace;
+        visibility: hidden;
     }
     #inputs{
         float: left;
@@ -38,6 +39,7 @@ window.onload = function(){
         btnRun = document.getElementById('run_test'),
         divInputs = document.getElementById('inputs'),
         divOutputs = document.getElementById('outputs'),
+        divContainer = document.getElementById('container'),
         midi = null,
         inputs = null,
         outputs = null,
@@ -45,6 +47,7 @@ window.onload = function(){
 
 
     function runTest() {
+        divContainer.style.visibility = 'visible';
         preLog.innerHTML = 'Starting up MIDI...\n';
         navigator.requestMIDIAccess().then(success, failure);
     }
