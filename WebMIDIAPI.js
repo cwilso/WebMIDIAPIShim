@@ -16,7 +16,7 @@
 // Initialize the MIDI library.
 (function (global) {
     'use strict';
-    var midiIO, _delayedInit, MIDIAccess, _createJazzInstance, _onReady, _onNotReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
+    var midiIO, _delayedInit, MIDIAccess, _createJazzInstance, _onReady, _onNotReady, _createMIDIPortMap, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
     var inNodeJs = ( typeof __dirname !== 'undefined' && window.jazzMidi );
     var allMidiIns = [];
 
@@ -187,8 +187,8 @@
 
     _onReady = function() {
         if (this._promise){
-            this._createMIDIInputMap();
-            this._createMIDIOutputMap();
+            this.inputs = _createMIDIPortMap.call(this, this._Jazz.MidiInList(), MIDIInput);
+            this.outputs = _createMIDIPortMap.call(this, this._Jazz.MidiOutList(), MIDIOutput);
             this._promise.succeed(this);
         }
     };
@@ -199,92 +199,50 @@
     };
 
 
-    MIDIAccess.prototype._createMIDIInputMap = function() {
-        if(!this._Jazz){
-            return null;
-        }
-
-        var list = this._Jazz.MidiInList(),
-            size = list.length,
+    _createMIDIPortMap = function(list, PortClass) {
+        var size = list.length,
             values = [],
             keys = [],
             entries = [],
             portsById = {},
-            input, i;
+            port, i;
 
         for(i = 0; i < size; i++) {
-            input = new MIDIInput(this, list[i], i);
-            entries.push([input.id, input]);
-            values.push(input);
-            keys.push(input.id);
-            portsById[input.id] = input;
-        }
-
-        this.inputs = {
-            size: size,
-            forEach: function(cb){
-                var i, entry, maxi = entries.length;
-                for(i = 0; i < maxi; i++){
-                    entry = entries[i];
-                    cb(entry[0], entry[1]);
-                }
-            },
-            keys: function(){
-                return new Iterator(keys);
-            },
-            values: function(){
-                return new Iterator(values);
-            },
-            entries: function(){
-                return new Iterator(entries);
-            },
-            get: function(id){
-                return portsById[id];
-            },
-            has: function(id){
-                return portsById[id] !== undefined;
+            if(PortClass !== undefined){ // Jazz plugin
+                port = new PortClass(this, list[i], i);
+            }else{ // older WebMIDI implementations
+                port = list[i];
             }
-        };
-    };
-
-    MIDIAccess.prototype._createMIDIOutputMap = function() {
-        if(!this._Jazz){
-            return null;
+            entries.push([port.id, port]);
+            values.push(port);
+            keys.push(port.id);
+            portsById[port.id] = port;
         }
 
-        var list = this._Jazz.MidiOutList(),
-            size = list.length,
-            values = [],
-            keys = [],
-            entries = [],
-            portsById = {},
-            output, i;
+        keys = new Iterator(keys);
+        values = new Iterator(values);
+        entries = new Iterator(entries);
 
-        for(i = 0; i < size; i++) {
-            output = new MIDIOutput(this, list[i], i);
-            entries.push([output.id, output]);
-            values.push(output);
-            keys.push(output.id);
-            portsById[output.id] = output;
-        }
-
-        this.outputs = {
+        return {
             size: size,
             forEach: function(cb){
-                var i, entry, maxi = entries.length;
-                for(i = 0; i < maxi; i++){
+                var i, entry;
+                for(i = 0; i < size; i++){
                     entry = entries[i];
                     cb(entry[0], entry[1]);
                 }
             },
             keys: function(){
-                return new Iterator(keys);
+                keys.reset();
+                return keys;
             },
             values: function(){
-                return new Iterator(values);
+                values.reset();
+                return values;
             },
             entries: function(){
-                return new Iterator(entries);
+                entries.reset();
+                return entries;
             },
             get: function(id){
                 return portsById[id];
@@ -565,8 +523,8 @@
             function onSuccess(access){
                 if(typeof access.inputs === 'function'){
                     // add MIDIInputMap and MIDIOutputMap to MIDIAccess object
-                    scope._createMIDIInputMap(access);
-                    scope._createMIDIOutputMap(access);
+                    access.inputs = _createMIDIPortMap.call(null, access.inputs());
+                    access.outputs = _createMIDIPortMap.call(null, access.outputs());
                 }
                 if(scope._promise){
                     scope._promise.succeed(access);
@@ -580,95 +538,6 @@
             }
         );
     };
-
-    MIDIAccessWrapper.prototype._createMIDIInputMap = function(access) {
-        var list = access.inputs(),
-            size = list.length,
-            values = [],
-            keys = [],
-            entries = [],
-            portsById = {},
-            input, i;
-
-        for(i = 0; i < size; i++) {
-            input = list[i];
-            entries.push([input.id, input]);
-            values.push(input);
-            keys.push(input.id);
-            portsById[input.id] = input;
-        }
-
-        access.inputs = {
-            size: size,
-            forEach: function(cb){
-                var i, entry, maxi = entries.length;
-                for(i = 0; i < maxi; i++){
-                    entry = entries[i];
-                    cb(entry[0], entry[1]);
-                }
-            },
-            keys: function(){
-                return new Iterator(keys);
-            },
-            values: function(){
-                return new Iterator(values);
-            },
-            entries: function(){
-                return new Iterator(entries);
-            },
-            get: function(id){
-                return portsById[id];
-            },
-            has: function(id){
-                return portsById[id] !== undefined;
-            }
-        };
-    };
-
-    MIDIAccessWrapper.prototype._createMIDIOutputMap = function(access) {
-        var list = access.outputs(),
-            size = list.length,
-            values = [],
-            keys = [],
-            entries = [],
-            portsById = {},
-            output, i;
-
-        for(i = 0; i < size; i++) {
-            output = list[i];
-            entries.push([output.id, output]);
-            values.push(output);
-            keys.push(output.id);
-            portsById[output.id] = output;
-        }
-
-        access.outputs = {
-            size: size,
-            forEach: function(cb){
-                var i, entry, maxi = entries.length;
-                for(i = 0; i < maxi; i++){
-                    entry = entries[i];
-                    cb(entry[0], entry[1]);
-                }
-            },
-            keys: function(){
-                return new Iterator(keys);
-            },
-            values: function(){
-                return new Iterator(values);
-            },
-            entries: function(){
-                return new Iterator(entries);
-            },
-            get: function(id){
-                return portsById[id];
-            },
-            has: function(id){
-                return portsById[id] !== undefined;
-            }
-        };
-    };
-
 
     //init: create plugin or wrap native MIDIAccess object
     (function init(){
