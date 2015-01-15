@@ -16,9 +16,27 @@
 // Initialize the MIDI library.
 (function (global) {
     'use strict';
-    var midiIO, _requestMIDIAccess, _delayedInit, MIDIAccess, _createJazzInstance, _onReady, _onNotReady, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
+    var midiIO, _delayedInit, MIDIAccess, _createJazzInstance, _onReady, _onNotReady, _createMIDIPortMap, MIDIPort, MIDIInput, MIDIOutput, _midiProc;
     var inNodeJs = ( typeof __dirname !== 'undefined' && window.jazzMidi );
     var allMidiIns = [];
+
+    function Iterator(items) {
+        this._items = items;
+        this._index = 0;
+        this._maxIndex = items.length;
+    }
+
+    Iterator.prototype.next = function(){
+        if(this._index === this._maxIndex){
+            return {value: undefined, done: true};
+        }
+        return {value: this._items[this._index++], done: false};
+    };
+
+    Iterator.prototype.reset = function(){
+        this._index = 0;
+    };
+
 
     function Promise() {
 
@@ -27,17 +45,17 @@
     Promise.prototype.then = function(accept, reject) {
         this.accept = accept;
         this.reject = reject;
-    }
+    };
 
     Promise.prototype.succeed = function(access) {
         if (this.accept)
             this.accept(access);
-    }
+    };
 
     Promise.prototype.fail = function(error) {
         if (this.reject)
             this.reject(error);
-    }
+    };
 
     function _JazzInstance() {
         this.inputInUse = false;
@@ -77,7 +95,7 @@
         var insertionPoint = document.getElementById("MIDIPlugin");
         if (!insertionPoint) {
             // Create hidden element
-            var insertionPoint = document.createElement("div");
+            insertionPoint = document.createElement("div");
             insertionPoint.id = "MIDIPlugin";
             insertionPoint.style.position = "absolute";
             insertionPoint.style.visibility = "hidden";
@@ -110,10 +128,6 @@
         }, 100);
     };
 
-    _requestMIDIAccess = function _requestMIDIAccess() {
-        var access = new MIDIAccess();
-        return access._promise;
-    };
 
     // API Methods
 
@@ -172,8 +186,11 @@
     };
 
     _onReady = function() {
-        if (this._promise)
+        if (this._promise){
+            this.inputs = _createMIDIPortMap.call(this, this._Jazz.MidiInList(), MIDIInput);
+            this.outputs = _createMIDIPortMap.call(this, this._Jazz.MidiOutList(), MIDIOutput);
             this._promise.succeed(this);
+        }
     };
 
     _onNotReady = function() {
@@ -181,29 +198,61 @@
             this._promise.fail( { code: 1 } );
     };
 
-    MIDIAccess.prototype.inputs = function(  ) {
-        if (!this._Jazz)
-              return null;
-        var list=this._Jazz.MidiInList();
-        var inputs = new Array( list.length );
 
-        for ( var i=0; i<list.length; i++ ) {
-            inputs[i] = new MIDIInput( this, list[i], i );
+    _createMIDIPortMap = function(list, PortClass) {
+        var size = list.length,
+            values = [],
+            keys = [],
+            entries = [],
+            portsById = {},
+            port, i;
+
+        for(i = 0; i < size; i++) {
+            if(PortClass !== undefined){ // Jazz plugin
+                port = new PortClass(this, list[i], i);
+            }else{ // older WebMIDI implementations
+                port = list[i];
+            }
+            entries.push([port.id, port]);
+            values.push(port);
+            keys.push(port.id);
+            portsById[port.id] = port;
         }
-        return inputs;
-    }
 
-    MIDIAccess.prototype.outputs = function(  ) {
-        if (!this._Jazz)
-            return null;
-        var list=this._Jazz.MidiOutList();
-        var outputs = new Array( list.length );
+        keys = new Iterator(keys);
+        values = new Iterator(values);
+        entries = new Iterator(entries);
 
-        for ( var i=0; i<list.length; i++ ) {
-            outputs[i] = new MIDIOutput( this, list[i], i );
-        }
-        return outputs;
+        return {
+            size: size,
+            forEach: function(cb){
+                var i, entry;
+                for(i = 0; i < size; i++){
+                    entry = entries[i];
+                    cb(entry[0], entry[1]);
+                }
+            },
+            keys: function(){
+                keys.reset();
+                return keys;
+            },
+            values: function(){
+                values.reset();
+                return values;
+            },
+            entries: function(){
+                entries.reset();
+                return entries;
+            },
+            get: function(id){
+                return portsById[id];
+            },
+            has: function(id){
+                return portsById[id] !== undefined;
+            }
+        };
     };
+
 
     MIDIInput = function MIDIInput( midiAccess, name, index ) {
         this._listeners = [];
@@ -239,7 +288,9 @@
             inputInstance._delayedInit(then.bind(this));
         } else {
             inputInstance.inputInUse = true;
-            inputInstance._delayedInit(then.bind(this));
+            //inputInstance._delayedInit(then.bind(this));
+            // no need for delay, the instance has already been initialized
+            then.call(this);
         }
     };
 
@@ -374,7 +425,7 @@
                         break;
                 }
             }
-            if (!isValidMessage) 
+            if (!isValidMessage)
                 continue;
             var evt = {};
             if (!inNodeJs) {
@@ -426,7 +477,9 @@
             outputInstance._delayedInit(then.bind(this));
         } else {
             outputInstance.outputInUse = true;
-            outputInstance._delayedInit(then.bind(this));
+            //outputInstance._delayedInit(then.bind(this));
+            // no need for delay, the instance has already been initialized
+            then.call(this);
         }
     };
 
@@ -454,16 +507,60 @@
         return true;
     };
 
-    //init: create plugin
-    if (!window.navigator.requestMIDIAccess) {
-        window.navigator.requestMIDIAccess = _requestMIDIAccess;
-        if (typeof __dirname !== 'undefined' && window.jazzMidi) {
-            window.navigator.close = function() {
-                for(var i in allMidiIns) allMidiIns[i].MidiInClose();
-                // Need to close MIDI input ports, otherwise Node.js will wait for MIDI input forever.
+
+    // wrapper for older WebMIDI implementation, i.e. Chromium's WebMIDI implementation
+
+    function MIDIAccessWrapper(request){
+        this._promise = new Promise();
+        this._request = request;
+    };
+
+    MIDIAccessWrapper.prototype.init = function() {
+        var scope = this;
+
+        this._request.bind(window.navigator)().then(
+
+            function onSuccess(access){
+                if(typeof access.inputs === 'function'){
+                    // add MIDIInputMap and MIDIOutputMap to MIDIAccess object
+                    access.inputs = _createMIDIPortMap.call(null, access.inputs());
+                    access.outputs = _createMIDIPortMap.call(null, access.outputs());
+                }
+                if(scope._promise){
+                    scope._promise.succeed(access);
+                }
+            },
+
+            function onError(e){
+                if(scope._promise){
+                    scope._promise.fail({code:1});
+                }
+            }
+        );
+    };
+
+    //init: create plugin or wrap native MIDIAccess object
+    (function init(){
+        var access;
+        if(!window.navigator.requestMIDIAccess){
+            window.navigator.requestMIDIAccess = function(){
+                access = new MIDIAccess();
+                return access._promise;
             };
+            if(typeof __dirname !== 'undefined' && window.jazzMidi) {
+                window.navigator.close = function() {
+                    for(var i in allMidiIns) allMidiIns[i].MidiInClose();
+                    // Need to close MIDI input ports, otherwise Node.js will wait for MIDI input forever.
+                };
+            }
+        }else{
+            access = new MIDIAccessWrapper(window.navigator.requestMIDIAccess);
+            window.navigator.requestMIDIAccess = function(){
+                access.init();
+                return access._promise;
+            }
         }
-    }
+    }());
 
 }(window));
 
