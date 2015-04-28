@@ -1,31 +1,54 @@
 {
   "name": "web-midi-api",
-  "version": "1.4.0",
-  "description": "Node.js version of Chris Wilson's WebMIDIAPIShim",
-  "main": "index.js",
-  "scripts": {
-    "test": "node ./test.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jazz-soft/WebMIDIAPIShim.git"
-  },
+  "version": "1.4.1",
+  "description": "Shim for the WebMIDI API, intended to be used in environments that don't have the WebMIDI API implemented: Nodejs and all browsers except Chrome and Chromium",
   "keywords": [
     "midi",
     "music",
-    "sound"
+    "sound",
+    "webmidi api"
   ],
-  "author": {
-    "name": "jazz-soft",
-    "url": "http://jazz-soft.net"
-  },
+  "homepage": "https://github.com/cwilso/WebMIDIAPIShim",
+  "bugs":"https://github.com/cwilso/WebMIDIAPIShim/issues",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "http://jazz-soft.org"
+  "author": {
+    "name": "Chris Wilson",
+    "email": "cwilso@gmail.com",
+    "url": "http://cwilso.com/"
+   },
+   "contributors":[{
+    "name": "jazz-soft",
+    "email": "info@jazz-soft.net",
+    "url": "http://jazz-soft.net"
+    },{
+    "name": "abudaan",
+    "email": "daniel@abumarkub.net",
+    "url": "http://github.com/abudaan"
+    }
+   ],
+  "main": "lib/index.js",
+  "directories":{
+    "example": "examples"
   },
-  "homepage": "http://jazz-soft.net",
-  "dependencies": {
-    "jazz-midi": "^1.4.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
   },
-  "readmeFilename": "README.md"
+  "scripts": {
+    "build": "browserify src/shim.js -t [ babelify --sourceMapRelative ./src ] --debug | exorcist lib/WebMIDIAPI.js.map > lib/WebMIDIAPI.js",
+    "watch": "watchify src/shim.js -t babelify -o lib/WebMIDIAPI.js --debug --verbose"
+  },
+  "dependencies":{
+    "jazz-midi": "^1.4.0",
+    "performance-now": ">=0.2.0"
+  },
+  "devDependencies": {
+    "babelify": ">=6.0.0",
+    "browserify": ">=8.1.1",
+    "exorcist": "^0.1.6",
+    "watchify": ">=1.0.1"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
 }

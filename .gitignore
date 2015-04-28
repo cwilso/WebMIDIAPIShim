@@ -1,2 +1,7 @@
-node_modules
-.DS_Store
+*/.DS_Store
+npm-debug.log
+node_modules/*
+tests/MIDITest.html
+tests/multi.html
+tests/routing.html
+tests/test0.html
