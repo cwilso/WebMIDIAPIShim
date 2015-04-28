@@ -62,12 +62,7 @@ export class MIDIInput{
     }
   }
 
-  preventDefault(){
-    this._pvtDef = true;
-  }
-
   dispatchEvent(evt){
-    this._pvtDef = false;
     let listeners = this._listeners.get(evt.type);
     listeners.forEach(function(listener){
       listener(evt);
@@ -82,8 +77,6 @@ export class MIDIInput{
         this.onstatechange(evt);
       }
     }
-
-    return this._pvtDef;
   }
 
   open(){
@@ -94,7 +87,7 @@ export class MIDIInput{
       this._jazzInstance.MidiInOpen(this.name, midiProc.bind(this));
     }
     this.connection = 'open';
-    dispatchEvent(this); // dispatch event via MIDIAccess
+    dispatchEvent(this); // dispatch MIDIConnectionEvent via MIDIAccess
   }
 
   close(){
@@ -105,7 +98,7 @@ export class MIDIInput{
       this._jazzInstance.MidiInClose();
     }
     this.connection = 'closed';
-    dispatchEvent(this); // dispatch event via MIDIAccess
+    dispatchEvent(this); // dispatch MIDIConnectionEvent via MIDIAccess
     this._onmidimessage = null;
     this.onstatechange = null;
     this._listeners.get('midimessage').clear();
@@ -144,8 +137,7 @@ midiProc = function(timestamp, data){
   let i;
   let isSysexMessage = false;
 
-  // Jazz sometimes passes us multiple messages at once, so we need to parse them out
-  // and pass them one at a time.
+  // Jazz sometimes passes us multiple messages at once, so we need to parse them out and pass them one at a time.
 
   for(i = 0; i < data.length; i += length){
     let isValidMessage = true;

@@ -1,3 +1,16 @@
+/*
+  Creates instances of the Jazz plugin if necessary. Initially the MIDIAccess creates one main Jazz instance that is used
+  to query all initially connected devices, and to track the devices that are being connected or disconnected at runtime.
+
+  For every MIDIInput and MIDIOutput that is created, MIDIAccess queries the getJazzInstance() method for a Jazz instance
+  that still have an available input or output. Because Jazz only allows one input and one output per instance, we
+  need to create new instances if more than one MIDI input or output device gets connected.
+
+  Note that an existing Jazz instance doesn't get deleted when both its input and output device are disconnected; instead it
+  will be reused if a new device gets connected.
+*/
+
+
 'use strict';
 
 /*

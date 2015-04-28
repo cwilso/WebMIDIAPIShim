@@ -34,7 +34,7 @@ export class MIDIOutput{
       this._jazzInstance.MidiOutOpen(this.name);
     }
     this.connection = 'open';
-    dispatchEvent(this); // dispatch event via MIDIAccess
+    dispatchEvent(this); // dispatch MIDIConnectionEvent via MIDIAccess
   }
 
   close(){
@@ -45,7 +45,7 @@ export class MIDIOutput{
       this._jazzInstance.MidiOutClose();
     }
     this.connection = 'closed';
-    dispatchEvent(this); // dispatch event via MIDIAccess
+    dispatchEvent(this); // dispatch MIDIConnectionEvent via MIDIAccess
     this.onstatechange = null;
     this._listeners.clear();
   }

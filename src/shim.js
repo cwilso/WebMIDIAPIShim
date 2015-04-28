@@ -1,3 +1,7 @@
+/*
+  Top entry point
+*/
+
 'use strict';
 
 import {createMIDIAccess, closeAllMIDIInputs} from './midi_access';
@@ -9,6 +13,7 @@ let midiAccess;
   if(!window.navigator.requestMIDIAccess){
     polyfill();
     window.navigator.requestMIDIAccess = function(){
+      // singleton-ish, no need to create multiple instances of MIDIAccess
       if(midiAccess === undefined){
           midiAccess = createMIDIAccess();
       }
@@ -22,5 +27,3 @@ let midiAccess;
     }
   }
 }());
-
-export {};

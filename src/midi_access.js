@@ -1,3 +1,14 @@
+/*
+  Creates a MIDIAccess instance:
+  - Creates MIDIInput and MIDIOutput instances for the initially connected MIDI devices.
+  - Keeps track of newly connected devices and creates the necessary instances of MIDIInput and MIDIOutput.
+  - Keeps track of disconnected devices and removes them from the inputs and/or outputs map.
+  - Creates a unique id for every device and stores these ids by the name of the device:
+    so when a device gets disconnected and reconnected again, it will still have the same id. This
+    is in line with the behaviour of the native MIDIAccess object.
+
+*/
+
 'use strict';
 
 import {createJazzInstance, getJazzInstance} from './jazz_instance';
@@ -42,6 +53,7 @@ class MIDIAccess{
   }
 }
 
+
 export function createMIDIAccess(){
 
   return new Promise(function executor(resolve, reject){
@@ -74,6 +86,8 @@ export function createMIDIAccess(){
   });
 }
 
+
+// create MIDIInput and MIDIOutput instances for all initially connected MIDI devices
 function createMIDIPorts(callback){
   let inputs = jazzInstance.MidiInList();
   let outputs = jazzInstance.MidiOutList();
@@ -120,6 +134,7 @@ function createMIDIPort(type, name, callback){
 }
 
 
+// lookup function: Jazz gives us the name of the connected/disconnected MIDI devices but we have stored them by id
 function getPortByName(ports, name){
   let port;
   for(port of ports.values()){
@@ -131,6 +146,7 @@ function getPortByName(ports, name){
 }
 
 
+// keep track of connected/disconnected MIDI devices
 function setupListeners(){
   jazzInstance.OnDisconnectMidiIn(function(name){
     let port = getPortByName(midiInputs, name);
@@ -168,8 +184,9 @@ function setupListeners(){
 }
 
 
+// when a device gets connected/disconnected both the port and MIDIAccess dispatch a MIDIConnectionEvent
+// therefor we call the ports dispatchEvent function here as well
 export function dispatchEvent(port){
-
   port.dispatchEvent(new MIDIConnectionEvent(port, port));
 
   let evt = new MIDIConnectionEvent(midiAccess, port);
@@ -191,6 +208,7 @@ export function closeAllMIDIInputs(){
 }
 
 
+// check if we have already created a unique id for this device, if so: reuse it, if not: create a new id and store it
 export function getMIDIDeviceId(name, type){
   let id;
   if(type === 'input'){

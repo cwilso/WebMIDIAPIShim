@@ -1,7 +1,12 @@
+/*
+  A collection of handy util methods
+*/
+
 'use strict';
 
 let device;
 
+// check on what type of device we are running, note that in this context a device is a computer not a MIDI device
 export function getDevice(){
 
   if(device !== undefined){
@@ -107,6 +112,7 @@ export function generateUUID(){
 }
 
 
+// a very simple implementation of a Promise for Internet Explorer and Nodejs
 export function polyfillPromise(scope){
   if(typeof scope.Promise !== 'function'){
 

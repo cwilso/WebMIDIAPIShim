@@ -24,7 +24,6 @@ window.onload = function(){
 
         // update the device list when devices get connected, disconnected, opened or closed
         midiAccess.onstatechange = function(e){
-          console.log(e);
           var port = e.port;
           var div = port.type === 'input' ? divInputs : divOutputs;
           var listener = port.type === 'input' ? checkboxMIDIInOnChange : checkboxMIDIOutOnChange;
