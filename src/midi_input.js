@@ -1,3 +1,7 @@
+/*
+  MIDIInput is a wrapper around an input of a Jazz instance
+*/
+
 'use strict';
 
 import {getDevice} from './util';
@@ -20,6 +24,8 @@ export class MIDIInput{
 
     this.onstatechange = null;
     this._onmidimessage = null;
+    // because we need to implicitly open the device when an onmidimessage handler gets added
+    // we define a setter that opens the device if the set value is a function
     Object.defineProperty(this, 'onmidimessage', {
       set: function(value){
         this._onmidimessage = value;
@@ -35,6 +41,9 @@ export class MIDIInput{
 
     this._jazzInstance = instance;
     this._jazzInstance.inputInUse = true;
+
+    // on Linux opening and closing Jazz instances causes the plugin to crash a lot so we open
+    // the device here and don't close it when close() is called, see below
     if(getDevice().platform === 'linux'){
       this._jazzInstance.MidiInOpen(this.name, midiProc.bind(this));
     }

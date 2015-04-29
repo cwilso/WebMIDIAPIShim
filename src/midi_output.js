@@ -1,3 +1,7 @@
+/*
+  MIDIOutput is a wrapper around an output of a Jazz instance
+*/
+
 'use strict';
 
 import {getDevice} from './util';
@@ -69,6 +73,10 @@ export class MIDIOutput{
       this._jazzInstance.MidiOutLong(data);
     }
     return true;
+  }
+
+  clear(){
+    // to be implemented
   }
 
   addEventListener(type, listener, useCapture){

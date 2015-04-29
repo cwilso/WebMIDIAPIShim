@@ -93,6 +93,7 @@ window.onload = function(){
     outputs = midiAccess.outputs;
     html = '<h4>midi outputs:</h4>';
     outputs.forEach(function(port){
+      console.log(port, port.clear);
       html += '<label><input type="checkbox" id="' + port.id + '">' + port.name + ' (' + port.state + ', ' +  port.connection + ')</label><br>';
     });
     divOutputs.innerHTML = html;
