@@ -48,7 +48,7 @@
     <p class="copyright">Web MIDI API Polyfill maintained by <a href="https://github.com/cwilso">cwilso</a></p>
   </footer>
     </div>
-<script src="WebMIDIAPI.js"></script>
+<script src="lib/WebMIDIAPI.js"></script>
 <script>
 var midi=null;
 var inputs=null;
@@ -83,45 +83,25 @@ function success( midiAccess ) {
     inputs = midi.inputs;
     log.innerHTML += inputs.size+" inputs:\n";
 
-/*
-    // forEach doesn't yet work in WebMIDI/Chrome
     i = 0;
-    inputs.forEach(function(key, value){
-        log.innerHTML += i++ + ": " + value.name + "; manufacturer: " + value.manufacturer + "; version: " + value.version + "\n";
-    });
-*/
-
-    // but the iterator does, so we use the iterator:
-    i = 0;
-    iterator = inputs.values();
-    while((data = iterator.next()).done === false){
-        port = data.value;
+    inputs.forEach(function(port){
         log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
-    }
+    });
 
     if(inputs.size > 0) {
         iterator = inputs.values();
         input = iterator.next().value;
-        // input.onmidimessage = handleMIDIMessage;
-        input.addEventListener("midimessage", handleMIDIMessage);
+        input.onmidimessage = handleMIDIMessage;
         log.innerHTML += "Hooked up first input.\n";
     }
 
     outputs = midi.outputs;
     log.innerHTML += outputs.size+" outputs:\n";
 
-/*
     i = 0;
-    outputs.forEach(function(key, value){
-        log.innerHTML += i++ + ": " + value.name + "; manufacturer: " + value.manufacturer + "; version: " + value.version + "\n";
-    });
-*/
-    i = 0;
-    iterator = outputs.values();
-    while((data = iterator.next()).done === false){
-        port = data.value;
+    outputs.forEach(function(port){
         log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
-    }
+    });
 
     if(outputs.size > 0) {
         iterator = outputs.values();
