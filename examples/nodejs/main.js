@@ -10,7 +10,7 @@
   - copy over this file to your project folder
   - type 'node main.js' and press enter (on Linux type: 'nodejs main.js')
 
-  You can use the code in the example below as a starting point for your own code. You can organize your project files
+  You can use the code in this example as a starting point for your own code. You can organize your project files
   in any directory structure that suits your project best; nodejs will find the web-midi-api package in the
   node_modules folder.
 

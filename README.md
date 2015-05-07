@@ -45,9 +45,21 @@ function onerrorcallback( err ) {
 }
 ```
 
+####Use as npm package
+
+The WebMIDIAPIShim is also available as npm package, you can add it to your project like so:
+
+- open a terminal
+- cd to the root folder of your project
+- run `npm install web-midi-api`
+- now a folder node_modules has been created, in this folder you'll find a folder named web-midi-api
+
+If you are new to npm and using npm modules in your project please visit the [npm site](https://docs.npmjs.com/).
+
+
 ####Use with Nodejs
 
-You can use the polyfill in your Nodejs projects as well:
+You can use the WebMIDIAPIShim in your Nodejs projects as well. First install the npm package as described above, then add the package to your project like so:
 
 ```
 var navigator = require('web-midi-api');
@@ -57,6 +69,7 @@ navigator.requestMIDIAccess().then(onFulFilled, onRejected);
 
 
 ```
+
 
 
 ####Examples
