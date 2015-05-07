@@ -37,8 +37,9 @@ export function createJazzInstance(callback){
   let instance;
   let objRef, activeX;
 
+
   if(getDevice().nodejs === true){
-    objRef = new window.jazzMidi.MIDI();
+    objRef = new jazzMidi.MIDI();
   }else{
     let o1 = document.createElement('object');
     o1.id = id + 'ie';
@@ -84,7 +85,7 @@ export function createJazzInstance(callback){
       instance = activeX;
     }
     if(instance !== undefined){
-      instance._perfTimeZero = window.performance.now();
+      instance._perfTimeZero = performance.now();
       jazzInstances.set(id, instance);
     }
     callback(instance);

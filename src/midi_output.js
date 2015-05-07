@@ -62,11 +62,11 @@ export class MIDIOutput{
     }
 
     if(timestamp){
-      delayBeforeSend = Math.floor(timestamp - window.performance.now());
+      delayBeforeSend = Math.floor(timestamp - performance.now());
     }
 
     if(timestamp && (delayBeforeSend > 1)){
-      window.setTimeout(() => {
+      setTimeout(() => {
         this._jazzInstance.MidiOutLong(data);
       }, delayBeforeSend);
     }else{
