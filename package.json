@@ -40,7 +40,7 @@
     "watch": "watchify src/shim.js -t babelify -o lib/WebMIDIAPI.js --debug --verbose"
   },
   "dependencies":{
-    "jazz-midi": ">=1.4.3",
+    "jazz-midi": ">=1.4.4",
     "performance-now": ">=0.2.0"
   },
   "devDependencies": {
