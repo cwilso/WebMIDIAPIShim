@@ -27,7 +27,8 @@ window.onload = function(){
           var port = e.port;
           var div = port.type === 'input' ? divInputs : divOutputs;
           var listener = port.type === 'input' ? checkboxMIDIInOnChange : checkboxMIDIOutOnChange;
-          var checkbox = document.getElementById(port.id);
+          var activePorts = port.type === 'input' ? activeInputs : activeOutputs;
+          var checkbox = document.getElementById(port.type + port.id);
           var label;
 
           // device disconnected
@@ -35,15 +36,14 @@ window.onload = function(){
             div.removeChild(checkbox.parentNode.nextSibling); // remove the <br> after the checkbox
             div.removeChild(checkbox.parentNode); // remove the label and the checkbox
             port.close();
-            delete activeInputs[port.id];
-            delete activeOutputs[port.id];
+            delete activePorts[port.type + port.id];
 
           // new device connected
           }else if(port.state === 'connected' && checkbox === null){
             label = document.createElement('label');
             checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.id = port.id;
+            checkbox.id = port.type + port.id;
             checkbox.addEventListener('change', listener, false);
             label.appendChild(checkbox);
             label.appendChild(document.createTextNode(port.name + ' (' + port.state + ', ' +  port.connection + ')'));
@@ -78,14 +78,14 @@ window.onload = function(){
     inputs = midiAccess.inputs;
     html = '<h4>midi inputs:</h4>';
     inputs.forEach(function(port){
-      html += '<label><input type="checkbox" id="' + port.id + '">' + port.name + ' (' + port.state + ', ' +  port.connection + ')</label><br>';
+      html += '<label><input type="checkbox" id="' + port.type + port.id + '">' + port.name + ' (' + port.state + ', ' +  port.connection + ')</label><br>';
     });
     divInputs.innerHTML = html;
 
     outputs = midiAccess.outputs;
     html = '<h4>midi outputs:</h4>';
     outputs.forEach(function(port){
-      html += '<label><input type="checkbox" id="' + port.id + '">' + port.name + ' (' + port.state + ', ' +  port.connection + ')</label><br>';
+      html += '<label><input type="checkbox" id="' + port.type + port.id + '">' + port.name + ' (' + port.state + ', ' +  port.connection + ')</label><br>';
     });
     divOutputs.innerHTML = html;
 
@@ -126,7 +126,7 @@ window.onload = function(){
   checkboxMIDIInOnChange = function(){
     // port id is the same a the checkbox id
     var id = this.id;
-    var port = midiAccess.inputs.get(id);
+    var port = midiAccess.inputs.get(id.replace('input', ''));
     var cb = this;
     if(this.checked === true){
       activeInputs[id] = port;
@@ -147,7 +147,7 @@ window.onload = function(){
   checkboxMIDIOutOnChange = function(){
     // port id is the same a the checkbox id
     var id = this.id;
-    var port = midiAccess.outputs.get(id);
+    var port = midiAccess.outputs.get(id.replace('output', ''));
     var cb = this;
     if(this.checked === true){
       activeOutputs[id] = port;
