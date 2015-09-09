@@ -41,7 +41,8 @@ window.onload = function(){
     inputs.forEach(function(port){
       html += port.name + '<br>';
       html += '<span class="small">manufacturer: ' + port.manufacturer + '</span><br>';
-      html += '<span class="small">version: ' + port.version + '</span><br><br>';
+      html += '<span class="small">version: ' + port.version + '</span><br>';
+      html += '<span class="small">id: ' + port.id + '</span><br><br>';
     });
     divInputs.innerHTML = html;
 
@@ -49,7 +50,8 @@ window.onload = function(){
     outputs.forEach(function(port){
       html += port.name + '<br>';
       html += '<span class="small">manufacturer: ' + port.manufacturer + '</span><br>';
-      html += '<span class="small">version: ' + port.version + '</span><br><br>';
+      html += '<span class="small">version: ' + port.version + '</span><br>';
+      html += '<span class="small">id: ' + port.id + '</span><br><br>';
     });
     divOutputs.innerHTML = html;
   }

@@ -18,13 +18,11 @@ export function getDevice(){
     browser = 'undetected',
     nodejs = false;
 
-  nodejs = (typeof __dirname !== 'undefined') && (window.jazzMidi !== undefined);
-
-  if(nodejs === true){
+  if(navigator.nodejs){
     platform = process.platform;
     device = {
       platform: platform,
-      nodejs: nodejs,
+      nodejs: true,
       mobile: platform === 'ios' || platform === 'android'
     };
     return device;
@@ -81,19 +79,19 @@ export function getDevice(){
 
 
 export function polyfillPerformance(){
-  if(window.performance === undefined){
-    window.performance = {};
+  if(performance === undefined){
+    performance = {};
   }
   Date.now = (Date.now || function(){
     return new Date().getTime();
   });
 
-  if(window.performance.now === undefined){
+  if(performance.now === undefined){
     let nowOffset = Date.now();
-    if(window.performance.timing !== undefined && window.performance.timing.navigationStart !== undefined){
-      nowOffset = window.performance.timing.navigationStart;
+    if(performance.timing !== undefined && performance.timing.navigationStart !== undefined){
+      nowOffset = performance.timing.navigationStart;
     }
-    window.performance.now = function now(){
+    performance.now = function now(){
       return Date.now() - nowOffset;
     }
   }

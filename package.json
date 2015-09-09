@@ -35,11 +35,12 @@
     "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
   },
   "scripts": {
+    "test": "node ./test/nodejs_test.js",
     "build": "browserify src/shim.js -t [ babelify --sourceMapRelative ./src ] --debug | exorcist lib/WebMIDIAPI.js.map > lib/WebMIDIAPI.js",
     "watch": "watchify src/shim.js -t babelify -o lib/WebMIDIAPI.js --debug --verbose"
   },
   "dependencies":{
-    "jazz-midi": "^1.4.0",
+    "jazz-midi": ">=1.4.4",
     "performance-now": ">=0.2.0"
   },
   "devDependencies": {
