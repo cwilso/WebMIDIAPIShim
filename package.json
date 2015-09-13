@@ -1,6 +1,6 @@
 {
-  "name": "web-midi-api",
-  "version": "1.4.1",
+  "name": "web-midi-api-dev",
+  "version": "0.0.0",
   "description": "Shim for the WebMIDI API, intended to be used in environments that don't have the WebMIDI API implemented: Nodejs and all browsers except Chrome and Chromium",
   "keywords": [
     "midi",
@@ -18,7 +18,7 @@
    },
    "contributors":[{
     "name": "jazz-soft",
-    "email": "info@jazz-soft.net",
+    "email": "jazz-dev@jazz-soft.net",
     "url": "http://jazz-soft.net"
     },{
     "name": "abudaan",
@@ -51,5 +51,6 @@
   },
   "engines": {
     "node": "0.10.x"
-  }
+  },
+  "private": true
 }
