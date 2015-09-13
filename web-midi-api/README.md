@@ -5,13 +5,13 @@
 ![mocos](http://jazz-soft.github.io/img/macos.jpg)
 ![linux](http://jazz-soft.github.io/img/linux.jpg)
 
-This is a Node.js implementation of [Web MIDI API](http://webaudio.github.io/web-midi-api) (as in Chrome-43 version).
+This is a Node.js implementation of [**Web MIDI API**](http://webaudio.github.io/web-midi-api) (as in Chrome-43 version).
 
-It is based on Chris Wilson's [WebMIDIAPIShim](https://github.com/cwilso/WebMIDIAPIShim).
+It is based on Chris Wilson's [**WebMIDIAPIShim**](https://github.com/cwilso/WebMIDIAPIShim).
 
 The complete development version and web-browser implementation is available at
-[cwilso/WebMIDIAPIShim](https://github.com/cwilso/WebMIDIAPIShim) (the original project), or
-[jazz-soft/WebMIDIAPIShim](https://github.com/jazz-soft/WebMIDIAPIShim) (the latest Node.js updates)
+[**cwilso/WebMIDIAPIShim**(https://github.com/cwilso/WebMIDIAPIShim) (the original project), or
+[**jazz-soft/WebMIDIAPIShim**](https://github.com/jazz-soft/WebMIDIAPIShim) (the latest Node.js updates)
 
 - these two get merged periodically.
 
