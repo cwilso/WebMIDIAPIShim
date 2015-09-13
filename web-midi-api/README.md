@@ -5,7 +5,7 @@
 ![mocos](http://jazz-soft.github.io/img/macos.jpg)
 ![linux](http://jazz-soft.github.io/img/linux.jpg)
 
-This is a Node.js implementation of [**Web MIDI API**](http://webaudio.github.io/web-midi-api) (as in Chrome-43 version).
+This is a **Node.js** implementation of [**Web MIDI API**](http://webaudio.github.io/web-midi-api) (as in Chrome-43 version).
 
 It is based on Chris Wilson's [**WebMIDIAPIShim**](https://github.com/cwilso/WebMIDIAPIShim).
 
