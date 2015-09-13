@@ -13,9 +13,9 @@ The complete development and web-browser versions are available at
 [**cwilso/WebMIDIAPIShim**](https://github.com/cwilso/WebMIDIAPIShim) (the original project), or
 [**jazz-soft/WebMIDIAPIShim**](https://github.com/jazz-soft/WebMIDIAPIShim) (the latest Node.js updates) - these two get merged periodically.
 
-##Usage
+## Usage
 
-[npm install web-midi-api](https://www.npmjs.com/package/web-midi-api)
+[**npm install web-midi-api**](https://www.npmjs.com/package/web-midi-api)
 
     var navigator = require('web-midi-api');
     
