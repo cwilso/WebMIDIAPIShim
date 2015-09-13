@@ -10,12 +10,15 @@ This is a Node.js implementation of [**Web MIDI API**](http://webaudio.github.io
 It is based on Chris Wilson's [**WebMIDIAPIShim**](https://github.com/cwilso/WebMIDIAPIShim).
 
 The complete development version and web-browser implementation is available at
-[**cwilso/WebMIDIAPIShim**(https://github.com/cwilso/WebMIDIAPIShim) (the original project), or
+[**cwilso/WebMIDIAPIShim**](https://github.com/cwilso/WebMIDIAPIShim) (the original project), or
 [**jazz-soft/WebMIDIAPIShim**](https://github.com/jazz-soft/WebMIDIAPIShim) (the latest Node.js updates)
-
 - these two get merged periodically.
 
 ##Usage
+
+    
+    [npm install web-midi-api](https://www.npmjs.com/package/web-midi-api)
+    
 
     var navigator = require('web-midi-api');
     
