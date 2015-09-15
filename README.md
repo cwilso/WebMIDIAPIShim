@@ -12,11 +12,15 @@ This javascript library is a prototype polyfill for the [Web MIDI API](http://we
 
 It was originally designed to test usability of the API itself, but it is currently mainly used as a shim for [Jazz-Soft.net's Jazz-Plugin](http://jazz-soft.net/) to enable MIDI scenarios in browsers that don't yet support Web MIDI.
 
-The polyfill will automatically check to see if the Web MIDI API is already implemented, and if not it will insert itself. At the moment Chrome (win|osx|linux|android) and Opera (win|osx|linux) support Web MIDI. In other browsers you need to have [version 1.2 or higher](http://jazz-soft.net/download/Jazz-Plugin) of the Jazz plugin installed in order for the polyfill to work properly.
+The polyfill will automatically check to see if the Web MIDI API is already implemented, and if not it will insert itself.
+
+At the moment Chrome (win|osx|linux|android) and Opera (win|osx|linux) support Web MIDI.
+
+In other browsers you need to have [version 1.2 or higher](http://jazz-soft.net/download/Jazz-Plugin) of the Jazz plugin installed in order for the polyfill to work properly.
 
 The polyfill and the Jazz plugin should work on Chrome (win|osx|linux|android), Firefox (win|osx|linux), Opera (win|osx|linux), Safari (osx, not ios) and Internet Explorer 10 and 11.
 
-This polyfill supports multiple simultaneous inputs and outputs, and sending and receiving long messages (system exclusive). It also properly dispatches events. Timestamps on send and receive should be properly implemented now, although of course timing will not be very precise on either.
+The polyfill supports multiple simultaneous inputs and outputs, and sending and receiving long messages (system exclusive). It also properly dispatches events. Timestamps on send and receive should be properly implemented now, although of course timing will not be very precise on either.
 
 ####Use in a browser
 
