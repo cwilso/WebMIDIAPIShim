@@ -1,12 +1,15 @@
 # Web MIDI API Polyfill
 
 ![nodejs](http://jazz-soft.github.io/img/nodejs.jpg)
+![chrome](http://jazz-soft.github.io/img/chrome.jpg)
 ![firefox](http://jazz-soft.github.io/img/firefox.jpg)
 ![safari](http://jazz-soft.github.io/img/safari.jpg)
+![opera](http://jazz-soft.github.io/img/opera.jpg)
 ![msie](http://jazz-soft.github.io/img/msie.jpg)
 ![windows](http://jazz-soft.github.io/img/windows.jpg)
 ![macos](http://jazz-soft.github.io/img/macos.jpg)
 ![linux](http://jazz-soft.github.io/img/linux.jpg)
+![android](http://jazz-soft.github.io/img/android.jpg)
 
 This javascript library is a prototype polyfill for the [Web MIDI API](http://webaudio.github.io/web-midi-api/) of which Chris is a co-author.
 
