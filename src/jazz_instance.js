@@ -19,6 +19,9 @@
 
   Note that you can remove the require statements if you don't need (or want) to support Internet Explorer:
   that will shrink the filesize of the WebMIDIAPIShim to about 50%.
+
+  If you are building for Nodejs platform you can comment these lines, then run the buildscript like so:
+  'npm run build-nodejs' -> the build file (approx. 15K) will be saved in the web-midi-api folder
 */
 require('babelify/node_modules/babel-core/node_modules/core-js/es6/map');
 require('babelify/node_modules/babel-core/node_modules/core-js/es6/set');
