@@ -9,7 +9,6 @@
 ![windows](http://jazz-soft.github.io/img/windows.jpg)
 ![macos](http://jazz-soft.github.io/img/macos.jpg)
 ![linux](http://jazz-soft.github.io/img/linux.jpg)
-![android](http://jazz-soft.github.io/img/android.jpg)
 
 This javascript library is a prototype polyfill for the [Web MIDI API](http://webaudio.github.io/web-midi-api/) of which Chris is a co-author.
 
