@@ -8,6 +8,6 @@ var performance = {
 };
 var navigator = {nodejs: true};
 
-eval(require('fs').readFileSync(require('path').join(__dirname, 'WebMIDIAPI.js')) + '');
+eval(require('fs').readFileSync(require('path').join(__dirname, 'WebMIDIAPI.min.js')) + '');
 
 module.exports = navigator;

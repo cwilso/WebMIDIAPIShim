@@ -2,7 +2,7 @@
 
 ![nodejs](http://jazz-soft.github.io/img/nodejs.jpg)
 ![windows](http://jazz-soft.github.io/img/windows.jpg)
-![mocos](http://jazz-soft.github.io/img/macos.jpg)
+![macos](http://jazz-soft.github.io/img/macos.jpg)
 ![linux](http://jazz-soft.github.io/img/linux.jpg)
 
 This is a **Node.js** implementation of [**Web MIDI API**](http://webaudio.github.io/web-midi-api) (as in Chrome-43 version).
@@ -18,23 +18,23 @@ The complete development and web-browser versions are available at
 [**npm install web-midi-api**](https://www.npmjs.com/package/web-midi-api)
 
     var navigator = require('web-midi-api');
-    
+
     var midi;
     var inputs;
     var outputs;
-    
+
     function onMIDIFailure(msg){
       console.log('Failed to get MIDI access - ' + msg);
       process.exit(1);
     }
-    
+
     function onMIDISuccess(midiAccess){
       midi = midiAccess;
       inputs = midi.inputs;
       outputs = midi.outputs;
       setTimeout(testOutputs, 500);
     }
-    
+
     function testOutputs(){
       console.log('Testing MIDI-Out ports...');
       outputs.forEach(function(port){
@@ -44,14 +44,14 @@ The complete development and web-browser versions are available at
       });
       setTimeout(stopOutputs, 1000);
     }
-    
+
     function stopOutputs(){
       outputs.forEach(function(port){
         port.send([0x80, 60, 0]);
       });
       testInputs();
     }
-    
+
     function onMidiIn(ev){
       var arr = [];
       for(var i = 0; i < ev.data.length; i++){
@@ -59,7 +59,7 @@ The complete development and web-browser versions are available at
       }
       console.log('MIDI:', arr.join(' '));
     }
-    
+
     function testInputs(){
       console.log('Testing MIDI-In ports...');
       inputs.forEach(function(port){
@@ -68,11 +68,11 @@ The complete development and web-browser versions are available at
       });
       setTimeout(stopInputs, 5000);
     }
-    
+
     function stopInputs(){
       console.log('Thank you!');
       navigator.close(); // This will close MIDI inputs, otherwise Node.js will wait for MIDI input forever.
       process.exit(0);
     }
-    
-    navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure); 
+
+    navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
