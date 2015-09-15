@@ -14,7 +14,7 @@ It was originally designed to test usability of the API itself, but it is curren
 
 The polyfill will automatically check to see if the Web MIDI API is already implemented, and if not it will insert itself.
 
-At the moment Chrome (win|osx|linux|android) and Opera (win|osx|linux) support Web MIDI.
+At the moment Chrome (win|osx|linux|android), Opera (win|osx|linux) and the Android WebView component support Web MIDI.
 
 In other browsers you need to have [version 1.2 or higher](http://jazz-soft.net/download/Jazz-Plugin) of the Jazz plugin installed in order for the polyfill to work properly.
 
