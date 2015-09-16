@@ -7,7 +7,7 @@
 
 'use strict';
 
-var navigator = require('web-midi-api');
+var navigator = require('../web-midi-api');
 
 var midi;
 var inputs;
