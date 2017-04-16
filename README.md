@@ -22,7 +22,7 @@ At the moment Chrome (win|osx|linux|android), Opera (win|osx|linux) and the Andr
 
 The polyfill supports multiple simultaneous inputs and outputs, and sending and receiving long messages (system exclusive). It also properly dispatches events. Timestamps on send and receive should be properly implemented now, although of course timing will not be very precise on either.
 
-####Use in a browser
+#### Use in a browser
 
 1. Copy the file WebMIDIAPI.min.js from the /lib folder into your project.
 2. Optionally you can copy the source map file WebMIDIAPI.min.js.map as well
@@ -60,7 +60,7 @@ function onerrorcallback( err ) {
 }
 ```
 
-####Use as npm package
+#### Use as npm package
 
 The WebMIDIAPIShim is also available as npm package, you can add it to your web or Nodejs projects like so:
 
@@ -72,7 +72,7 @@ The WebMIDIAPIShim is also available as npm package, you can add it to your web 
 If you are new to npm and using npm modules in your project please visit the [npm site](https://docs.npmjs.com/). If you are new to bundling dependencies of a web project consult the [browserify documentation](https://github.com/substack/node-browserify#usage).
 
 
-####Use with Nodejs
+#### Use with Nodejs
 
 The web-midi-api package installs the [jazz-midi package](https://www.npmjs.com/package/jazz-midi) which is the Nodejs version of the Jazz browser plugin.
 
@@ -89,7 +89,7 @@ navigator.requestMIDIAccess().then(onFulFilled, onRejected);
 
 
 
-####Examples
+#### Examples
 
 - [list_devices](http://cwilso.github.com/WebMIDIAPIShim/examples/list_devices) simple listing of all MIDI devices
 - [routing_1](http://cwilso.github.com/WebMIDIAPIShim/examples/routing_1) example that lets you route MIDI inports to MIDI outports
@@ -97,7 +97,7 @@ navigator.requestMIDIAccess().then(onFulFilled, onRejected);
 - [nodejs](http://cwilso.github.com/WebMIDIAPIShim/examples/nodejs) example of using the polyfill with Nodejs
 
 
-####Building the polyfill
+#### Building the polyfill
 
 The polyfill is written in es6 so you need to transpile it before it can run in a browser. You can find the es6 files in the /src folder. If you change something in the es6 files, you need to build the polyfill again. To do this, you need to have [Node.js](http://nodejs.org/) and [npm](https://www.npmjs.org/) installed.
 
