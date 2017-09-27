@@ -41,7 +41,7 @@ function createJazzInstance(callback) {
 
     if ((0, _util.getDevice)().nodejs === true) {
         // jazzMidi is available globally in the node environment
-        objRef = new jazzMidi.MIDI();
+        objRef = new window.jazzMidi.MIDI();
     } else {
         /*
             generate this html:

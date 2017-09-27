@@ -12,31 +12,27 @@ exports.polyfill = polyfill;
 /* eslint no-bitwise: 0 */
 /* eslint no-mixed-operators: 0 */
 
-/*
-  A collection of handy util methods
-*/
-
-var scope = void 0;
+var Scope = void 0;
 var device = null;
 
 var getScope = function getScope() {
-    if (typeof scope !== 'undefined') {
-        return;
+    if (typeof Scope !== 'undefined') {
+        return Scope;
     }
-    scope = null;
+    Scope = null;
     if (typeof window !== 'undefined') {
-        scope = window;
+        Scope = window;
     } else if (typeof global !== 'undefined') {
-        scope = global;
+        Scope = global;
     }
     // console.log('scope', scope);
-    // return scope;
+    return Scope;
 };
 
 // check on what type of device we are running, note that in this context
 // a device is a computer not a MIDI device
 function getDevice() {
-    getScope();
+    var scope = getScope();
     if (device !== null) {
         return device;
     }
@@ -44,7 +40,7 @@ function getDevice() {
     var platform = 'undetected';
     var browser = 'undetected';
 
-    if (typeof scope.navigator.nodejs !== 'undefined') {
+    if (scope.navigator.node === true) {
         device = {
             platform: process.platform,
             nodejs: true,
@@ -103,7 +99,7 @@ function getDevice() {
 }
 
 function polyfillPerformance() {
-    getScope();
+    var scope = getScope();
     if (typeof scope.performance === 'undefined') {
         scope.performance = {};
     }
@@ -135,7 +131,7 @@ function generateUUID() {
 
 // a very simple implementation of a Promise for Internet Explorer and Nodejs
 function polyfillPromise() {
-    getScope();
+    var scope = getScope();
     if (typeof scope.Promise !== 'function') {
         scope.Promise = function promise(executor) {
             this.executor = executor;

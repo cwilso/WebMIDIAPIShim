@@ -1,23 +1,14 @@
 // This script is for Node.js only. Don't use it in HTML!
-const window = {};
-window.jazzMidi = require('jazz-midi');
-
 global.navigator = {
-    nodejs: true,
+    node: true,
 };
-window.setTimeout = setTimeout;
 
-const { polyfill } = require('../dist/util/util.js');
+require('../dist/index.js');
 
-polyfill();
-// const shim = require('../browser/WebMIDIAPI.js');
+const jazzMidi = require('jazz-midi');
 
-// console.log(global.performance);
-// console.log(global.performance);
+global.window = {
+    setTimeout,
+    jazzMidi,
+};
 
-// const shim = require('../dist/index.js');
-// console.log(shim);
-
-// module.exports = shim;
-
-eval(`${require('fs').readFileSync(require('path').join(__dirname, '../browser/WebMIDIAPI.js'))}`);

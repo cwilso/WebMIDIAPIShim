@@ -2,32 +2,29 @@
 /* eslint no-bitwise: 0 */
 /* eslint no-mixed-operators: 0 */
 
-/*
-  A collection of handy util methods
-*/
 
-let scope;
+let Scope;
 let device = null;
 
 const getScope = () => {
-    if (typeof scope !== 'undefined') {
-        return;
+    if (typeof Scope !== 'undefined') {
+        return Scope;
     }
-    scope = null;
+    Scope = null;
     if (typeof window !== 'undefined') {
-        scope = window;
+        Scope = window;
     } else if (typeof global !== 'undefined') {
-        scope = global;
+        Scope = global;
     }
     // console.log('scope', scope);
-    // return scope;
+    return Scope;
 };
 
 
 // check on what type of device we are running, note that in this context
 // a device is a computer not a MIDI device
 export function getDevice() {
-    getScope();
+    const scope = getScope();
     if (device !== null) {
         return device;
     }
@@ -35,7 +32,7 @@ export function getDevice() {
     let platform = 'undetected';
     let browser = 'undetected';
 
-    if (typeof scope.navigator.nodejs !== 'undefined') {
+    if (scope.navigator.node === true) {
         device = {
             platform: process.platform,
             nodejs: true,
@@ -95,7 +92,7 @@ export function getDevice() {
 
 
 export function polyfillPerformance() {
-    getScope();
+    const scope = getScope();
     if (typeof scope.performance === 'undefined') {
         scope.performance = {};
     }
@@ -130,7 +127,7 @@ export function generateUUID() {
 
 // a very simple implementation of a Promise for Internet Explorer and Nodejs
 export function polyfillPromise() {
-    getScope();
+    const scope = getScope();
     if (typeof scope.Promise !== 'function') {
         scope.Promise = function promise(executor) {
             this.executor = executor;

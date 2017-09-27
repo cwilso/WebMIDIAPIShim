@@ -1,4 +1,4 @@
-const shim = require('../node/index.js');
+require('../node/index.js');
 
 let ins;
 let outs;
@@ -9,15 +9,17 @@ function onMIDIFailure(msg) {
 
 function onMIDISuccess(midiAccess) {
     midi = midiAccess;
-    ins = midi.inputs();
-    outs = midi.outputs();
-    setTimeout(testOutputs, 200);
+    ins = midi.inputs;
+    outs = midi.outputs;
+    // setTimeout(testOutputs, 200);
+    setTimeout(testInputs, 200);
 }
 
 function testOutputs() {
     console.log('Testing MIDI-Out ports...');
     for (const i in outs) {
         const x = outs[i];
+        console.log(x);
         console.log('id:', x.id, 'manufacturer:', x.manufacturer, 'name:', x.name, 'version:', x.version);
         x.send([0x90, 60, 0x7f]);
     }
@@ -52,5 +54,5 @@ function stopInputs() {
     navigator.close(); // This will close MIDI inputs, otherwise Node.js will wait for MIDI input forever.
 }
 
-shim.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 

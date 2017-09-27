@@ -29,7 +29,7 @@ export function createJazzInstance(callback) {
 
     if (getDevice().nodejs === true) {
         // jazzMidi is available globally in the node environment
-        objRef = new jazzMidi.MIDI();
+        objRef = new window.jazzMidi.MIDI();
     } else {
         /*
             generate this html:
