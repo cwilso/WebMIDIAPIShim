@@ -6,11 +6,28 @@
   A collection of handy util methods
 */
 
+let scope;
 let device = null;
+
+const getScope = () => {
+    if (typeof scope !== 'undefined') {
+        return;
+    }
+    scope = null;
+    if (typeof window !== 'undefined') {
+        scope = window;
+    } else if (typeof global !== 'undefined') {
+        scope = global;
+    }
+    // console.log('scope', scope);
+    // return scope;
+};
+
 
 // check on what type of device we are running, note that in this context
 // a device is a computer not a MIDI device
 export function getDevice() {
+    getScope();
     if (device !== null) {
         return device;
     }
@@ -18,7 +35,7 @@ export function getDevice() {
     let platform = 'undetected';
     let browser = 'undetected';
 
-    if (typeof navigator.nodejs !== 'undefined') {
+    if (typeof scope.navigator.nodejs !== 'undefined') {
         device = {
             platform: process.platform,
             nodejs: true,
@@ -27,7 +44,7 @@ export function getDevice() {
         return device;
     }
 
-    const ua = navigator.userAgent;
+    const ua = scope.navigator.userAgent;
 
     if (ua.match(/(iPad|iPhone|iPod)/g)) {
         platform = 'ios';
@@ -78,21 +95,21 @@ export function getDevice() {
 
 
 export function polyfillPerformance() {
-    // performance is a global variable
-    if (typeof performance === 'undefined') {
-        performance = {};
+    getScope();
+    if (typeof scope.performance === 'undefined') {
+        scope.performance = {};
     }
     Date.now = Date.now || (() => new Date().getTime());
 
-    if (typeof performance.now === 'undefined') {
+    if (typeof scope.performance.now === 'undefined') {
         let nowOffset = Date.now();
         if (
-            typeof performance.timing !== 'undefined' &&
-            typeof performance.timing.navigationStart !== 'undefined'
+            typeof scope.performance.timing !== 'undefined' &&
+            typeof scope.performance.timing.navigationStart !== 'undefined'
         ) {
-            nowOffset = performance.timing.navigationStart;
+            nowOffset = scope.performance.timing.navigationStart;
         }
-        performance.now = function now() {
+        scope.performance.now = function now() {
             return Date.now() - nowOffset;
         };
     }
@@ -112,7 +129,8 @@ export function generateUUID() {
 
 
 // a very simple implementation of a Promise for Internet Explorer and Nodejs
-export function polyfillPromise(scope) {
+export function polyfillPromise() {
+    getScope();
     if (typeof scope.Promise !== 'function') {
         scope.Promise = function promise(executor) {
             this.executor = executor;
@@ -134,10 +152,8 @@ export function polyfillPromise(scope) {
 export function polyfill() {
     const d = getDevice();
     // console.log(device);
-    if (d.browser === 'ie') {
-        polyfillPromise(window);
-    } else if (d.nodejs === true) {
-        polyfillPromise(global);
+    if (d.browser === 'ie' || d.nodejs === true) {
+        polyfillPromise();
     }
     polyfillPerformance();
 }
