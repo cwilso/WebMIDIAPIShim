@@ -1,0 +1,22 @@
+{
+    "extends": "airbnb-base",
+    "parser": "babel-eslint",
+    "plugins": [],
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+    "rules": {
+        "indent": [
+            2,
+            4
+        ]
+    },
+    "settings": {
+        "classes": true,
+        "flowtype": {
+            "onlyFilesWithFlowAnnotation": true
+        }
+    }
+}

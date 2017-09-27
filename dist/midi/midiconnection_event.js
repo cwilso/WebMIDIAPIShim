@@ -1,7 +1,14 @@
 'use strict';
 
-export class MIDIConnectionEvent{
-  constructor(midiAccess, port){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MIDIConnectionEvent = function MIDIConnectionEvent(midiAccess, port) {
+    _classCallCheck(this, MIDIConnectionEvent);
+
     this.bubbles = false;
     this.cancelBubble = false;
     this.cancelable = false;
@@ -15,6 +22,6 @@ export class MIDIConnectionEvent{
     this.target = midiAccess;
     this.timeStamp = Date.now();
     this.type = 'statechange';
-  }
-}
+};
 
+exports.default = MIDIConnectionEvent;

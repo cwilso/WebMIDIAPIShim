@@ -1,55 +1,72 @@
 {
-  "name": "web-midi-api",
-  "version": "1.4.1",
-  "description": "Shim for the WebMIDI API, intended to be used in environments that don't have the WebMIDI API implemented: Nodejs and all browsers except Chrome and Chromium",
-  "keywords": [
-    "midi",
-    "music",
-    "sound",
-    "webmidi api"
-  ],
-  "homepage": "https://github.com/cwilso/WebMIDIAPIShim",
-  "bugs":"https://github.com/cwilso/WebMIDIAPIShim/issues",
-  "license": "Apache-2.0",
-  "author": {
-    "name": "Chris Wilson",
-    "email": "cwilso@gmail.com",
-    "url": "http://cwilso.com/"
-   },
-   "contributors":[{
-    "name": "jazz-soft",
-    "email": "info@jazz-soft.net",
-    "url": "http://jazz-soft.net"
-    },{
-    "name": "abudaan",
-    "email": "daniel@abumarkub.net",
-    "url": "http://github.com/abudaan"
-    }
-   ],
-  "main": "lib/index.js",
-  "directories":{
-    "example": "examples"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
-  },
-  "scripts": {
-    "test": "node ./test/nodejs_test.js",
-    "build": "browserify src/shim.js -t [ babelify --sourceMapRelative ./src ] --debug | exorcist lib/WebMIDIAPI.js.map > lib/WebMIDIAPI.js",
-    "watch": "watchify src/shim.js -t babelify -o lib/WebMIDIAPI.js --debug --verbose"
-  },
-  "dependencies":{
-    "jazz-midi": ">=1.4.4",
-    "performance-now": ">=0.2.0"
-  },
-  "devDependencies": {
-    "babelify": ">=6.0.0",
-    "browserify": ">=8.1.1",
-    "exorcist": "^0.1.6",
-    "watchify": ">=1.0.1"
-  },
-  "engines": {
-    "node": "0.10.x"
-  }
+    "name": "web-midi-api-shim",
+    "version": "0.1.0",
+    "description": "Shim for the WebMIDI API, intended to be used in environments that don't have the WebMIDI API implemented: Nodejs and all browsers except Chrome, Chromium and Opera",
+    "keywords": [
+        "midi",
+        "music",
+        "sound",
+        "webmidi api"
+    ],
+    "main": "dist/index.js",
+    "module": "src/index.js",
+    "browser": "browser/WebMIDIAPI.js",
+    "homepage": "https://github.com/cwilso/WebMIDIAPIShim",
+    "bugs": "https://github.com/cwilso/WebMIDIAPIShim/issues",
+    "license": "Apache-2.0",
+    "author": {
+        "name": "Chris Wilson",
+        "email": "cwilso@gmail.com",
+        "url": "http://cwilso.com/"
+    },
+    "contributors": [
+        {
+            "name": "jazz-soft",
+            "email": "jazz-dev@jazz-soft.net",
+            "url": "http://jazz-soft.net"
+        },
+        {
+            "name": "abudaan",
+            "email": "daniel@abumarkub.net",
+            "url": "http://github.com/abudaan"
+        }
+    ],
+    "directories": {
+        "example": "examples"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
+    },
+    "scripts": {
+        "gulp:build": "gulp build",
+        "compile": "babel src --out-dir ./dist",
+        "update": "npm run compile && npm run gulp:build",
+        "watch": "watchify src/index.js -t babelify -o browser/WebMIDIAPI.js --debug --verbose"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-eslint": "^7.2.3",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-preset-env": "^1.6.0",
+        "babel-preset-stage-0": "^6.24.1",
+        "babelify": "^7.3.0",
+        "browserify": "^14.4.0",
+        "eslint": "^4.6.1",
+        "eslint-config-airbnb-base": "^12.0.0",
+        "eslint-plugin-import": "^2.7.0",
+        "gulp": "github:gulpjs/gulp#4.0",
+        "gulp-babel-minify": "^0.2.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-filter": "^5.0.1",
+        "gulp-sourcemaps": "^2.6.1",
+        "gulp-util": "^3.0.8",
+        "vinyl-buffer": "^1.0.0",
+        "vinyl-source-stream": "^1.1.0",
+        "watchify": "^3.9.0"
+    },
+    "engines": {
+        "node": "0.10.x"
+    },
+    "private": false
 }
