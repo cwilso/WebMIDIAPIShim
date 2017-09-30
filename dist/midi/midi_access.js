@@ -63,7 +63,7 @@ var MIDIAccess = function () {
 
     _createClass(MIDIAccess, [{
         key: 'addEventListener',
-        value: function addEventListener(type, listener, useCapture) {
+        value: function addEventListener(type, listener) {
             if (type !== 'statechange') {
                 return;
             }
@@ -73,7 +73,7 @@ var MIDIAccess = function () {
         }
     }, {
         key: 'removeEventListener',
-        value: function removeEventListener(type, listener, useCapture) {
+        value: function removeEventListener(type, listener) {
             if (type !== 'statechange') {
                 return;
             }
@@ -88,7 +88,7 @@ var MIDIAccess = function () {
 
 function createMIDIAccess() {
     return new Promise(function (resolve, reject) {
-        if (midiAccess !== undefined) {
+        if (typeof midiAccess !== 'undefined') {
             resolve(midiAccess);
             return;
         }
@@ -99,8 +99,8 @@ function createMIDIAccess() {
         }
 
         (0, _jazz_instance.createJazzInstance)(function (instance) {
-            if (instance === undefined) {
-                reject({ message: 'No access to MIDI devices: browser does not support the WebMIDI API and the Jazz plugin is not installed.' });
+            if (typeof instance === 'undefined') {
+                reject({ message: 'No access to MIDI devices: your browser does not support the WebMIDI API and the Jazz plugin is not installed.' });
                 return;
             }
 

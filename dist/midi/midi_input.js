@@ -4,14 +4,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint prefer-destructuring: 0 */
-/* eslint no-underscore-dangle: 0 */
-/* eslint no-bitwise: 0 */
-/* eslint func-names: 0 */
-
-/*
-  MIDIInput is a wrapper around an input of a Jazz instance
-*/
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       MIDIInput is a wrapper around an input of a Jazz instance
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
 var _midimessage_event = require('./midimessage_event');
 
@@ -77,7 +72,7 @@ var MIDIInput = function () {
 
     _createClass(MIDIInput, [{
         key: 'addEventListener',
-        value: function addEventListener(type, listener, useCapture) {
+        value: function addEventListener(type, listener) {
             var listeners = this._listeners.get(type);
             if (typeof listeners === 'undefined') {
                 return;
@@ -89,7 +84,7 @@ var MIDIInput = function () {
         }
     }, {
         key: 'removeEventListener',
-        value: function removeEventListener(type, listener, useCapture) {
+        value: function removeEventListener(type, listener) {
             var listeners = this._listeners.get(type);
             if (typeof listeners === 'undefined') {
                 return;

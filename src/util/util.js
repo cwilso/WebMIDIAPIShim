@@ -1,11 +1,8 @@
-/* eslint no-param-reassign: 0 */
-/* eslint no-bitwise: 0 */
-/* eslint no-mixed-operators: 0 */
-
 
 let Scope;
 let device = null;
 
+// check if we are in a browser or in Nodejs
 const getScope = () => {
     if (typeof Scope !== 'undefined') {
         return Scope;
@@ -91,7 +88,8 @@ export function getDevice() {
 }
 
 
-export function polyfillPerformance() {
+// polyfill for window.performance.now()
+const polyfillPerformance = () => {
     const scope = getScope();
     if (typeof scope.performance === 'undefined') {
         scope.performance = {};
@@ -112,7 +110,7 @@ export function polyfillPerformance() {
     }
 }
 
-
+// generates UUID for MIDI devices
 export function generateUUID() {
     let d = new Date().getTime();
     let uuid = new Array(64).join('x');// 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
@@ -126,7 +124,7 @@ export function generateUUID() {
 
 
 // a very simple implementation of a Promise for Internet Explorer and Nodejs
-export function polyfillPromise() {
+const polyfillPromise = () => {
     const scope = getScope();
     if (typeof scope.Promise !== 'function') {
         scope.Promise = function promise(executor) {

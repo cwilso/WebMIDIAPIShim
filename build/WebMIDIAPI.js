@@ -187,23 +187,18 @@ process.umask = function() { return 0; };
 },{}],2:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
 var _midi_access = require('./midi/midi_access');
 
 var _util = require('./util/util');
-
-/* eslint wrap-iife: ["error", "any"] */
 
 var midiAccess = void 0;
 
 var init = function init() {
     if (!navigator.requestMIDIAccess) {
+        // Add some functionality to older browsers
         (0, _util.polyfill)();
         navigator.requestMIDIAccess = function () {
-            // singleton-ish, no need to create multiple instances of MIDIAccess
+            // Singleton-ish, no need to create multiple instances of MIDIAccess
             if (midiAccess === undefined) {
                 midiAccess = (0, _midi_access.createMIDIAccess)();
             }
@@ -211,7 +206,8 @@ var init = function init() {
         };
         if ((0, _util.getDevice)().nodejs === true) {
             navigator.close = function () {
-                // Need to close MIDI input ports, otherwise Node.js will wait for MIDI input forever.
+                // For Nodejs applications we need to add a method that closes all MIDI input ports,
+                // otherwise Nodejs will wait for MIDI input forever.
                 (0, _midi_access.closeAllMIDIInputs)();
             };
         }
@@ -219,8 +215,6 @@ var init = function init() {
 };
 
 init();
-// export for use with node
-exports.default = init;
 
 },{"./midi/midi_access":3,"./util/util":10}],3:[function(require,module,exports){
 'use strict';
@@ -288,7 +282,7 @@ var MIDIAccess = function () {
 
     _createClass(MIDIAccess, [{
         key: 'addEventListener',
-        value: function addEventListener(type, listener, useCapture) {
+        value: function addEventListener(type, listener) {
             if (type !== 'statechange') {
                 return;
             }
@@ -298,7 +292,7 @@ var MIDIAccess = function () {
         }
     }, {
         key: 'removeEventListener',
-        value: function removeEventListener(type, listener, useCapture) {
+        value: function removeEventListener(type, listener) {
             if (type !== 'statechange') {
                 return;
             }
@@ -313,7 +307,7 @@ var MIDIAccess = function () {
 
 function createMIDIAccess() {
     return new Promise(function (resolve, reject) {
-        if (midiAccess !== undefined) {
+        if (typeof midiAccess !== 'undefined') {
             resolve(midiAccess);
             return;
         }
@@ -324,8 +318,8 @@ function createMIDIAccess() {
         }
 
         (0, _jazz_instance.createJazzInstance)(function (instance) {
-            if (instance === undefined) {
-                reject({ message: 'No access to MIDI devices: browser does not support the WebMIDI API and the Jazz plugin is not installed.' });
+            if (typeof instance === 'undefined') {
+                reject({ message: 'No access to MIDI devices: your browser does not support the WebMIDI API and the Jazz plugin is not installed.' });
                 return;
             }
 
@@ -482,14 +476,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint prefer-destructuring: 0 */
-/* eslint no-underscore-dangle: 0 */
-/* eslint no-bitwise: 0 */
-/* eslint func-names: 0 */
-
-/*
-  MIDIInput is a wrapper around an input of a Jazz instance
-*/
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       MIDIInput is a wrapper around an input of a Jazz instance
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
 var _midimessage_event = require('./midimessage_event');
 
@@ -555,7 +544,7 @@ var MIDIInput = function () {
 
     _createClass(MIDIInput, [{
         key: 'addEventListener',
-        value: function addEventListener(type, listener, useCapture) {
+        value: function addEventListener(type, listener) {
             var listeners = this._listeners.get(type);
             if (typeof listeners === 'undefined') {
                 return;
@@ -567,7 +556,7 @@ var MIDIInput = function () {
         }
     }, {
         key: 'removeEventListener',
-        value: function removeEventListener(type, listener, useCapture) {
+        value: function removeEventListener(type, listener) {
             var listeners = this._listeners.get(type);
             if (typeof listeners === 'undefined') {
                 return;
@@ -761,12 +750,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint prefer-destructuring: 0 */
-/* eslint no-underscore-dangle: 0 */
-
-/*
-  MIDIOutput is a wrapper around an output of a Jazz instance
-*/
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       MIDIOutput is a wrapper around an output of a Jazz instance
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     */
 
 
 var _util = require('../util/util');
@@ -863,7 +849,7 @@ var MIDIOutput = function () {
         }
     }, {
         key: 'addEventListener',
-        value: function addEventListener(type, listener, useCapture) {
+        value: function addEventListener(type, listener) {
             if (type !== 'statechange') {
                 return;
             }
@@ -874,7 +860,7 @@ var MIDIOutput = function () {
         }
     }, {
         key: 'removeEventListener',
-        value: function removeEventListener(type, listener, useCapture) {
+        value: function removeEventListener(type, listener) {
             if (type !== 'statechange') {
                 return;
             }
@@ -991,7 +977,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   will be reused if a new device gets connected.
 */
 
-var jazzPluginInitTime = 100; // milliseconds
+var jazzPluginInitTime = 200; // 200 ms timeout for Firefox v.55
 
 var jazzInstanceNumber = 0;
 var jazzInstances = new _store2.default();
@@ -1003,7 +989,7 @@ function createJazzInstance(callback) {
     var activeX = void 0;
 
     if ((0, _util.getDevice)().nodejs === true) {
-        // jazzMidi is added to the global var navigator in the node environment
+        // jazzMidi is added to the global variable navigator in the node environment
         objRef = new navigator.jazzMidi.MIDI();
     } else {
         /*
@@ -1097,6 +1083,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+// es5 implementation of both Map and Set
+
 var idIndex = 0;
 
 var Store = function () {
@@ -1183,17 +1171,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.getDevice = getDevice;
-exports.polyfillPerformance = polyfillPerformance;
 exports.generateUUID = generateUUID;
-exports.polyfillPromise = polyfillPromise;
 exports.polyfill = polyfill;
-/* eslint no-param-reassign: 0 */
-/* eslint no-bitwise: 0 */
-/* eslint no-mixed-operators: 0 */
 
 var Scope = void 0;
 var device = null;
 
+// check if we are in a browser or in Nodejs
 var getScope = function getScope() {
     if (typeof Scope !== 'undefined') {
         return Scope;
@@ -1277,7 +1261,8 @@ function getDevice() {
     return device;
 }
 
-function polyfillPerformance() {
+// polyfill for window.performance.now()
+var polyfillPerformance = function polyfillPerformance() {
     var scope = getScope();
     if (typeof scope.performance === 'undefined') {
         scope.performance = {};
@@ -1295,8 +1280,9 @@ function polyfillPerformance() {
             return Date.now() - nowOffset;
         };
     }
-}
+};
 
+// generates UUID for MIDI devices
 function generateUUID() {
     var d = new Date().getTime();
     var uuid = new Array(64).join('x'); // 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
@@ -1309,7 +1295,7 @@ function generateUUID() {
 }
 
 // a very simple implementation of a Promise for Internet Explorer and Nodejs
-function polyfillPromise() {
+var polyfillPromise = function polyfillPromise() {
     var scope = getScope();
     if (typeof scope.Promise !== 'function') {
         scope.Promise = function promise(executor) {
@@ -1326,7 +1312,7 @@ function polyfillPromise() {
             this.executor(resolve, reject);
         };
     }
-}
+};
 
 function polyfill() {
     var d = getDevice();

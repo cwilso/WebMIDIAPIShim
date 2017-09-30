@@ -77,7 +77,7 @@ export default class MIDIOutput {
         // to be implemented
     }
 
-    addEventListener(type, listener, useCapture) {
+    addEventListener(type, listener) {
         if (type !== 'statechange') {
             return;
         }
@@ -87,7 +87,7 @@ export default class MIDIOutput {
         }
     }
 
-    removeEventListener(type, listener, useCapture) {
+    removeEventListener(type, listener) {
         if (type !== 'statechange') {
             return;
         }

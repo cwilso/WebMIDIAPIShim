@@ -3,8 +3,6 @@
 */
 
 window.onload = function () {
-    
-
     let div = document.getElementById('container');
     let midiAccess;
 

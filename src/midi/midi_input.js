@@ -48,7 +48,7 @@ export default class MIDIInput {
         }
     }
 
-    addEventListener(type, listener, useCapture) {
+    addEventListener(type, listener) {
         const listeners = this._listeners.get(type);
         if (typeof listeners === 'undefined') {
             return;
@@ -59,7 +59,7 @@ export default class MIDIInput {
         }
     }
 
-    removeEventListener(type, listener, useCapture) {
+    removeEventListener(type, listener) {
         const listeners = this._listeners.get(type);
         if (typeof listeners === 'undefined') {
             return;

@@ -15,7 +15,7 @@
 import Store from './store';
 import { getDevice } from './util';
 
-const jazzPluginInitTime = 100; // milliseconds
+const jazzPluginInitTime = 200; // 200 ms timeout for Firefox v.55
 
 let jazzInstanceNumber = 0;
 const jazzInstances = new Store();
@@ -28,7 +28,7 @@ export function createJazzInstance(callback) {
     let activeX;
 
     if (getDevice().nodejs === true) {
-        // jazzMidi is added to the global var navigator in the node environment
+        // jazzMidi is added to the global variable navigator in the node environment
         objRef = new navigator.jazzMidi.MIDI();
     } else {
         /*

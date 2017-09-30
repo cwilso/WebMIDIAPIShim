@@ -1,11 +1,14 @@
-// require('../../node/index.js');
-require('web-midi-api');
+
+require('../../node/index.js');
+
+// Note that in your own project you should use:
+// require('web-midi-api');
 
 let midi;
 let inputs;
 let outputs;
 
-console.log(navigator.jazzMidi.version);
+console.log('Jazz MIDI version: ' + navigator.jazzMidi.version);
 
 function onMIDIFailure(msg) {
     console.log(`Failed to get MIDI access - ${msg}`);

@@ -1,3 +1,5 @@
+// es5 implementation of both Map and Set
+
 let idIndex = 0;
 
 export default class Store {

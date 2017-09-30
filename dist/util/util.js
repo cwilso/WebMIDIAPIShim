@@ -4,17 +4,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.getDevice = getDevice;
-exports.polyfillPerformance = polyfillPerformance;
 exports.generateUUID = generateUUID;
-exports.polyfillPromise = polyfillPromise;
 exports.polyfill = polyfill;
-/* eslint no-param-reassign: 0 */
-/* eslint no-bitwise: 0 */
-/* eslint no-mixed-operators: 0 */
 
 var Scope = void 0;
 var device = null;
 
+// check if we are in a browser or in Nodejs
 var getScope = function getScope() {
     if (typeof Scope !== 'undefined') {
         return Scope;
@@ -98,7 +94,8 @@ function getDevice() {
     return device;
 }
 
-function polyfillPerformance() {
+// polyfill for window.performance.now()
+var polyfillPerformance = function polyfillPerformance() {
     var scope = getScope();
     if (typeof scope.performance === 'undefined') {
         scope.performance = {};
@@ -116,8 +113,9 @@ function polyfillPerformance() {
             return Date.now() - nowOffset;
         };
     }
-}
+};
 
+// generates UUID for MIDI devices
 function generateUUID() {
     var d = new Date().getTime();
     var uuid = new Array(64).join('x'); // 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
@@ -130,7 +128,7 @@ function generateUUID() {
 }
 
 // a very simple implementation of a Promise for Internet Explorer and Nodejs
-function polyfillPromise() {
+var polyfillPromise = function polyfillPromise() {
     var scope = getScope();
     if (typeof scope.Promise !== 'function') {
         scope.Promise = function promise(executor) {
@@ -147,7 +145,7 @@ function polyfillPromise() {
             this.executor(resolve, reject);
         };
     }
-}
+};
 
 function polyfill() {
     var d = getDevice();

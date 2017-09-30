@@ -28,7 +28,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   will be reused if a new device gets connected.
 */
 
-var jazzPluginInitTime = 100; // milliseconds
+var jazzPluginInitTime = 200; // 200 ms timeout for Firefox v.55
 
 var jazzInstanceNumber = 0;
 var jazzInstances = new _store2.default();
@@ -40,7 +40,7 @@ function createJazzInstance(callback) {
     var activeX = void 0;
 
     if ((0, _util.getDevice)().nodejs === true) {
-        // jazzMidi is added to the global var navigator in the node environment
+        // jazzMidi is added to the global variable navigator in the node environment
         objRef = new navigator.jazzMidi.MIDI();
     } else {
         /*
