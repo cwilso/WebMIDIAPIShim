@@ -1,14 +1,8 @@
-// This script is for Node.js only. Don't use it in HTML!
+const jazzMidi = require('jazz-midi');
+// create a global navigator object in the Node environment
 global.navigator = {
     node: true,
-};
-
-require('../dist/index.js');
-
-const jazzMidi = require('jazz-midi');
-
-global.window = {
-    setTimeout,
     jazzMidi,
 };
 
+require('../dist/index.js');

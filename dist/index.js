@@ -32,4 +32,5 @@ var init = function init() {
 };
 
 init();
+// export for use with node
 exports.default = init;

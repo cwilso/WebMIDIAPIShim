@@ -32,7 +32,7 @@ window.onload = function () {
                     if (port.state === 'disconnected') {
                         port.close();
                         label = checkbox.parentNode;
-                        checkbox.nextSibling.nodeValue = `${port.name  } (${  port.state  }, ${  port.connection  })`;
+                        checkbox.nextSibling.nodeValue = `${port.name} (${port.state}, ${port.connection})`;
                         checkbox.disabled = true;
                         checkbox.checked = false;
                         delete activePorts[port.type + port.id];
@@ -45,7 +45,7 @@ window.onload = function () {
                         checkbox.id = port.type + port.id;
                         checkbox.addEventListener('change', listener, false);
                         label.appendChild(checkbox);
-                        label.appendChild(document.createTextNode(`${port.name  } (${  port.state  }, ${  port.connection  })`));
+                        label.appendChild(document.createTextNode(`${port.name} (${port.state}, ${port.connection})`));
                         div.appendChild(label);
                         div.appendChild(document.createElement('br'));
 
@@ -53,7 +53,7 @@ window.onload = function () {
                     } else if (checkbox !== null) {
                         label = checkbox.parentNode;
                         checkbox.disabled = false;
-                        checkbox.nextSibling.nodeValue = `${port.name  } (${  port.state  }, ${  port.connection  })`;
+                        checkbox.nextSibling.nodeValue = `${port.name} (${port.state}, ${port.connection})`;
                     }
                 };
             },
@@ -86,7 +86,7 @@ window.onload = function () {
         html = '<h4>midi inputs:</h4>';
         inputs.forEach((port) => {
             // console.log('in', port.name, port.id);
-            html += `<label><input type="checkbox" id="${  port.type  }${port.id  }">${  port.name  } (${  port.state  }, ${  port.connection  })</label><br>`;
+            html += `<label><input type="checkbox" id="${port.type}${port.id}">${port.name} (${port.state}, ${port.connection})</label><br>`;
         });
         divInputs.innerHTML = html;
 
@@ -94,7 +94,7 @@ window.onload = function () {
         html = '<h4>midi outputs:</h4>';
         outputs.forEach((port) => {
             // console.log('out', port.name, port.id);
-            html += `<label><input type="checkbox" id="${  port.type  }${port.id  }">${  port.name  } (${  port.state  }, ${  port.connection  })</label><br>`;
+            html += `<label><input type="checkbox" id="${port.type}${port.id}">${port.name} (${port.state}, ${port.connection})</label><br>`;
         });
         divOutputs.innerHTML = html;
 

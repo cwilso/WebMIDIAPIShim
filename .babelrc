@@ -12,5 +12,12 @@
                 "useBuiltIns": true
             }
         ]
-    ]
+    ],
+    "env": {
+        "production": {
+            "presets": [
+                "minify"
+            ]
+        }
+    }
 }

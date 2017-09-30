@@ -25,4 +25,5 @@ const init = () => {
 };
 
 init();
+// export for use with node
 export default init;

@@ -1,0 +1,23 @@
+{
+    "extends": "eslint:recommended",
+    "parser": "babel-eslint",
+    "plugins": [],
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+    "rules": {
+        "indent": [
+            2,
+            4
+        ],
+        "padded-blocks": [
+            "error",
+            "never"
+        ]
+    },
+    "settings": {
+        "classes": true
+    }
+}

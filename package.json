@@ -8,7 +8,7 @@
         "sound",
         "webmidi api"
     ],
-    "main": "dist/index.js",
+    "main": "node/index.js",
     "module": "src/index.js",
     "browser": "browser/WebMIDIAPI.js",
     "homepage": "https://github.com/cwilso/WebMIDIAPIShim",
@@ -39,9 +39,10 @@
         "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
     },
     "scripts": {
-        "gulp:build": "gulp build",
+        "build": "browserify -t [babelify] src/index.js -o browser/WebMIDIAPI.js",
+        "minify": "babel-minify browser/WebMIDIAPI.js > browser/WebMIDIAPI.min.js",
         "compile": "babel src --out-dir ./dist",
-        "update": "npm run compile && npm run gulp:build",
+        "update": "npm run compile && npm run build && npm run minify",
         "watch": "watchify src/index.js -t babelify -o browser/WebMIDIAPI.js --debug --verbose"
     },
     "dependencies": {
@@ -50,6 +51,7 @@
     "devDependencies": {
         "babel-cli": "^6.26.0",
         "babel-eslint": "^7.2.3",
+        "babel-minify": "^0.2.0",
         "babel-plugin-transform-runtime": "^6.23.0",
         "babel-preset-env": "^1.6.0",
         "babel-preset-stage-0": "^6.24.1",
@@ -58,14 +60,6 @@
         "eslint": "^4.6.1",
         "eslint-config-airbnb-base": "^12.0.0",
         "eslint-plugin-import": "^2.7.0",
-        "gulp": "github:gulpjs/gulp#4.0",
-        "gulp-babel-minify": "^0.2.0",
-        "gulp-concat": "^2.6.1",
-        "gulp-filter": "^5.0.1",
-        "gulp-sourcemaps": "^2.6.1",
-        "gulp-util": "^3.0.8",
-        "vinyl-buffer": "^1.0.0",
-        "vinyl-source-stream": "^1.1.0",
         "watchify": "^3.9.0"
     },
     "engines": {
