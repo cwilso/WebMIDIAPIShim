@@ -977,7 +977,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   will be reused if a new device gets connected.
 */
 
-var jazzPluginInitTime = 200; // 200 ms timeout for Firefox v.55
+var jazzPluginInitTime = (0, _util.getDevice)().browser === 'firefox' ? 200 : 100; // 200 ms timeout for Firefox v.55
 
 var jazzInstanceNumber = 0;
 var jazzInstances = new _store2.default();

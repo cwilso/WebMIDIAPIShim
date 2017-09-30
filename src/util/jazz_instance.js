@@ -15,7 +15,7 @@
 import Store from './store';
 import { getDevice } from './util';
 
-const jazzPluginInitTime = 200; // 200 ms timeout for Firefox v.55
+const jazzPluginInitTime = getDevice().browser === 'firefox' ? 200 : 100; // 200 ms timeout for Firefox v.55
 
 let jazzInstanceNumber = 0;
 const jazzInstances = new Store();
