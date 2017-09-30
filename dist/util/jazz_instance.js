@@ -122,3 +122,4 @@ function getJazzInstance(type, callback) {
         callback(instance);
     }
 }
+//# sourceMappingURL=jazz_instance.js.map

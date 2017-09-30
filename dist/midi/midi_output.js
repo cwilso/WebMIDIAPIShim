@@ -143,3 +143,4 @@ var MIDIOutput = function () {
 }();
 
 exports.default = MIDIOutput;
+//# sourceMappingURL=midi_output.js.map

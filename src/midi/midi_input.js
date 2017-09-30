@@ -1,8 +1,3 @@
-/* eslint prefer-destructuring: 0 */
-/* eslint no-underscore-dangle: 0 */
-/* eslint no-bitwise: 0 */
-/* eslint func-names: 0 */
-
 /*
   MIDIInput is a wrapper around an input of a Jazz instance
 */

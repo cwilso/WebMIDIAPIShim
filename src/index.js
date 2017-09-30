@@ -1,5 +1,3 @@
-/* eslint wrap-iife: ["error", "any"] */
-
 import { createMIDIAccess, closeAllMIDIInputs } from './midi/midi_access';
 import { polyfill, getDevice } from './util/util';
 
@@ -7,9 +5,10 @@ let midiAccess;
 
 const init = () => {
     if (!navigator.requestMIDIAccess) {
+        // Add some functionality to older browsers
         polyfill();
         navigator.requestMIDIAccess = () => {
-            // singleton-ish, no need to create multiple instances of MIDIAccess
+            // Singleton-ish, no need to create multiple instances of MIDIAccess
             if (midiAccess === undefined) {
                 midiAccess = createMIDIAccess();
             }
@@ -17,7 +16,8 @@ const init = () => {
         };
         if (getDevice().nodejs === true) {
             navigator.close = () => {
-                // Need to close MIDI input ports, otherwise Node.js will wait for MIDI input forever.
+                // For Nodejs applications we need to add a method that closes all MIDI input ports,
+                // otherwise Nodejs will wait for MIDI input forever.
                 closeAllMIDIInputs();
             };
         }
@@ -25,5 +25,3 @@ const init = () => {
 };
 
 init();
-// export for use with node
-export default init;

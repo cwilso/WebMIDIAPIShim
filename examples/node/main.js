@@ -1,4 +1,4 @@
-require('../node/index.js');
+require('web-midi-api');
 
 let midi;
 let inputs;

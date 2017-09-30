@@ -1,6 +1,3 @@
-/* eslint prefer-destructuring: 0 */
-/* eslint no-underscore-dangle: 0 */
-
 /*
   MIDIOutput is a wrapper around an output of a Jazz instance
 */

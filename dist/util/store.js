@@ -85,3 +85,4 @@ var Store = function () {
 }();
 
 exports.default = Store;
+//# sourceMappingURL=store.js.map

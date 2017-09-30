@@ -25,3 +25,4 @@ var MIDIConnectionEvent = function MIDIConnectionEvent(midiAccess, port) {
 };
 
 exports.default = MIDIConnectionEvent;
+//# sourceMappingURL=midiconnection_event.js.map

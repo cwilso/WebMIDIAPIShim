@@ -249,3 +249,4 @@ function getMIDIDeviceId(name, type) {
     }
     return id;
 }
+//# sourceMappingURL=midi_access.js.map

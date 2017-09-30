@@ -1,5 +1,5 @@
 {
-    "extends": "airbnb-base",
+    "extends": "eslint:recommended",
     "parser": "babel-eslint",
     "plugins": [],
     "env": {
@@ -11,12 +11,13 @@
         "indent": [
             2,
             4
+        ],
+        "padded-blocks": [
+            "error",
+            "never"
         ]
     },
     "settings": {
-        "classes": true,
-        "flowtype": {
-            "onlyFilesWithFlowAnnotation": true
-        }
+        "classes": true
     }
 }

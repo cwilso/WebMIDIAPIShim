@@ -10,7 +10,7 @@
     ],
     "main": "node/index.js",
     "module": "src/index.js",
-    "browser": "browser/WebMIDIAPI.js",
+    "browser": "dist/index.js",
     "homepage": "https://github.com/cwilso/WebMIDIAPIShim",
     "bugs": "https://github.com/cwilso/WebMIDIAPIShim/issues",
     "license": "Apache-2.0",
@@ -32,6 +32,7 @@
         }
     ],
     "directories": {
+        "lib": "src",
         "example": "examples"
     },
     "repository": {
@@ -39,11 +40,11 @@
         "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
     },
     "scripts": {
-        "build": "browserify -t [babelify] src/index.js -o browser/WebMIDIAPI.js",
-        "minify": "babel-minify browser/WebMIDIAPI.js > browser/WebMIDIAPI.min.js",
-        "compile": "babel src --out-dir ./dist",
+        "build": "browserify -t [babelify] src/index.js -o build/WebMIDIAPI.js",
+        "minify": "babel-minify build/WebMIDIAPI.js > build/WebMIDIAPI.min.js",
+        "compile": "babel --source-maps 'true' src --out-dir ./dist",
         "update": "npm run compile && npm run build && npm run minify",
-        "watch": "watchify src/index.js -t babelify -o browser/WebMIDIAPI.js --debug --verbose"
+        "watch": "watchify src/index.js -t babelify -o build/WebMIDIAPI.js --debug --verbose"
     },
     "dependencies": {
         "jazz-midi": "^1.5.1"
@@ -58,8 +59,6 @@
         "babelify": "^7.3.0",
         "browserify": "^14.4.0",
         "eslint": "^4.6.1",
-        "eslint-config-airbnb-base": "^12.0.0",
-        "eslint-plugin-import": "^2.7.0",
         "watchify": "^3.9.0"
     },
     "engines": {

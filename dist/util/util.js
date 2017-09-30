@@ -157,3 +157,4 @@ function polyfill() {
     }
     polyfillPerformance();
 }
+//# sourceMappingURL=util.js.map

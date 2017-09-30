@@ -24,11 +24,11 @@ The polyfill supports multiple simultaneous inputs and outputs, and sending and 
 
 #### Use in a browser
 
-1. Copy the file `WebMIDIAPI.min.js` from the `browser` folder into your project.
+1. Copy the file `WebMIDIAPI.min.js` from the `build` folder into your project.
 2. Optionally you can copy the source map file WebMIDIAPI.min.js.map as well
 3. Add `<script src="/your/path/to/WebMIDIAPI.min.js"></script>` to your html page before the script tag(s) of your own code.
 
-For debugging purposes you can use the uncompressed version; you can find in the `browser` folder as well.
+For debugging purposes you can use the uncompressed version; you can find in the `build` folder as well.
 
 After you have added the shim to your HTML page, you can use the Web MIDI API as captured in the specification.
 
@@ -66,11 +66,11 @@ function onErrorCallback(err) {
 
 Recommended if you are coding in es-next. Install the package from npm:
 
-`npm i --save git://github.com/cwilso/webmidiapishim.git#gh-pages`
+`npm i --save https://github.com/cwilso/webmidiapishim#gh-pages`
 
 or
 
-`yarn add git://github.com/cwilso/webmidiapishim.git#gh-pages`
+`yarn add https://github.com/cwilso/webmidiapishim#gh-pages`
 
 Now in your code you can import the shim like this:
 
@@ -86,9 +86,20 @@ shim.requestMIDIAccess()
 );
 ```
 
-If you are new to npm and using npm modules in your project please visit the [npm site](https://docs.npmjs.com/). If you are new to bundling dependencies of a web project consult the [browserify documentation](https://github.com/substack/node-browserify#usage).
+If you are new to npm and using npm modules in your project please visit the [npm site](https://docs.npmjs.com/). If you are new to bundling dependencies of a web project consult one of these bundlers:
+
+* [browserify documentation](https://github.com/substack/node-browserify#usage).
+* webpack
+* rollup
+
 
 #### Use with Nodejs
+
+You can use the WebMIDIAPIShim for a Nodejs project as well. A global `navigator` object will be added.
+
+```javascript
+require('web-midi-api');
+```
 
 If you want to use MIDI in your node project you can use the package [`web-midi-api`](https://www.npmjs.com/package/web-midi-api) which is maintained by the creator of the Jazz plugin. This package is in fact a bundling of the WebMIDIAPIShim and the npm package [jazz-midi package](https://www.npmjs.com/package/jazz-midi) which is the Nodejs version of the Jazz browser plugin.
 
@@ -121,5 +132,5 @@ If you're satisfied with the new code, you can transpile, build and minimize the
 
 `npm run update`
 
-This compile the files in the `src` folder to es5 files and puts these in the `dist` folder. It also creates a browser bundle in the `browser`
+This compile the files in the `src` folder to es5 files and puts these in the `dist` folder. It also creates a browser bundle in the `build`
 folder.

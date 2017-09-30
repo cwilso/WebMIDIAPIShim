@@ -31,7 +31,7 @@ class MIDIAccess {
         this.outputs = midiOutputs;
     }
 
-    addEventListener(type, listener, useCapture) {
+    addEventListener(type, listener) {
         if (type !== 'statechange') {
             return;
         }
@@ -40,7 +40,7 @@ class MIDIAccess {
         }
     }
 
-    removeEventListener(type, listener, useCapture) {
+    removeEventListener(type, listener) {
         if (type !== 'statechange') {
             return;
         }
@@ -53,7 +53,7 @@ class MIDIAccess {
 
 export function createMIDIAccess() {
     return new Promise(((resolve, reject) => {
-        if (midiAccess !== undefined) {
+        if (typeof midiAccess !== 'undefined') {
             resolve(midiAccess);
             return;
         }
@@ -64,8 +64,8 @@ export function createMIDIAccess() {
         }
 
         createJazzInstance((instance) => {
-            if (instance === undefined) {
-                reject({ message: 'No access to MIDI devices: browser does not support the WebMIDI API and the Jazz plugin is not installed.' });
+            if (typeof instance === 'undefined') {
+                reject({ message: 'No access to MIDI devices: your browser does not support the WebMIDI API and the Jazz plugin is not installed.' });
                 return;
             }
 

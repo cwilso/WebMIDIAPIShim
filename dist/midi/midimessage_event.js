@@ -26,3 +26,4 @@ var MIDIMessageEvent = function MIDIMessageEvent(port, data, receivedTime) {
 };
 
 exports.default = MIDIMessageEvent;
+//# sourceMappingURL=midimessage_event.js.map

@@ -1,5 +1,7 @@
+// Main entry point for Nodejs applications, includes jazz-midi Nodejs module as a replacement
+// of the browsers' native WebMIDI implementation or the JazzMIDI browser plugin.
+
 const jazzMidi = require('jazz-midi');
-// create a global navigator object in the Node environment
 global.navigator = {
     node: true,
     jazzMidi,
