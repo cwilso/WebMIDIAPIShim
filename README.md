@@ -1,4 +1,4 @@
-# Web MIDI API Polyfill
+# Web MIDI API Shim
 
 ![nodejs](http://jazz-soft.github.io/img/nodejs.jpg)
 ![chrome](http://jazz-soft.github.io/img/chrome.jpg)
