@@ -47,7 +47,7 @@
         "watch": "watchify src/index.js -t babelify -o build/WebMIDIAPI.js --debug --verbose"
     },
     "dependencies": {
-        "jazz-midi": "^1.5.1"
+        "jazz-midi": ">=1.4.4"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
