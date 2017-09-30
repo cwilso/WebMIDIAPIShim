@@ -79,7 +79,7 @@ var MIDIInput = function () {
         key: 'addEventListener',
         value: function addEventListener(type, listener, useCapture) {
             var listeners = this._listeners.get(type);
-            if (listeners === undefined) {
+            if (typeof listeners === 'undefined') {
                 return;
             }
 
@@ -91,7 +91,7 @@ var MIDIInput = function () {
         key: 'removeEventListener',
         value: function removeEventListener(type, listener, useCapture) {
             var listeners = this._listeners.get(type);
-            if (listeners === undefined) {
+            if (typeof listeners === 'undefined') {
                 return;
             }
 
