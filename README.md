@@ -59,7 +59,7 @@ For debugging purposes you can use the uncompressed version; you can find it in 
 
 ### 2. Import as a module
 
-This method is suitable for both Nodejs and browser projects, and for both es5 and ex-next code.
+This method is suitable for both Nodejs and browser projects, and for both es5 and esnext code.
 
 First install the package from npm:
 
@@ -184,5 +184,5 @@ If you are new to npm and using npm packages in your project please visit the [n
 * `gh-pages`: styles and script used by the Github page and the examples, does not contain any library code.
 * `node`: contains the entry point for Nodejs applications; this scripts combines the Web MIDI API shim with the `jazz-midi` npm package.
 * `src`: contains the actual code of this library, written in esnext.
-* `test`: contains a simple Nodejs test script
+* `test`: contains a Nodejs test script that checks your MIDI in- and outports.
 
