@@ -1,5 +1,5 @@
 
-require('../../node/index.js');
+require('./index.js');
 
 // Note that in your own project you should use:
 // require('web-midi-api');
