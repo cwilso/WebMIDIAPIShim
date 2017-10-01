@@ -1,11 +1,12 @@
 {
     "name": "web-midi-api-shim",
-    "version": "0.1.0",
+    "version": "1.4.4",
     "description": "Shim for the WebMIDI API, intended to be used in environments that don't have the WebMIDI API implemented: Nodejs and all browsers except Chrome, Chromium and Opera",
     "keywords": [
         "midi",
         "music",
         "sound",
+        "jazz plugin",
         "webmidi api"
     ],
     "main": "node/index.js",
@@ -40,12 +41,13 @@
         "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
     },
     "scripts": {
-        "test": "node ./examples/node/main.js",
+        "test": "node ./test/node.js",
         "build": "browserify -t [babelify] src/index.js -o build/WebMIDIAPI.js",
         "minify": "babel-minify build/WebMIDIAPI.js > build/WebMIDIAPI.min.js",
         "compile": "babel --source-maps 'true' src --out-dir ./dist",
         "update": "npm run compile && npm run build && npm run minify",
-        "watch": "watchify src/index.js -t babelify -o build/WebMIDIAPI.js --debug --verbose"
+        "watch": "watchify src/index.js -t babelify -o build/WebMIDIAPI.js --debug --verbose",
+        "postpublish": "git push && git push --tags"
     },
     "dependencies": {
         "jazz-midi": ">=1.4.4"
