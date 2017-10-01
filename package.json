@@ -41,7 +41,7 @@
         "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
     },
     "scripts": {
-        "test": "node ./test/node.js",
+        "test": "node ./tests/node.js",
         "build": "browserify -t [babelify] src/index.js -o build/WebMIDIAPI.js",
         "minify": "babel-minify build/WebMIDIAPI.js > build/WebMIDIAPI.min.js",
         "compile": "babel --source-maps 'true' src --out-dir ./dist",
