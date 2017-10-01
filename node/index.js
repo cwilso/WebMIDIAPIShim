@@ -6,5 +6,4 @@ global.navigator = {
     node: true,
     jazzMidi,
 };
-
 require('../dist/index.js');
