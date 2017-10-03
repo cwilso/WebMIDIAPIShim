@@ -32,7 +32,7 @@ You can use the Web MIDI API as captured in the specification.
 
 So, some sample usage:
 
-```
+```js
 var m = null; // m = MIDIAccess object for you to make calls on
 navigator.requestMIDIAccess().then( onsuccesscallback, onerrorcallback );
 
@@ -78,13 +78,11 @@ The web-midi-api package installs the [jazz-midi package](https://www.npmjs.com/
 
 Adding web-midi-api to your Nodejs project is done like so:
 
-```
+```js
 var navigator = require('web-midi-api');
 
 // and from here your code is exactly the same as a browser project
 navigator.requestMIDIAccess().then(onFulFilled, onRejected);
-
-
 ```
 
 
@@ -102,17 +100,20 @@ navigator.requestMIDIAccess().then(onFulFilled, onRejected);
 The polyfill is written in es6 so you need to transpile it before it can run in a browser. You can find the es6 files in the /src folder. If you change something in the es6 files, you need to build the polyfill again. To do this, you need to have [Node.js](http://nodejs.org/) and [npm](https://www.npmjs.org/) installed.
 
 Then install the project dependencies using:
-
-    npm install
+```bash
+npm install
+```
 
 This will install a.o. browserify and babelify.
 
 
 During development you can start watchify which transpiles your code as soon as you save a changed file:
-
-    npm run watch
+```bash
+npm run watch
+```
 
 
 If you're satisfied with the new code, you can transpile, build and minimize the code and create a separate sourcemap by:
-
-    npm run build
+```bash
+npm run build
+```
