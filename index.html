@@ -19,11 +19,15 @@
 
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
-        <header class="inner"> <a id="forkme_banner" href="https://github.com/cwilso/WebMIDIAPIShim">View on GitHub</a>
+        <header class="inner">
+            <a id="forkme_banner" href="https://github.com/cwilso/WebMIDIAPIShim">View on GitHub</a>
             <h1 id="project_title">Web MIDI API Polyfill</h1>
-            <h2 id="project_tagline">This is a polyfill using the <a href="http://jazz-soft.net/">Jazz</a> NPAPI MIDI plugin to implement the Web
-                MIDI API on Mac and Windows.</h2>
-            <section id="downloads"> <a class="zip_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/zipball/master">Download this project as a .zip file</a>                <a class="tar_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/tarball/master">Download this project as a tar.gz file</a>                </section>
+            <h2 id="project_tagline">This is a polyfill using the
+                <a href="http://jazz-soft.net/">Jazz</a> NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows.</h2>
+            <section id="downloads">
+                <a class="zip_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/zipball/master">Download this project as a .zip file</a>
+                <a class="tar_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/tarball/master">Download this project as a tar.gz file</a>
+            </section>
         </header>
     </div>
 
@@ -32,13 +36,15 @@
         <section id="main_content" class="inner">
             <h3>To use the Web MIDI API Polyfill</h3>
             <p>Just include</p>
-            <pre>&lt;script src='http://cwilso.github.com/WebMIDIAPIShim/browser/WebMIDIAPI.min.js'&gt;&lt;/script&gt;</pre>
+            <pre>&lt;script src='http://cwilso.github.com/WebMIDIAPIShim/build/WebMIDIAPI.min.js'&gt;&lt;/script&gt;</pre>
             <p>in your HTML source.</p>
             <h3>Test it out!</h3>
-            <p><strong>Before you press the button:</strong> install the <a href="http://jazz-soft.net/">Jazz-Soft.net's Jazz-Plugin</a>,
-                version 1.4 or higher to enable MIDI support on Windows, OSX and Linux.</p>
+            <p>
+                <strong>Before you press the button:</strong> install the
+                <a href="http://jazz-soft.net/">Jazz-Soft.net's Jazz-Plugin</a>, version 1.4 or higher to enable MIDI support on Windows, OSX and Linux.</p>
             <p>You will also want some MIDI input/output devices - MacOS and Windows typically have output software synthesizers
-                installed by default. On MacOS, if you want a software input device you may want to install <a href="http://www.manyetas.com/creed/midikeys.html">MidiKeys</a>.
+                installed by default. On MacOS, if you want a software input device you may want to install
+                <a href="http://www.manyetas.com/creed/midikeys.html">MidiKeys</a>.
             </p>
             <button onclick="runTest();">Test MIDI!</button>
             <pre id="log">
@@ -50,7 +56,9 @@
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
         <footer class="inner">
-            <p class="copyright">Web MIDI API Polyfill maintained by <a href="https://github.com/cwilso">cwilso</a></p>
+            <p class="copyright">Web MIDI API Polyfill maintained by
+                <a href="https://github.com/cwilso">cwilso</a>
+            </p>
         </footer>
     </div>
     <script src="browser/WebMIDIAPI.min.js"></script>

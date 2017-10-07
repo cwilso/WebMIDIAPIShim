@@ -16,7 +16,7 @@ It was originally designed to test usability of the API itself, but it is curren
 
 The library is actually a combination of a shim and a polyfill: as a polyfill it implements the WebMIDI API in browsers that don't support it natively, and as a shim it intercepts calls from and to the Jazz plugin. In this readme the terms polyfill and shim are used interchangeably.
 
-Including this library means Web MIDI should work in all browsers that are supported by the Jazz plugin.
+Including this library means Web MIDI should work in all browsers that are supported by the Jazz plugin. The library also makes the Web MIDI API available in Node.js applications.
 
 The shim will automatically check to see if the Web MIDI API is already implemented, and if not it will insert itself.
 
@@ -32,20 +32,20 @@ In other browsers you need to have version 1.4.4 or higher of the Jazz plugin in
 
 Internet Explorer is supported from version 9 and up.
 
-Note that there is no way on iOS to work with the Web MIDI API; Chrome and Opera for iOS do not have the Web MIDI API implemented and there is no Jazz plugin for any iOS browser either.
+Note that Chrome and Opera for iOS do not have the Web MIDI API implemented and since there is no Jazz plugin for any iOS browser either, you cannot use Web MIDI on iOS devices.
 
 ## Support for Node.js applications
 
-The Web MIDI API shim works in Node.js applications as well. The shim creates a global variable `navigator` that has the method `requestMIDIAccess`. This means that you can use the same code in both browser and Node.js environments.
+The Web MIDI API shim works with Node.js applications as well. The shim creates a global variable `navigator` that mimics the native `navigator` object in browsers. The `navigator` object has the method `requestMIDIAccess` and this means that you can share your Web MIDI API related code seamlessly across browser and Node.js projects.
 
-The Node.js version uses the npm module [jazz-midi](https://www.npmjs.com/package/jazz-midi) to connect to the MIDI implementation of your operating system. A reference to `jazz-midi` is added to the global `navigator` object so you can query `jazz-midi` for instance to get the version number:
+Instead of the Jazz plugin, the Node.js version uses the npm module [jazz-midi](https://www.npmjs.com/package/jazz-midi) to connect to the MIDI implementation of your operating system. A reference to `jazz-midi` is added to the global `navigator` object so you can query `jazz-midi` for instance to get the version number:
 
 ```javascript
 // nodejs
 console.log(navigator.jazzMidi.version); // 1.5.1
 ```
 
-`jazz-midi` is the Node.js version of the Jazz browser plugin and is maintained by [Jazz Soft](http://jazz-soft.net/) as well.
+The `jazz-midi` package can be seen as the Node.js version of the Jazz browser plugin and is maintained by [Jazz Soft](http://jazz-soft.net/) as well.
 
 ## Use the shim in your project
 
@@ -59,7 +59,7 @@ For debugging purposes you can use the uncompressed version; you can find it in 
 
 ### 2. Import as a module
 
-This method is suitable for both Node.js and browser projects, and for both es5 and esnext code.
+This method is suitable for both Node.js and browser projects, and for both commonjs and es-next code.
 
 First install the package from npm:
 
@@ -72,16 +72,16 @@ or
 Then you can import the module into your code:
 
 ```javascript
-// commonjs, es5
+// commonjs
 require('web-midi-api');
 
-// esnext
+// es-next
 import 'web-midi-api';
 ```
 
 ## Sample usage
 
-After you have added the shim using any of the methods described above , you can use the Web MIDI API as captured in the specification.
+After you have added the shim using any of the methods described above, you can use the Web MIDI API as captured in the specification.
 
 So, some sample usage:
 
@@ -94,7 +94,7 @@ navigator.requestMIDIAccess().then(onSuccessCallback, onErrorCallback);
 function onSuccessCallback(access) {
     // If the browser supports WebMIDI, access is a native MIDIAccess
     // object. If not, it is an instance of a custom class that mimics
-    // the behavior of MIDIAccess by using the Jazz plugin
+    // the behavior of MIDIAccess using Jazz.
     m = access;
 
     // Things you can do with the MIDIAccess object:
@@ -134,7 +134,7 @@ function onErrorCallback(err) {
 
 ## Examples
 
-- [list_devices](http://cwilso.github.com/WebMIDIAPIShim/examples/list_devices) simple listing of all MIDI devices
+- [list_devices](http://cwilso.github.com/WebMIDIAPIShim/examples/list_devices) simple listing of all available MIDI devices
 - [routing_1](http://cwilso.github.com/WebMIDIAPIShim/examples/routing_1) example that lets you route MIDI inports to MIDI outports
 - [routing_2](http://cwilso.github.com/WebMIDIAPIShim/examples/routing_2) same routing example with slightly different code
 - [node](http://cwilso.github.com/WebMIDIAPIShim/examples/node) example that tests your MIDI in- and outports in Node.js
@@ -142,9 +142,9 @@ function onErrorCallback(err) {
 
 ## Building the polyfill
 
-The polyfill is written in esnext so it needs to be transpiled to es5. You can find the esnext files in the `src` folder. If you change something in the esnext files, you need to build the polyfill again. To do this, you need to have [Node.js](http://nodejs.org/) and [npm](https://www.npmjs.org/) installed.
+The polyfill is written in es-next so it needs to be transpiled to es5. You can find the es-next files in the `src` folder. If you change something in the es-next files, you need to build the polyfill again. To do this, you need to have [Node.js](http://nodejs.org/) and [npm](https://www.npmjs.org/) installed.
 
-Then install the project dependencies using:
+First install the project dependencies using:
 
 `npm install`
 
@@ -166,11 +166,11 @@ If you're satisfied with the new code, you can run a complete build:
 
 `npm run update`
 
-This compiles the files in the `src` folder to commonjs es5 files and puts them in the `dist` folder. It also creates a browser bundle in the `build` folder.
+This compiles the files in the `src` folder to commonjs files and puts them in the `dist` folder. It also creates a browser bundle in es5 in the `build` folder.
 
 ## Additional documentation
 
-If you are new to npm and using npm packages in your project please visit the [npm site](https://docs.npmjs.com/). If you are new to bundling npm packages into a web-bundle that can be used in the browser, consult the documentation one of these bundlers:
+If you are new to npm and using npm packages in your project please visit the [npm site](https://docs.npmjs.com/). If you are new to bundling npm packages into an es5 web-bundle that can be used in the browser, consult the documentation one of these bundlers:
 
 * [browserify](https://github.com/substack/node-browserify#usage).
 * [webpack](https://webpack.js.org/)
@@ -179,9 +179,8 @@ If you are new to npm and using npm packages in your project please visit the [n
 ## Folder layout
 
 * `build`: contains the transpiled and bundled version of the Web MIDI API shim, this is the script that you add as a separate script to your HTML page.
-* `dist`: contains the transpiled commonjs code (not bundled), this code is used if you import the Web MIDI API shim as a module.
+* `dist`: contains the transpiled commonjs code, this code is used if you import the Web MIDI API shim as a module.
 * `examples`: some usage examples for browser and Node.js, written in es5.
-* `gh-pages`: styles and script used by the Github page and the examples, does not contain any library code.
+* `gh-pages`: styles and scripts used by the github.io landing page, does not contain any library code.
 * `node`: contains the entry point for Node.js applications; this scripts combines the Web MIDI API shim with the `jazz-midi` npm package. It also contains a Node.js test script that checks your MIDI in- and outports.
-* `src`: contains the actual code of this library, written in esnext.
-
+* `src`: contains the actual code of this library, written in es-next, this code is by bundlers that support es-next (rollupjs).
