@@ -90,7 +90,7 @@ var MIDIInput = function () {
                 return;
             }
 
-            if (listeners.has(listener) === false) {
+            if (listeners.has(listener) === true) {
                 listeners.delete(listener);
             }
         }

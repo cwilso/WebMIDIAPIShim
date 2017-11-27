@@ -562,7 +562,7 @@ var MIDIInput = function () {
                 return;
             }
 
-            if (listeners.has(listener) === false) {
+            if (listeners.has(listener) === true) {
                 listeners.delete(listener);
             }
         }
@@ -865,7 +865,7 @@ var MIDIOutput = function () {
                 return;
             }
 
-            if (this._listeners.has(listener) === false) {
+            if (this._listeners.has(listener) === true) {
                 this._listeners.delete(listener);
             }
         }

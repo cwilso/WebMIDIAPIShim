@@ -119,7 +119,7 @@ var MIDIOutput = function () {
                 return;
             }
 
-            if (this._listeners.has(listener) === false) {
+            if (this._listeners.has(listener) === true) {
                 this._listeners.delete(listener);
             }
         }

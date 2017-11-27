@@ -65,7 +65,7 @@ export default class MIDIInput {
             return;
         }
 
-        if (listeners.has(listener) === false) {
+        if (listeners.has(listener) === true) {
             listeners.delete(listener);
         }
     }
