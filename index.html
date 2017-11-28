@@ -1,118 +1,132 @@
 ﻿<!DOCTYPE html>
 <html>
-	<head>
-	<meta charset='utf-8' />
-	<meta http-equiv="X-UA-Compatible" content="chrome=1" />
-	<meta name="description" content="Webmidiapishim : Polyfill using the Jazz NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows." />
-	<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-	<title>Web MIDI API Polyfill</title>
-	<style>
-#log {
-	height: 15em;
-}
-</style>
-	</head>
 
-	<body>
+<head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Webmidiapishim : Polyfill using the Jazz NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows."
+    />
+    <link rel="stylesheet" type="text/css" media="screen" href="gh-pages/styles/stylesheet.css">
+    <title>Web MIDI API Polyfill</title>
+    <style>
+        #log {
+            height: 15em;
+        }
+    </style>
+</head>
 
-<!-- HEADER -->
-<div id="header_wrap" class="outer">
-      <header class="inner"> <a id="forkme_banner" href="https://github.com/cwilso/WebMIDIAPIShim">View on GitHub</a>
-    <h1 id="project_title">Web MIDI API Polyfill</h1>
-    <h2 id="project_tagline">This is a polyfill using the <a href="http://jazz-soft.net/">Jazz</a> NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows.</h2>
-    <section id="downloads"> <a class="zip_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/zipball/master">Download this project as a .zip file</a> <a class="tar_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/tarball/master">Download this project as a tar.gz file</a> </section>
-  </header>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+            <a id="forkme_banner" href="https://github.com/cwilso/WebMIDIAPIShim">View on GitHub</a>
+            <h1 id="project_title">Web MIDI API Polyfill</h1>
+            <h2 id="project_tagline">This is a polyfill using the
+                <a href="http://jazz-soft.net/">Jazz</a> NPAPI MIDI plugin to implement the Web MIDI API on Mac and Windows.</h2>
+            <section id="downloads">
+                <a class="zip_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/zipball/master">Download this project as a .zip file</a>
+                <a class="tar_download_link" href="https://github.com/cwilso/WebMIDIAPIShim/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
     </div>
 
-<!-- MAIN CONTENT -->
-<div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-    <h3>To use the Web MIDI API Polyfill</h3>
-    <p>Just include</p>
-    <pre>&lt;script src='http://cwilso.github.com/WebMIDIAPIShim/WebMIDIAPI.js'&gt;&lt;/script&gt;</pre>
-    <p>in your HTML source.</p>
-    <h3>Test it out!</h3>
-    <p><strong>Before you press the button:</strong> install the <a href="http://jazz-soft.net/">Jazz-Soft.net's Jazz-Plugin</a>, version 1.4 or higher to enable MIDI support on Windows, OSX and Linux.</p>
-    <p>You will also want some MIDI input/output devices - MacOS and Windows typically have output software synthesizers installed by default.
-    On MacOS, if you want a software input device you may want to install <a href="http://www.manyetas.com/creed/midikeys.html">MidiKeys</a>. </p>
-    <button onclick="runTest();">Test MIDI!</button>
-    <pre id="log">
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+            <h3>To use the Web MIDI API Polyfill</h3>
+            <p>Just include</p>
+            <pre>&lt;script src='http://cwilso.github.com/WebMIDIAPIShim/build/WebMIDIAPI.min.js'&gt;&lt;/script&gt;</pre>
+            <p>in your HTML source.</p>
+            <h3>Test it out!</h3>
+            <p>
+                <strong>Before you press the button:</strong> install the
+                <a href="http://jazz-soft.net/">Jazz-Soft.net's Jazz-Plugin</a>, version 1.4 or higher to enable MIDI support on Windows, OSX and Linux.</p>
+            <p>You will also want some MIDI input/output devices - MacOS and Windows typically have output software synthesizers
+                installed by default. On MacOS, if you want a software input device you may want to install
+                <a href="http://www.manyetas.com/creed/midikeys.html">MidiKeys</a>.
+            </p>
+            <button onclick="runTest();">Test MIDI!</button>
+            <pre id="log">
 	</pre>
-    <div id="MIDIPlugin" style="position:absolute; visibility:hidden"></div>
-  </section>
+            <div id="MIDIPlugin" style="position:absolute; visibility:hidden"></div>
+        </section>
     </div>
 
-<!-- FOOTER  -->
-<div id="footer_wrap" class="outer">
-      <footer class="inner">
-    <p class="copyright">Web MIDI API Polyfill maintained by <a href="https://github.com/cwilso">cwilso</a></p>
-  </footer>
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+        <footer class="inner">
+            <p class="copyright">Web MIDI API Polyfill maintained by
+                <a href="https://github.com/cwilso">cwilso</a>
+            </p>
+        </footer>
     </div>
-<script src="lib/WebMIDIAPI.js"></script>
-<script>
-var midi=null;
-var inputs=null;
-var outputs=null;
-var input=null;
-var output=null;
-var log=null;
+    <script src="browser/WebMIDIAPI.min.js"></script>
+    <script>
+        var midi = null;
+        var inputs = null;
+        var outputs = null;
+        var input = null;
+        var output = null;
+        var log = null;
 
-function runTest() {
-	if (!log)
-		log = document.getElementById("log");
-	log.innerHTML = "Starting up MIDI...\n";
-	navigator.requestMIDIAccess().then( success, failure );
-}
+        function runTest() {
+            if (!log)
+                log = document.getElementById("log");
+            log.innerHTML = "Starting up MIDI...\n";
+            navigator.requestMIDIAccess().then(success, failure);
+        }
 
-function handleMIDIMessage( ev ) {
-	// testing - just reflect.
-	log.innerHTML += "Message: " + ev.data.length + " bytes, timestamp: " + ev.timeStamp;
-	if (ev.data.length == 3)
-		log.innerHTML += " 0x" + ev.data[0].toString(16) + " 0x" + ev.data[1].toString(16) + " 0x" + ev.data[2].toString(16);
-	log.innerHTML += "\n";
-	if (output)
-		output.send( ev.data );
-}
+        function handleMIDIMessage(ev) {
+            // testing - just reflect.
+            log.innerHTML += "Message: " + ev.data.length + " bytes, timestamp: " + ev.timeStamp;
+            if (ev.data.length == 3)
+                log.innerHTML += " 0x" + ev.data[0].toString(16) + " 0x" + ev.data[1].toString(16) + " 0x" + ev.data[2].toString(16);
+            log.innerHTML += "\n";
+            if (output)
+                output.send(ev.data);
+        }
 
-function success( midiAccess ) {
-    var i, iterator, data, port;
+        function success(midiAccess) {
+            var i, iterator, data, port;
 
-    log.innerHTML += "MIDI ready!\n";
-    midi = midiAccess;
+            log.innerHTML += "MIDI ready!\n";
+            midi = midiAccess;
 
-    inputs = midi.inputs;
-    log.innerHTML += inputs.size+" inputs:\n";
+            inputs = midi.inputs;
+            log.innerHTML += inputs.size + " inputs:\n";
 
-    i = 0;
-    inputs.forEach(function(port){
-        log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
-    });
+            i = 0;
+            inputs.forEach(function (port) {
+                log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
+            });
 
-    if(inputs.size > 0) {
-        iterator = inputs.values();
-        input = iterator.next().value;
-        input.onmidimessage = handleMIDIMessage;
-        log.innerHTML += "Hooked up first input.\n";
-    }
+            if (inputs.size > 0) {
+                iterator = inputs.values();
+                input = iterator.next().value;
+                input.onmidimessage = handleMIDIMessage;
+                log.innerHTML += "Hooked up first input.\n";
+            }
 
-    outputs = midi.outputs;
-    log.innerHTML += outputs.size+" outputs:\n";
+            outputs = midi.outputs;
+            log.innerHTML += outputs.size + " outputs:\n";
 
-    i = 0;
-    outputs.forEach(function(port){
-        log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
-    });
+            i = 0;
+            outputs.forEach(function (port) {
+                log.innerHTML += i++ + ": " + port.name + "; manufacturer: " + port.manufacturer + "; version: " + port.version + "\n";
+            });
 
-    if(outputs.size > 0) {
-        iterator = outputs.values();
-		output = iterator.next().value;
-        output.send( [0xb0, 0x00, 0x7f] );  // If the first device is a Novation Launchpad, this will light it up!
-	}
-}
+            if (outputs.size > 0) {
+                iterator = outputs.values();
+                output = iterator.next().value;
+                output.send([0xb0, 0x00, 0x7f]);  // If the first device is a Novation Launchpad, this will light it up!
+            }
+        }
 
-function failure( error ) {
-	alert( "MIDI failed to start. Did you forget to install the Jazz plugin?");
-}
-</script>
+        function failure(error) {
+            alert("MIDI failed to start. Did you forget to install the Jazz plugin?");
+        }
+    </script>
 </body>
+
 </html>

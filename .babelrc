@@ -1,0 +1,23 @@
+{
+    "presets": [
+        "stage-0",
+        [
+            "env",
+            {
+                "targets": {
+                    "browsers": [
+                        "> 2%"
+                    ]
+                },
+                "useBuiltIns": true
+            }
+        ]
+    ],
+    "env": {
+        "production": {
+            "presets": [
+                "minify"
+            ]
+        }
+    }
+}
