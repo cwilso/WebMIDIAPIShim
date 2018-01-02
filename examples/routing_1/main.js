@@ -9,7 +9,6 @@ window.onload = function () {
         activeInputs = {},
         activeOutputs = {};
 
-
     if (navigator.requestMIDIAccess !== undefined) {
         navigator.requestMIDIAccess().then(
 

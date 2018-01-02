@@ -17,15 +17,15 @@ var init = function init() {
         // Add some functionality to older browsers
         (0, _util.polyfill)();
 
-        // Add WebMIDI API globals
-        global.MIDIInput = _midi_input.MIDIInput;
-        global.MIDIOutput = _midi_output.MIDIOutput;
-        global.MIDIMessageEvent = _midimessage_event.MIDIMessageEvent;
-
         navigator.requestMIDIAccess = function () {
             // Singleton-ish, no need to create multiple instances of MIDIAccess
             if (midiAccess === undefined) {
                 midiAccess = (0, _midi_access.createMIDIAccess)();
+                // Add WebMIDI API globals
+                var scope = (0, _util.getScope)();
+                scope.MIDIInput = _midi_input.MIDIInput;
+                scope.MIDIOutput = _midi_output.MIDIOutput;
+                scope.MIDIMessageEvent = _midimessage_event.MIDIMessageEvent;
             }
             return midiAccess;
         };

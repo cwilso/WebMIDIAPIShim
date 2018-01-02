@@ -3,15 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.getScope = getScope;
 exports.getDevice = getDevice;
 exports.generateUUID = generateUUID;
 exports.polyfill = polyfill;
-
 var Scope = void 0;
 var device = null;
 
 // check if we are in a browser or in Nodejs
-var getScope = function getScope() {
+function getScope() {
     if (typeof Scope !== 'undefined') {
         return Scope;
     }
@@ -23,7 +23,7 @@ var getScope = function getScope() {
     }
     // console.log('scope', scope);
     return Scope;
-};
+}
 
 // check on what type of device we are running, note that in this context
 // a device is a computer not a MIDI device

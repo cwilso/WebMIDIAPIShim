@@ -185,7 +185,6 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],2:[function(require,module,exports){
-(function (global){
 'use strict';
 
 var _midi_access = require('./midi/midi_access');
@@ -205,15 +204,15 @@ var init = function init() {
         // Add some functionality to older browsers
         (0, _util.polyfill)();
 
-        // Add WebMIDI API globals
-        global.MIDIInput = _midi_input.MIDIInput;
-        global.MIDIOutput = _midi_output.MIDIOutput;
-        global.MIDIMessageEvent = _midimessage_event.MIDIMessageEvent;
-
         navigator.requestMIDIAccess = function () {
             // Singleton-ish, no need to create multiple instances of MIDIAccess
             if (midiAccess === undefined) {
                 midiAccess = (0, _midi_access.createMIDIAccess)();
+                // Add WebMIDI API globals
+                var scope = (0, _util.getScope)();
+                scope.MIDIInput = _midi_input.MIDIInput;
+                scope.MIDIOutput = _midi_output.MIDIOutput;
+                scope.MIDIMessageEvent = _midimessage_event.MIDIMessageEvent;
             }
             return midiAccess;
         };
@@ -229,7 +228,6 @@ var init = function init() {
 
 init();
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./midi/midi_access":3,"./midi/midi_input":4,"./midi/midi_output":5,"./midi/midimessage_event":7,"./util/util":10}],3:[function(require,module,exports){
 'use strict';
 
@@ -1184,15 +1182,15 @@ exports.default = Store;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.getScope = getScope;
 exports.getDevice = getDevice;
 exports.generateUUID = generateUUID;
 exports.polyfill = polyfill;
-
 var Scope = void 0;
 var device = null;
 
 // check if we are in a browser or in Nodejs
-var getScope = function getScope() {
+function getScope() {
     if (typeof Scope !== 'undefined') {
         return Scope;
     }
@@ -1204,7 +1202,7 @@ var getScope = function getScope() {
     }
     // console.log('scope', scope);
     return Scope;
-};
+}
 
 // check on what type of device we are running, note that in this context
 // a device is a computer not a MIDI device

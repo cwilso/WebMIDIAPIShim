@@ -1,9 +1,8 @@
-
 let Scope;
 let device = null;
 
 // check if we are in a browser or in Nodejs
-const getScope = () => {
+export function getScope() {
     if (typeof Scope !== 'undefined') {
         return Scope;
     }
@@ -15,7 +14,7 @@ const getScope = () => {
     }
     // console.log('scope', scope);
     return Scope;
-};
+}
 
 
 // check on what type of device we are running, note that in this context
@@ -152,3 +151,4 @@ export function polyfill() {
     }
     polyfillPerformance();
 }
+

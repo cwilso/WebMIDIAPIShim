@@ -1,9 +1,8 @@
 import { createMIDIAccess, closeAllMIDIInputs } from './midi/midi_access';
-import { polyfill, getDevice } from './util/util';
+import { polyfill, getDevice, getScope } from './util/util';
 import { MIDIInput } from './midi/midi_input'
 import { MIDIOutput } from './midi/midi_output'
 import { MIDIMessageEvent } from './midi/midimessage_event'
-
 
 let midiAccess;
 
@@ -12,17 +11,15 @@ const init = () => {
         // Add some functionality to older browsers
         polyfill();
 
-        // Add WebMIDI API globals
-        global.MIDIInput = MIDIInput
-        global.MIDIOutput = MIDIOutput
-        global.MIDIMessageEvent = MIDIMessageEvent
-
-        console.log(MIDIInput);
-
         navigator.requestMIDIAccess = () => {
             // Singleton-ish, no need to create multiple instances of MIDIAccess
             if (midiAccess === undefined) {
                 midiAccess = createMIDIAccess();
+                // Add WebMIDI API globals
+                const scope = getScope();
+                scope.MIDIInput = MIDIInput
+                scope.MIDIOutput = MIDIOutput
+                scope.MIDIMessageEvent = MIDIMessageEvent
             }
             return midiAccess;
         };
