@@ -17,6 +17,8 @@ const init = () => {
         global.MIDIOutput = MIDIOutput
         global.MIDIMessageEvent = MIDIMessageEvent
 
+        console.log(MIDIInput);
+
         navigator.requestMIDIAccess = () => {
             // Singleton-ish, no need to create multiple instances of MIDIAccess
             if (midiAccess === undefined) {
