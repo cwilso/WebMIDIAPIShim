@@ -193,9 +193,21 @@ var _util = require('./util/util');
 
 var _midi_input = require('./midi/midi_input');
 
+var _midi_input2 = _interopRequireDefault(_midi_input);
+
 var _midi_output = require('./midi/midi_output');
 
+var _midi_output2 = _interopRequireDefault(_midi_output);
+
 var _midimessage_event = require('./midi/midimessage_event');
+
+var _midimessage_event2 = _interopRequireDefault(_midimessage_event);
+
+var _midiconnection_event = require('./midi/midiconnection_event');
+
+var _midiconnection_event2 = _interopRequireDefault(_midiconnection_event);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var midiAccess = void 0;
 
@@ -210,9 +222,10 @@ var init = function init() {
                 midiAccess = (0, _midi_access.createMIDIAccess)();
                 // Add WebMIDI API globals
                 var scope = (0, _util.getScope)();
-                scope.MIDIInput = _midi_input.MIDIInput;
-                scope.MIDIOutput = _midi_output.MIDIOutput;
-                scope.MIDIMessageEvent = _midimessage_event.MIDIMessageEvent;
+                scope.MIDIInput = _midi_input2.default;
+                scope.MIDIOutput = _midi_output2.default;
+                scope.MIDIMessageEvent = _midimessage_event2.default;
+                scope.MIDIConnectionEvent = _midiconnection_event2.default;
             }
             return midiAccess;
         };
@@ -228,7 +241,7 @@ var init = function init() {
 
 init();
 
-},{"./midi/midi_access":3,"./midi/midi_input":4,"./midi/midi_output":5,"./midi/midimessage_event":7,"./util/util":10}],3:[function(require,module,exports){
+},{"./midi/midi_access":3,"./midi/midi_input":4,"./midi/midi_output":5,"./midi/midiconnection_event":6,"./midi/midimessage_event":7,"./util/util":10}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

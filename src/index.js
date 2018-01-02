@@ -1,8 +1,9 @@
 import { createMIDIAccess, closeAllMIDIInputs } from './midi/midi_access';
 import { polyfill, getDevice, getScope } from './util/util';
-import { MIDIInput } from './midi/midi_input'
-import { MIDIOutput } from './midi/midi_output'
-import { MIDIMessageEvent } from './midi/midimessage_event'
+import MIDIInput from './midi/midi_input';
+import MIDIOutput from './midi/midi_output';
+import MIDIMessageEvent from './midi/midimessage_event';
+import MIDIConnectionEvent from './midi/midiconnection_event';
 
 let midiAccess;
 
@@ -17,9 +18,10 @@ const init = () => {
                 midiAccess = createMIDIAccess();
                 // Add WebMIDI API globals
                 const scope = getScope();
-                scope.MIDIInput = MIDIInput
-                scope.MIDIOutput = MIDIOutput
-                scope.MIDIMessageEvent = MIDIMessageEvent
+                scope.MIDIInput = MIDIInput;
+                scope.MIDIOutput = MIDIOutput;
+                scope.MIDIMessageEvent = MIDIMessageEvent;
+                scope.MIDIConnectionEvent = MIDIConnectionEvent;
             }
             return midiAccess;
         };

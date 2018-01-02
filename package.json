@@ -1,6 +1,6 @@
 {
     "name": "web-midi-api-shim",
-    "version": "1.4.18",
+    "version": "1.4.19",
     "description": "Shim for the WebMIDI API, intended to be used in environments that don't have the WebMIDI API implemented: Nodejs and all browsers except Chrome, Chromium and Opera",
     "keywords": [
         "midi",
