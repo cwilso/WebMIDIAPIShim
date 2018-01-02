@@ -64,7 +64,7 @@ export function createMIDIAccess() {
         }
 
         createJazzInstance((instance) => {
-            if (typeof instance === 'undefined') {
+            if (typeof instance === 'undefined' || instance === null) {
                 reject({ message: 'No access to MIDI devices: your browser does not support the WebMIDI API and the Jazz plugin is not installed.' });
                 return;
             }
