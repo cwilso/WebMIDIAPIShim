@@ -1,0 +1,43 @@
+{
+  "name": "web-midi-api",
+  "version": "1.4.4",
+  "description": "Web MIDI API for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jazz-soft/WebMIDIAPIShim.git"
+  },
+  "keywords": [
+    "MIDI",
+    "midi",
+    "music",
+    "sound",
+    "webmidi api"
+  ],
+  "contributors":[{
+    "name": "Chris Wilson",
+    "email": "cwilso@gmail.com",
+    "url": "http://cwilso.com/"
+    },{
+    "name": "jazz-soft",
+    "email": "jazz-dev@jazz-soft.net",
+    "url": "http://jazz-soft.net"
+    },{
+    "name": "abudaan",
+    "email": "daniel@abumarkub.net",
+    "url": "http://github.com/abudaan"
+    }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "http://jazz-soft.org"
+  },
+  "homepage": "http://jazz-soft.net",
+  "dependencies": {
+    "jazz-midi": "^1.4.0",
+    "performance-now": ">=0.2.0"
+  }
+}
