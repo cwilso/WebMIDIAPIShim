@@ -1,64 +1,72 @@
 {
-  "name": "web-midi-api-dev",
-  "version": "0.0.0",
-  "description": "Shim for the WebMIDI API, intended to be used in environments that don't have the WebMIDI API implemented: Nodejs and all browsers except Chrome and Chromium",
-  "keywords": [
-    "midi",
-    "music",
-    "sound",
-    "webmidi api"
-  ],
-  "homepage": "https://github.com/cwilso/WebMIDIAPIShim",
-  "bugs": "https://github.com/cwilso/WebMIDIAPIShim/issues",
-  "license": "Apache-2.0",
-  "author": {
-    "name": "Chris Wilson",
-    "email": "cwilso@gmail.com",
-    "url": "http://cwilso.com/"
-  },
-  "contributors": [
-    {
-      "name": "jazz-soft",
-      "email": "jazz-dev@jazz-soft.net",
-      "url": "http://jazz-soft.net"
+    "name": "web-midi-api-shim",
+    "version": "1.4.20",
+    "description": "Shim for the WebMIDI API, intended to be used in environments that don't have the WebMIDI API implemented: Nodejs and all browsers except Chrome, Chromium and Opera",
+    "keywords": [
+        "midi",
+        "music",
+        "sound",
+        "jazz plugin",
+        "webmidi api"
+    ],
+    "main": "node/index.js",
+    "module": "src/index.js",
+    "browser": "dist/index.js",
+    "homepage": "https://github.com/cwilso/WebMIDIAPIShim",
+    "bugs": "https://github.com/cwilso/WebMIDIAPIShim/issues",
+    "license": "Apache-2.0",
+    "author": {
+        "name": "Chris Wilson",
+        "email": "cwilso@gmail.com",
+        "url": "http://cwilso.com/"
     },
-    {
-      "name": "abudaan",
-      "email": "daniel@abumarkub.net",
-      "url": "http://github.com/abudaan"
-    }
-  ],
-  "main": "lib/index.js",
-  "directories": {
-    "example": "examples"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
-  },
-  "scripts": {
-    "test": "node ./test/nodejs_test.js",
-    "build": "gulp build",
-    "build-nodejs": "gulp build-nodejs",
-    "watch": "watchify src/shim.js -t babelify -o lib/WebMIDIAPI.js --debug --verbose"
-  },
-  "dependencies": {
-    "jazz-midi": ">=1.4.4",
-    "performance-now": ">=0.2.0"
-  },
-  "devDependencies": {
-    "babelify": ">=6.0.0",
-    "browserify": ">=10.1.3",
-    "watchify": ">=1.0.1",
-    "gulp": "3.8.11",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.2.0",
-    "gulp-sourcemaps": "^1.5.2",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "engines": {
-    "node": "0.10.x"
-  },
-  "private": true
+    "contributors": [
+        {
+            "name": "jazz-soft",
+            "email": "jazz-dev@jazz-soft.net",
+            "url": "http://jazz-soft.net"
+        },
+        {
+            "name": "abudaan",
+            "email": "daniel@abumarkub.net",
+            "url": "http://github.com/abudaan"
+        }
+    ],
+    "directories": {
+        "lib": "src",
+        "example": "examples",
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cwilso/WebMIDIAPIShim.git"
+    },
+    "scripts": {
+        "test": "node ./node/test-node.js",
+        "build": "browserify -t [babelify] src/index.js -o build/WebMIDIAPI.js",
+        "minify": "babel-minify build/WebMIDIAPI.js > build/WebMIDIAPI.min.js",
+        "compile": "babel --source-maps 'true' src --out-dir ./dist",
+        "update": "npm run compile && npm run build && npm run minify",
+        "watch": "watchify src/index.js -t babelify -o build/WebMIDIAPI.js --debug --verbose",
+        "postpublish": "git push && git push --tags"
+    },
+    "dependencies": {
+        "jazz-midi": "^1.6.0"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-eslint": "^7.2.3",
+        "babel-minify": "^0.2.0",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-stage-0": "^6.24.1",
+        "babelify": "^7.3.0",
+        "browserify": "^14.5.0",
+        "eslint": "^4.14.0",
+        "watchify": "^3.9.0"
+    },
+    "engines": {
+        "node": "0.10.x"
+    },
+    "private": false
 }
